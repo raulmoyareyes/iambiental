@@ -1,25 +1,103 @@
-<?xml version='1.0' encoding='UTF-8' ?>
-<!-- was: <?xml version="1.0" encoding="UTF-8"?> -->
+<?xml version="1.0" encoding="UTF-8"?>
 <beans xmlns="http://www.springframework.org/schema/beans"
        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-       xmlns:p="http://www.springframework.org/schema/p"
-       xmlns:aop="http://www.springframework.org/schema/aop"
+       xmlns:context="http://www.springframework.org/schema/context"
        xmlns:tx="http://www.springframework.org/schema/tx"
-       xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans-4.0.xsd
-       http://www.springframework.org/schema/aop http://www.springframework.org/schema/aop/spring-aop-4.0.xsd
-       http://www.springframework.org/schema/tx http://www.springframework.org/schema/tx/spring-tx-4.0.xsd">
+       xsi:schemaLocation="http://www.springframework.org/schema/beans 
+        http://www.springframework.org/schema/beans/spring-beans-3.0.xsd
+        http://www.springframework.org/schema/context
+        http://www.springframework.org/schema/context/spring-context.xsd
+        http://www.springframework.org/schema/tx
+        http://www.springframework.org/schema/tx/spring-tx-3.0.xsd">
 
-    <!--bean id="propertyConfigurer"
-          class="org.springframework.beans.factory.config.PropertyPlaceholderConfigurer"
-          p:location="/WEB-INF/jdbc.properties" />
+    
+    
+    <!--Activando anotaciones-->
+    <context:annotation-config/>
+    
+    <!--Datos de ejemplo-->
+    <!--<import resource="datosAdministradorEjemplo.xml"/>-->
+    <!--<import resource="datosOperadorEjemplo.xml"/>-->
+    <!--<import resource="datosHotelEjemplo.xml"/>-->
+    
+    <!--Beans (quitando datos de ejemplo)-->
+    <context:component-scan base-package="es.ujaen.iambiental.beans"/>
+    
+    <!--Base de datos-->
+<!--    <bean id="dataSource" class="org.springframework.jdbc.datasource.DriverManagerDataSource">
+        <property name="driverClassName" value="org.apache.derby.jdbc.ClientDriver" />
+        <property name="url" value="jdbc:derby://localhost:1527/dae" />
+        <property name="username" value="dae" />
+        <property name="password" value="dae" />
+        <property name="initialSize" value="5" />
+        <property name="maxActive" value="10" />
+    </bean>-->
+    
+<!--    <bean id="jpaAdapter" class="org.springframework.orm.jpa.vendor.HibernateJpaVendorAdapter">
+        <property name="database" value="DERBY" />
+        <property name="databasePlatform" value="org.hibernate.dialect.DerbyDialect" />
+        
+        Solo en fase de desarollo
+        <property name="showSql" value="true" />
+        <property name="generateDdl" value="true" />
+    </bean>-->
+    
+<!--    <bean id="emf" class="org.springframework.orm.jpa.LocalContainerEntityManagerFactoryBean">
+        <property name="packagesToScan" value="es.ujaen.dae.gabri_raul.hoteles.modelos" />
+        <property name="dataSource" ref="dataSource" />
+        <property name="jpaVendorAdapter" ref="jpaAdapter" />
+        <property name="jpaProperties">
+            <props>
+                <prop key="hibernate.hbm2ddl.auto">update</prop>
+            </props>
+        </property>
+    </bean>-->
+    
+    <!--Transacciones-->
+<!--    <tx:annotation-driven transaction-manager="txManager" />
+    <context:component-scan base-package="es.ujaen.iambiental.dao"/>
+    <bean id="txManager" class="org.springframework.orm.jpa.JpaTransactionManager">
+        <property name="entityManagerFactory" ref="emf"/>
+    </bean>-->
+    
+    
+    <!--AnotacionAOP-->
+<!--    <aop:aspectj-autoproxy/>
+    <bean id="aop" class="es.ujaen.dae.gabri_raul.hoteles.anotacionaop.AOP"/>-->
+    
+    <!--Recursos con Rest-->
+    <!--<context:component-scan base-package="es.ujaen.iambiental.recursos"/>-->
+    
+    <!--Seguridad-->
+<!--    <security:global-method-security secured-annotations="enabled" />
+    Desde DB
+    <security:jdbc-user-service id="proveedorDB" data-source-ref="dataSource" />
+    <security:jdbc-user-service id="proveedorDB"
+                           data-source-ref="dataSource"
+                           user-by-username-query="select cif, '123456', true from Operadores where cif=?;"
+                           authorities-by-username-query="select 'ROLE_OPERADOR' from Operadores where cif=?;" />
 
-<bean id="dataSource"
-    class="org.springframework.jdbc.datasource.DriverManagerDataSource"
-    p:driverClassName="${jdbc.driverClassName}"
-    p:url="${jdbc.url}"
-    p:username="${jdbc.username}"
-    p:password="${jdbc.password}" /-->
+    Desde lista de usuarios
+    <security:authentication-manager alias="authenticationManager">
+        <security:authentication-provider user-service-ref="proveedorUsuarios"/>
+        <security:authentication-provider user-service-ref="proveedorDB"/>
+    </security:authentication-manager>
+    <security:user-service id="proveedorUsuarios">
+        <security:user name="11111111A" password="123456" authorities="ROLE_OPERADOR"/>
+        <security:user name="admin" password="admin" authorities="ROLE_OPERADOR, ROLE_ADMIN"/>
+    </security:user-service>
+    Sin crear sesiones tengo que mandar siempre los datos
+    <security:http create-session="stateless">
+        <security:http-basic/>
+        
+        <security:intercept-url pattern="/recursos/usuarios*" access="ROLE_OPERADOR" />
+        <security:intercept-url pattern="/recursos/reservas*" access="ROLE_OPERADOR" />
+        <security:intercept-url pattern="/recursos/busqueda*" access="ROLE_OPERADOR" />
+        <security:intercept-url pattern="/recursos/hoteles*" method="GET" access="ROLE_OPERADOR" />
+        <security:intercept-url pattern="/recursos/hoteles*" method="PUT" access="ROLE_ADMIN" />
+        <security:intercept-url pattern="/recursos/hoteles*" method="DELETE" access="ROLE_ADMIN" />
+        <security:intercept-url pattern="/recursos/hoteles*" method="POST" access="ROLE_ADMIN" />
 
-    <!-- ADD PERSISTENCE SUPPORT HERE (jpa, hibernate, etc) -->
+    </security:http>-->
 
 </beans>
