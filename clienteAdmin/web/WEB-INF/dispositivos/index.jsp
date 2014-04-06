@@ -1,58 +1,8 @@
-<!DOCTYPE html>
-<html>
-    <head>
-        <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
-        <title>Dispositivos</title>
-
-        <!-- Bootstrap core CSS -->
-        <link href="./css/bootstrap.min.css" rel="stylesheet">
-
-        <!-- Custom styles for this template -->
-        <link href="./css/offcanvas.css" rel="stylesheet">
-
-        <!-- Just for debugging purposes. Don't actually copy this line! -->
-        <!--[if lt IE 9]><script src="../../assets/js/ie8-responsive-file-warning.js"></script><![endif]-->
-
-        <!-- HTML5 shim and Respond.js IE8 support of HTML5 elements and media queries -->
-        <!--[if lt IE 9]>
-          <script src="https://oss.maxcdn.com/libs/html5shiv/3.7.0/html5shiv.js"></script>
-          <script src="https://oss.maxcdn.com/libs/respond.js/1.4.2/respond.min.js"></script>
-        <![endif]-->
-    </head>
-</head>
-<body>
-    <div class="navbar navbar-fixed-top navbar-inverse" role="navigation">
-        <div class="container">
-            <div class="navbar-header">
-                <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse">
-                    <span class="sr-only">Toggle navigation</span>
-                    <span class="icon-bar"></span>
-                    <span class="icon-bar"></span>
-                    <span class="icon-bar"></span>
-                </button>
-                <a class="navbar-brand" href="#">Inteligencia Ambiental</a>
-            </div>
-            <div class="collapse navbar-collapse">
-                <ul class="nav navbar-nav">
-                    <li><a href="index.html">Inicio</a></li>
-                    <li><a href="dependencias.html">Dependencias</a></li>
-                    <li class="active"><a href="dispositivos.html">Dispositivos</a></li>
-                    <li><a href="sensores.html">Sensores</a></li>
-                    <li><a href="actuadores.html">Actuadores</a></li>
-                    <li><a href="reglas.html">Reglas Sensor-Actuador</a></li>
-                    <li><a href="tareas.html">Tareas programadas</a></li>
-                </ul>
-            </div><!-- /.nav-collapse -->
-        </div><!-- /.container -->
-    </div><!-- /.navbar -->
-
-    <div class="container">
-
         <div class="row row-offcanvas row-offcanvas-right">
 
             <div class="col-xs-12 col-sm-9">
                 <p class="pull-right visible-xs">
-                    <button type="button" class="btn btn-primary btn-xs" data-toggle="offcanvas">Menú lateral</button>
+                    <button type="button" class="btn btn-primary btn-xs" data-toggle="offcanvas">Men� lateral</button>
                 </p>
                 <div class="row">
                     <h1>Agregar nuevo dispositivo</h1>
@@ -77,9 +27,9 @@
                         </div>
 
                         <div class="form-group">
-                            <label for="inputUbicacionDispositivo" class="col-sm-2 control-label">Ubicación</label>
+                            <label for="inputUbicacionDispositivo" class="col-sm-2 control-label">Ubicaci�n</label>
                             <div class="col-sm-10">
-                                <input type="text" class="form-control" id="inputUbicacionDispositivo" placeholder="Ubicación del dispositivo">
+                                <input type="text" class="form-control" id="inputUbicacionDispositivo" placeholder="Ubicaci�n del dispositivo">
                             </div>
                         </div>
 
@@ -87,7 +37,7 @@
                             <label for="selectDependenciaDispositivo" class="col-sm-2 control-label">Dependencia</label>
                             <div class="col-sm-10">
                                  <select class="form-control" id="inputUbicacionDispositivo" name="ubicacionDispositivo">
-                                    <option>Salón</option>
+                                    <option>Sal�n</option>
                                     <option>Cocina</option>
                                     <option>Pasillo</option>
                                     <option>Dormitorio principal</option>
@@ -117,29 +67,10 @@
                     <a href="#" class="list-group-item"><span class="glyphicon glyphicon-minus-sign"></span> Eliminar</a>
                 </div>
                 <div class="list-group">
-                    <a href="#" class="list-group-item">Arduino salón</a>
+                    <a href="#" class="list-group-item">Arduino sal�n</a>
                     <a href="#" class="list-group-item">Arduino cocina</a>
                     <a href="#" class="list-group-item">Arduino pasillo</a>
                     <a href="#" class="list-group-item">Beagle</a>
                 </div>
             </div><!--/span-->
         </div><!--/row-->
-
-        <hr>
-
-        <footer>
-            <p>Proyecto de prácticas de la asignatura <em>Inteligencia Ambiental</em> de <em>4º de Grado en Ingeniería Informática</em> realizado por Gabriel Fernández Moral, Raúl Moya Reyes, Vicente Plaza Franco y Agustín Ruiz Linares</p>
-        </footer>
-
-    </div><!--/.container-->
-
-
-
-    <!-- Bootstrap core JavaScript
-    ================================================== -->
-    <!-- Placed at the end of the document so the pages load faster -->
-    <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.0/jquery.min.js"></script>
-    <script src="./js/bootstrap.min.js"></script>
-    <script src="./js/offcanvas.js"></script>
-</body>
-</html>
