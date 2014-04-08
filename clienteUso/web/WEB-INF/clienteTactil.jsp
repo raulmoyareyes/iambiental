@@ -12,8 +12,8 @@
 		
 		#main    { position:relative; background:red; height:500px; width:100%; }
 		#leftcol { position:absolute; background:blue; bottom:20px; text-align:right; }
-		#temperatura { position:absolute; left:10%; background:grey; top:-30%;  height:100%;   }
-		#lamparas { position:absolute; right:10%; background:grey; top:-30%;  height:100%;   }
+		#temperatura { position:absolute; width:30%; left:15%; background:grey; top:0%;  height:100%;   }
+		#lamparas { position:absolute; width:30%; right:15%; background:grey; top:0%;  height:100%;   }
 		
 	</style>
     <body tyle="position: static>   
@@ -28,28 +28,29 @@
 
 					<!-- Wrapper for slides -->
 					<div class="carousel-inner">
-						<div class="item active">
+						<div class="item ">
 							<img data-src="holder.js/900x500/auto/#666:#666" alt="900x500" src="data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSI5MDAiIGhlaWdodD0iNTAwIj48cmVjdCB3aWR0aD0iOTAwIiBoZWlnaHQ9IjUwMCIgZmlsbD0iIzY2NiI+PC9yZWN0Pjx0ZXh0IHRleHQtYW5jaG9yPSJtaWRkbGUiIHg9IjQ1MCIgeT0iMjUwIiBzdHlsZT0iZmlsbDojNjY2O2ZvbnQtd2VpZ2h0OmJvbGQ7Zm9udC1zaXplOjU2cHg7Zm9udC1mYW1pbHk6QXJpYWwsSGVsdmV0aWNhLHNhbnMtc2VyaWY7ZG9taW5hbnQtYmFzZWxpbmU6Y2VudHJhbCI+OTAweDUwMDwvdGV4dD48L3N2Zz4="/>
 							<div position="relative" align="center" class="carousel-caption">
-								<h1>ESTA HORA</h1>
-								<h1>ESTA TEMP</h1>
+								<div id="reloj" style="font-size:40px;"></div>
+								<div id="temperaturaDisplay" style="font-size:40px;">
+									15.0ºC
+								</div>
 								
 								</br></br></br></br></br></br>
 							</div>
 						</div>
-						<div class="item">
+						<div class="item active">
 							<img data-src="holder.js/900x500/auto/#666:#666" alt="900x500" src="data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSI5MDAiIGhlaWdodD0iNTAwIj48cmVjdCB3aWR0aD0iOTAwIiBoZWlnaHQ9IjUwMCIgZmlsbD0iIzY2NiI+PC9yZWN0Pjx0ZXh0IHRleHQtYW5jaG9yPSJtaWRkbGUiIHg9IjQ1MCIgeT0iMjUwIiBzdHlsZT0iZmlsbDojNjY2O2ZvbnQtd2VpZ2h0OmJvbGQ7Zm9udC1zaXplOjU2cHg7Zm9udC1mYW1pbHk6QXJpYWwsSGVsdmV0aWNhLHNhbnMtc2VyaWY7ZG9taW5hbnQtYmFzZWxpbmU6Y2VudHJhbCI+OTAweDUwMDwvdGV4dD48L3N2Zz4="/>
 							<div class="carousel-caption">
 								
-								<div id="temperatura" class="span8">
-									<p>TEMPERATURA</p>
+								<div id="temperatura">
+									<p style="" >TEMPERATURA</p>
 								</div>
 								
-								<div id="lamparas" class="span8">
+								<div id="lamparas">
 									<p>LAMPARAS</p>
 								</div>
 								</br></br></br></br></br></br>
-								<h1>Bontoncicos y displays</h1>
 							</div>
 						</div>
 					</div>
@@ -65,4 +66,21 @@
 			</div>
 		</div>
     </body>
+	<script type="text/javascript">
+		function startTime(){
+			today=new Date();
+			h=today.getHours();
+			m=today.getMinutes();
+			s=today.getSeconds();
+			m=checkTime(m);
+			s=checkTime(s);
+			document.getElementById('reloj').innerHTML=h+":"+m+":"+s;
+			t=setTimeout('startTime()',500);
+		}
+		function checkTime(i){
+			if (i<10) {i="0" + i;}
+			return i;
+		}
+		window.onload=function(){ startTime(); }
+	</script>
 </html>
