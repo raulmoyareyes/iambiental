@@ -42,13 +42,13 @@
 		<div class="row">
 			<div align="center" class="col-md-9" role="main">
 				<div id="carousel-example-generic" data-interval="false" class="carousel slide" data-ride="carousel">
-					<!-- Indicators -->
+					<!-- Indicadores de pantalla actual -->
 					<ol class="carousel-indicators">
 						<li data-target="#carousel-example-generic" data-slide-to="0" class="active"></li>
 						<li data-target="#carousel-example-generic" data-slide-to="1"></li>
 					</ol>
 
-					<!-- Wrapper for slides -->
+					<!-- Definicion de pantallas -->
 					<div class="carousel-inner">
 						<div class="item active">
 							<img data-src="holder.js/900x500/auto/#666:#666" alt="900x500" 
