@@ -1,0 +1,5 @@
+
+		
+#main    { position:relative; background:red; height:500px; width:100%; }
+#temperaturaControl { position:absolute; width:45%; left:0%; background:#999; top:-80%;  height:160%;   }
+#lamparasControl { position:absolute; width:40%; right:5%; top:-80%;  height:160%;   }
