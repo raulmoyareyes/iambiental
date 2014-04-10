@@ -5,8 +5,10 @@
  */
 package es.ujaen.iambiental.clienteadmin;
 
+import es.ujaen.iambiental.modelos.Dependencia;
 import java.io.IOException;
-import java.io.PrintWriter;
+import java.util.ArrayList;
+import java.util.List;
 import javax.servlet.RequestDispatcher;
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
@@ -19,7 +21,7 @@ import javax.servlet.http.HttpSession;
  *
  * @author agustin
  */
-@WebServlet(name = "dependencias", urlPatterns = {"/dependencias"})
+@WebServlet(name = "dependencias", urlPatterns = {"/dependencias/*"})
 public class dependencias extends HttpServlet {
 
     /**
@@ -41,15 +43,52 @@ public class dependencias extends HttpServlet {
         request.setAttribute("srvUrl", srvUrl);
         HttpSession session = request.getSession();
 
+        /* SÓLO PARA PRUEBAS */
+        Dependencia.reset(); //Resetear id de dependencia
+        List<Dependencia> dependencias;
+        dependencias = new ArrayList<>();
+        dependencias.add(new Dependencia("Salón", "Descripción del salón"));
+        dependencias.add(new Dependencia("Cocina", "Descripción de cocina"));
+        dependencias.add(new Dependencia("Baño", "Descripción de baño"));
+        dependencias.add(new Dependencia("Dormitorio principal", "Descripción de dormitorio principal"));
+        dependencias.add(new Dependencia("Dormitorio individual", "Descripción de dormitorio individual"));
+        dependencias.add(new Dependencia("Pasillo", "Descripción de pasillo"));
+        dependencias.add(new Dependencia("Piscina", "Descripción de piscina"));
+        /* FIN DE PRUEBAS */
+
         //Cabecera
         request.setAttribute("mainMenuOption", "dependencias");
         rd = request.getRequestDispatcher("/WEB-INF/cabecera.jsp");
         rd.include(request, response);
-        
+
         //Cuerpo
-        rd = request.getRequestDispatcher("/WEB-INF/dependencias/index.jsp");
-        rd.include(request, response);
-        
+        String action = (request.getPathInfo() != null ? request.getPathInfo() : "");
+        switch (action) {
+            case "/listado":
+            default: //Ninguna opción seleccionada
+                request.setAttribute("dependencias", dependencias);
+                rd = request.getRequestDispatcher("/WEB-INF/dependencias/index.jsp");
+                rd.include(request, response);
+                break;
+            case "/insertar": //Insertar dependencia
+                request.setAttribute("dependencias", dependencias);
+                rd = request.getRequestDispatcher("/WEB-INF/dependencias/insertar.jsp");
+                rd.include(request, response);
+                break;
+            case "/ver": //Ver dependencia
+                request.setAttribute("dependencias", dependencias);
+                request.setAttribute("dependencia", dependencias.get(Integer.parseInt(request.getParameter("id"))-1));
+                rd = request.getRequestDispatcher("/WEB-INF/dependencias/ver.jsp");
+                rd.include(request, response);
+                break;
+            case "/editar": //Insertar dependencia
+                request.setAttribute("dependencias", dependencias);
+                request.setAttribute("dependencia", dependencias.get(Integer.parseInt(request.getParameter("id"))-1));
+                rd = request.getRequestDispatcher("/WEB-INF/dependencias/editar.jsp");
+                rd.include(request, response);
+                break;
+        }
+
         //Footer
         rd = request.getRequestDispatcher("/WEB-INF/pie.jsp");
         rd.include(request, response);

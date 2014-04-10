@@ -4,7 +4,7 @@
                 <p class="pull-right visible-xs">
                     <button type="button" class="btn btn-primary btn-xs" data-toggle="offcanvas">Menú lateral</button>
                 </p>
-                <div class="row">
+                <div class="row padding1em">
                     <h1>Agregar nuevo dispositivo</h1>
 
                     <form class="form-horizontal" role="form">

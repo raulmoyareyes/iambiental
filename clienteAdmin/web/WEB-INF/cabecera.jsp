@@ -8,13 +8,13 @@
             %></title>
 
         <!-- Bootstrap core CSS -->
-        <link href="./css/bootstrap.min.css" rel="stylesheet">
+        <link href="/clienteAdmin/css/bootstrap.min.css" rel="stylesheet">
 
         <!-- Custom styles for this template -->
-        <link href="./css/offcanvas.css" rel="stylesheet">
+        <link href="/clienteAdmin/css/offcanvas.css" rel="stylesheet">
 
-        <!-- Just for debugging purposes. Don't actually copy this line! -->
-        <!--[if lt IE 9]><script src="../../assets/js/ie8-responsive-file-warning.js"></script><![endif]-->
+        <!-- Estilos para este proyecto -->
+        <link href="/clienteAdmin/css/iAmbiental.css" rel="stylesheet">
 
         <!-- HTML5 shim and Respond.js IE8 support of HTML5 elements and media queries -->
         <!--[if lt IE 9]>
@@ -33,17 +33,17 @@
                     <span class="icon-bar"></span>
                     <span class="icon-bar"></span>
                 </button>
-                <a class="navbar-brand" href="home">Inteligencia Ambiental</a>
+                <a class="navbar-brand" href="home">iAmbiental</a>
             </div>
             <div class="collapse navbar-collapse">
                 <ul class="nav navbar-nav">
                     <!--<li ${(mainMenuOption == 'home')?'class="active"':''} ><a href="home">Home</a></li>-->
-                    <li ${(mainMenuOption == 'dependencias')?'class="active"':''} ><a href="dependencias">Dependencias</a></li>
-                    <li ${(mainMenuOption == 'dispositivos')?'class="active"':''} ><a href="dispositivos">Dispositivos</a></li>
-                    <li ${(mainMenuOption == 'sensores')?'class="active"':''} ><a href="sensores">Sensores</a></li>
-                    <li ${(mainMenuOption == 'actuadores')?'class="active"':''} ><a href="actuadores">Actuadores</a></li>
-                    <li ${(mainMenuOption == 'reglas')?'class="active"':''} ><a href="reglas">Reglas</a></li>
-                    <li ${(mainMenuOption == 'tareas')?'class="active"':''} ><a href="tareas">Tareas</a></li>
+                    <li ${(mainMenuOption == 'dependencias')?'class="active"':''} ><a href="/clienteAdmin/dependencias">Dependencias</a></li>
+                    <li ${(mainMenuOption == 'dispositivos')?'class="active"':''} ><a href="/clienteAdmin/dispositivos">Dispositivos</a></li>
+                    <li ${(mainMenuOption == 'sensores')?'class="active"':''} ><a href="/clienteAdmin/sensores">Sensores</a></li>
+                    <li ${(mainMenuOption == 'actuadores')?'class="active"':''} ><a href="/clienteAdmin/actuadores">Actuadores</a></li>
+                    <li ${(mainMenuOption == 'reglas')?'class="active"':''} ><a href="/clienteAdmin/reglas">Reglas</a></li>
+                    <li ${(mainMenuOption == 'tareas')?'class="active"':''} ><a href="/clienteAdmin/tareas">Tareas</a></li>
                 </ul>
             </div><!-- /.nav-collapse -->
         </div><!-- /.container -->

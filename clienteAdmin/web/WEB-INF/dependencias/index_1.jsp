@@ -15,10 +15,10 @@
                         <a href="#" class="btn pull-right">
                             <span class="glyphicon glyphicon-minus-sign"></span>
                         </a>
-                        <a href="/clienteAdmin/dependencias/editar?id=${d.id}" class="btn pull-right">
+                        <a href="#" class="btn pull-right">
                             <span class="glyphicon glyphicon-edit"></span>
                         </a>
-                        <a href="/clienteAdmin/dependencias/ver?id=${d.id}" class="btn pull-right">
+                        <a href="#" class="btn pull-right">
                             <span class="glyphicon glyphicon-eye-open"></span>
                         </a>
                     </div>
@@ -29,7 +29,18 @@
 
     <div class="col-xs-6 col-sm-3 sidebar-offcanvas" id="sidebar" role="navigation">
         <div class="list-group">
-            <a href="/clienteAdmin/dependencias/insertar" class="list-group-item"><span class="glyphicon glyphicon-plus-sign"></span> Insertar nueva dependencia</a>
+            <a href="#" class="list-group-item"><span class="glyphicon glyphicon-plus-sign"></span> Insertar</a>
+            <a href="#" class="list-group-item active"><span class="glyphicon glyphicon-edit"></span> Editar</a>
+            <a href="#" class="list-group-item"><span class="glyphicon glyphicon-minus-sign"></span> Eliminar</a>
+        </div>
+        <div class="list-group">
+            <c:forEach var="d" items="${dependencias}" varStatus="estado">
+                <a href="#" class="list-group-item">${d.id} - ${d.nombre}
+                
+                    <%--Aquí va el dropdown--%>
+                    
+                </a>
+            </c:forEach>
         </div>
     </div><!--/span-->
 </div><!--/row-->
