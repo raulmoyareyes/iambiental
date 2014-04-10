@@ -14,7 +14,7 @@ import java.util.Map;
  *
  * @author raulm
  */
-public class ClienteUsoBEAN {
+public class ClienteUsoBean {
     
     /**
      * Devuelve un mapa con la lista de sensores de la habitación indicada.

@@ -4,15 +4,14 @@
  * and open the template in the editor.
  */
 
-package es.ujaen.iambiental.recursos;
-
-import javax.ws.rs.Path;
+package es.ujaen.iambiental.excepciones;
 
 /**
  *
- * @author raulm
+ * @author Gabriel
  */
-@Path("/sensor")
-public class SensorRECURSO {
-    
+public class SensorNoEncontrado extends Exception {
+    public SensorNoEncontrado(){
+        super();
+    }
 }

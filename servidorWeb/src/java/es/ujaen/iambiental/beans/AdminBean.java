@@ -6,6 +6,11 @@
 
 package es.ujaen.iambiental.beans;
 
+import es.ujaen.iambiental.excepciones.SensorErrorActualizar;
+import es.ujaen.iambiental.excepciones.SensorErrorDatos;
+import es.ujaen.iambiental.excepciones.SensorErrorEliminar;
+import es.ujaen.iambiental.excepciones.SensorErrorPersistir;
+import es.ujaen.iambiental.excepciones.SensorNoEncontrado;
 import es.ujaen.iambiental.modelos.Actuador;
 import es.ujaen.iambiental.modelos.ReglaProgramada;
 import es.ujaen.iambiental.modelos.ReglaSensorActuador;
@@ -21,14 +26,16 @@ import org.springframework.stereotype.Component;
  * @author raulm
  */
 @Component(value = "beanAdmin")
-public class AdminBEAN {
+public class AdminBean {
 
     /**
      * Crear un sensor.
      *
      * @param sensor
+     * @throws es.ujaen.iambiental.excepciones.SensorErrorDatos
+     * @throws es.ujaen.iambiental.excepciones.SensorErrorPersistir
      */
-    public void crearSensor(Sensor sensor){
+    public void crearSensor(Sensor sensor) throws SensorErrorDatos, SensorErrorPersistir{
         
     }
     
@@ -46,8 +53,10 @@ public class AdminBEAN {
      * Elimina un sensor del sistema.
      *
      * @param idSensor
+     * @throws es.ujaen.iambiental.excepciones.SensorErrorEliminar
+     * @throws es.ujaen.iambiental.excepciones.SensorNoEncontrado
      */
-    public void eliminarSensor(String idSensor) {
+    public void eliminarSensor(String idSensor) throws SensorErrorEliminar, SensorNoEncontrado{
         
     }
     
@@ -55,8 +64,9 @@ public class AdminBEAN {
      * Modifica un sensor del sistema.
      *
      * @param sensor
+     * @throws es.ujaen.iambiental.excepciones.SensorErrorActualizar
      */
-    public void modificarSensor(Sensor sensor) {
+    public void modificarSensor(Sensor sensor) throws SensorErrorActualizar{
         
     }
     
