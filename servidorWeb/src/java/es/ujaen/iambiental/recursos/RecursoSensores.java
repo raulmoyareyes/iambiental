@@ -71,7 +71,7 @@ public class RecursoSensores {
             administrador.crearSensor(sensor);
         } catch (SensorErrorDatos | SensorErrorPersistir e) {
             throw new WebApplicationException(
-                    Response.status(Status.NOT_ACCEPTABLE).entity("Error al crear el hotel.").build()
+                    Response.status(Status.NOT_ACCEPTABLE).entity("Error al crear el sensor.").build()
             );
         }
         return Response.status(Status.ACCEPTED).build();

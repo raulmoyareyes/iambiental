@@ -6,6 +6,11 @@
 
 package es.ujaen.iambiental.beans;
 
+import es.ujaen.iambiental.excepciones.ActuadorErrorActualizar;
+import es.ujaen.iambiental.excepciones.ActuadorErrorDatos;
+import es.ujaen.iambiental.excepciones.ActuadorErrorEliminar;
+import es.ujaen.iambiental.excepciones.ActuadorErrorPersistir;
+import es.ujaen.iambiental.excepciones.ActuadorNoEncontrado;
 import es.ujaen.iambiental.excepciones.SensorErrorActualizar;
 import es.ujaen.iambiental.excepciones.SensorErrorDatos;
 import es.ujaen.iambiental.excepciones.SensorErrorEliminar;
@@ -74,8 +79,10 @@ public class AdminBean {
      * Crear un actuador.
      *
      * @param actuador
+     * @throws es.ujaen.iambiental.excepciones.ActuadorErrorDatos
+     * @throws es.ujaen.iambiental.excepciones.ActuadorErrorPersistir
      */
-    public void crearActuador(Actuador actuador){
+    public void crearActuador(Actuador actuador) throws ActuadorErrorDatos, ActuadorErrorPersistir{
         
     }
     
@@ -93,8 +100,10 @@ public class AdminBean {
      * Elimina un actuador del sistema.
      *
      * @param idActuador
+     * @throws es.ujaen.iambiental.excepciones.ActuadorErrorEliminar
+     * @throws es.ujaen.iambiental.excepciones.ActuadorNoEncontrado
      */
-    public void eliminarActuador(String idActuador) {
+    public void eliminarActuador(String idActuador) throws ActuadorErrorEliminar, ActuadorNoEncontrado {
         
     }
     
@@ -102,8 +111,9 @@ public class AdminBean {
      * Modifica un actuador del sistema.
      *
      * @param actuador
+     * @throws es.ujaen.iambiental.excepciones.ActuadorErrorActualizar
      */
-    public void modificarActuador(Actuador actuador) {
+    public void modificarActuador(Actuador actuador) throws ActuadorErrorActualizar {
         
     }
     
