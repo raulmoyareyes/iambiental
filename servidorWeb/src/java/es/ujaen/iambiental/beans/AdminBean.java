@@ -16,6 +16,11 @@ import es.ujaen.iambiental.excepciones.SensorErrorDatos;
 import es.ujaen.iambiental.excepciones.SensorErrorEliminar;
 import es.ujaen.iambiental.excepciones.SensorErrorPersistir;
 import es.ujaen.iambiental.excepciones.SensorNoEncontrado;
+import es.ujaen.iambiental.excepciones.TareaProgramadaErrorActualizar;
+import es.ujaen.iambiental.excepciones.TareaProgramadaErrorDatos;
+import es.ujaen.iambiental.excepciones.TareaProgramadaErrorEliminar;
+import es.ujaen.iambiental.excepciones.TareaProgramadaErrorPersistir;
+import es.ujaen.iambiental.excepciones.TareaProgramadaNoEncontrada;
 import es.ujaen.iambiental.modelos.Actuador;
 import es.ujaen.iambiental.modelos.ReglaProgramada;
 import es.ujaen.iambiental.modelos.ReglaSensorActuador;
@@ -121,8 +126,10 @@ public class AdminBean {
      * Crear una tarea programada.
      *
      * @param tareaProgramada
+     * @throws es.ujaen.iambiental.excepciones.TareaProgramadaErrorDatos
+     * @throws es.ujaen.iambiental.excepciones.TareaProgramadaErrorPersistir
      */
-    public void crearTareaProgramada(TareaProgramada tareaProgramada){
+    public void crearTareaProgramada(TareaProgramada tareaProgramada) throws TareaProgramadaErrorDatos, TareaProgramadaErrorPersistir{
         
     }
     
@@ -140,8 +147,10 @@ public class AdminBean {
      * Elimina una tarea programada del sistema.
      *
      * @param idTareaProgramada
+     * @throws es.ujaen.iambiental.excepciones.TareaProgramadaErrorEliminar
+     * @throws es.ujaen.iambiental.excepciones.TareaProgramadaNoEncontrada
      */
-    public void eliminarTareaProgramada(String idTareaProgramada) {
+    public void eliminarTareaProgramada(String idTareaProgramada) throws TareaProgramadaErrorEliminar, TareaProgramadaNoEncontrada {
         
     }
     
@@ -149,8 +158,9 @@ public class AdminBean {
      * Modifica una tarea programada del sistema.
      *
      * @param tareaProgramada
+     * @throws es.ujaen.iambiental.excepciones.TareaProgramadaErrorActualizar
      */
-    public void modificarTareaProgramada(TareaProgramada tareaProgramada) {
+    public void modificarTareaProgramada(TareaProgramada tareaProgramada) throws TareaProgramadaErrorActualizar {
         
     }
     
