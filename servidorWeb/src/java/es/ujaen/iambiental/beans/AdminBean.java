@@ -11,6 +11,11 @@ import es.ujaen.iambiental.excepciones.ActuadorErrorDatos;
 import es.ujaen.iambiental.excepciones.ActuadorErrorEliminar;
 import es.ujaen.iambiental.excepciones.ActuadorErrorPersistir;
 import es.ujaen.iambiental.excepciones.ActuadorNoEncontrado;
+import es.ujaen.iambiental.excepciones.ReglaProgramadaErrorActualizar;
+import es.ujaen.iambiental.excepciones.ReglaProgramadaErrorDatos;
+import es.ujaen.iambiental.excepciones.ReglaProgramadaErrorEliminar;
+import es.ujaen.iambiental.excepciones.ReglaProgramadaErrorPersistir;
+import es.ujaen.iambiental.excepciones.ReglaProgramadaNoEncontrada;
 import es.ujaen.iambiental.excepciones.SensorErrorActualizar;
 import es.ujaen.iambiental.excepciones.SensorErrorDatos;
 import es.ujaen.iambiental.excepciones.SensorErrorEliminar;
@@ -169,8 +174,10 @@ public class AdminBean {
      *
      * @param reglaProgramada
      * @param idTareaProgramada
+     * @throws es.ujaen.iambiental.excepciones.ReglaProgramadaErrorDatos
+     * @throws es.ujaen.iambiental.excepciones.ReglaProgramadaErrorPersistir
      */
-    public void crearReglaProgramada(ReglaProgramada reglaProgramada, String idTareaProgramada){
+    public void crearReglaProgramada(ReglaProgramada reglaProgramada, String idTareaProgramada) throws ReglaProgramadaErrorDatos, ReglaProgramadaErrorPersistir{
         
     }
     
@@ -188,8 +195,10 @@ public class AdminBean {
      * Elimina una regla programada del sistema.
      *
      * @param idReglaProgramada
+     * @throws es.ujaen.iambiental.excepciones.ReglaProgramadaErrorEliminar
+     * @throws es.ujaen.iambiental.excepciones.ReglaProgramadaNoEncontrada
      */
-    public void eliminarReglaProgramada(String idReglaProgramada) {
+    public void eliminarReglaProgramada(String idReglaProgramada) throws ReglaProgramadaErrorEliminar, ReglaProgramadaNoEncontrada {
         
     }
     
@@ -197,8 +206,9 @@ public class AdminBean {
      * Modifica una regla programada del sistema.
      *
      * @param reglaProgramada
+     * @throws es.ujaen.iambiental.excepciones.ReglaProgramadaErrorActualizar
      */
-    public void modificarReglaProgramada(ReglaProgramada reglaProgramada) {
+    public void modificarReglaProgramada(ReglaProgramada reglaProgramada) throws ReglaProgramadaErrorActualizar {
         
     }
     

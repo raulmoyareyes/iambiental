@@ -51,7 +51,7 @@ public class RecursoTareasProgramadas {
     }
     
     @PUT
-    @Path("/{idTareasProgramadas}")
+    @Path("/{idTareaProgramada}")
     @Consumes("application/json")
     public Response crearTareaProgramada(@PathParam("idTareaProgramada") String idTareaProgramada, TareaProgramada tareaProgramada) {
         if (tareaProgramada == null) {
