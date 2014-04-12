@@ -16,6 +16,11 @@ import es.ujaen.iambiental.excepciones.ReglaProgramadaErrorDatos;
 import es.ujaen.iambiental.excepciones.ReglaProgramadaErrorEliminar;
 import es.ujaen.iambiental.excepciones.ReglaProgramadaErrorPersistir;
 import es.ujaen.iambiental.excepciones.ReglaProgramadaNoEncontrada;
+import es.ujaen.iambiental.excepciones.ReglaSensorActuadorErrorActualizar;
+import es.ujaen.iambiental.excepciones.ReglaSensorActuadorErrorDatos;
+import es.ujaen.iambiental.excepciones.ReglaSensorActuadorErrorEliminar;
+import es.ujaen.iambiental.excepciones.ReglaSensorActuadorErrorPersistir;
+import es.ujaen.iambiental.excepciones.ReglaSensorActuadorNoEncontrada;
 import es.ujaen.iambiental.excepciones.SensorErrorActualizar;
 import es.ujaen.iambiental.excepciones.SensorErrorDatos;
 import es.ujaen.iambiental.excepciones.SensorErrorEliminar;
@@ -216,8 +221,10 @@ public class AdminBean {
      * Crear una regla sensor-actuador.
      *
      * @param reglaSensorActuador
+     * @throws es.ujaen.iambiental.excepciones.ReglaSensorActuadorErrorDatos
+     * @throws es.ujaen.iambiental.excepciones.ReglaSensorActuadorErrorPersistir
      */
-    public void crearReglaSensorActuador(ReglaSensorActuador reglaSensorActuador){
+    public void crearReglaSensorActuador(ReglaSensorActuador reglaSensorActuador) throws ReglaSensorActuadorErrorDatos, ReglaSensorActuadorErrorPersistir{
         
     }
     
@@ -235,8 +242,10 @@ public class AdminBean {
      * Elimina una regla sensor-actuador del sistema.
      *
      * @param idReglaSensorActuador
+     * @throws es.ujaen.iambiental.excepciones.ReglaSensorActuadorErrorEliminar
+     * @throws es.ujaen.iambiental.excepciones.ReglaSensorActuadorNoEncontrada
      */
-    public void eliminarReglaSensorActuador(String idReglaSensorActuador) {
+    public void eliminarReglaSensorActuador(String idReglaSensorActuador) throws ReglaSensorActuadorErrorEliminar, ReglaSensorActuadorNoEncontrada {
         
     }
     
@@ -244,8 +253,9 @@ public class AdminBean {
      * Modifica una regla sensor-actuador del sistema.
      *
      * @param reglaSensorActuador
+     * @throws es.ujaen.iambiental.excepciones.ReglaSensorActuadorErrorActualizar
      */
-    public void modificarReglaSensorActuador(ReglaSensorActuador reglaSensorActuador) {
+    public void modificarReglaSensorActuador(ReglaSensorActuador reglaSensorActuador) throws ReglaSensorActuadorErrorActualizar {
         
     }
     
