@@ -7,6 +7,8 @@ import es.ujaen.iambiental.excepciones.SensorErrorEliminar;
 import es.ujaen.iambiental.excepciones.SensorErrorPersistir;
 import es.ujaen.iambiental.excepciones.SensorNoEncontrado;
 import es.ujaen.iambiental.modelos.Sensor;
+import java.util.Date;
+import java.util.Map;
 import javax.ws.rs.Consumes;
 import javax.ws.rs.DELETE;
 import javax.ws.rs.GET;
@@ -14,6 +16,7 @@ import javax.ws.rs.PUT;
 import javax.ws.rs.Path;
 import javax.ws.rs.PathParam;
 import javax.ws.rs.Produces;
+import javax.ws.rs.QueryParam;
 import javax.ws.rs.WebApplicationException;
 import javax.ws.rs.core.Response;
 import javax.ws.rs.core.Response.Status;
@@ -120,6 +123,26 @@ public class RecursoSensores {
             );
         }
         return Response.status(Status.ACCEPTED).build();
+    }
+    
+    @GET
+    @Path("/{idSensor}/{fechaInicio}/{fechaFinal}")
+    @Produces("application/json; charset=utf-8")
+    public Response obtenerHistoricoSensor(@QueryParam("idSensor") String idSensor, @QueryParam("fechaInicio") Date fechaInicio, @QueryParam("fechaFinal") Date fechaFinal) {
+        Sensor sensor = administrador.obtenerSensor(idSensor);
+        if (sensor == null) {
+            throw new WebApplicationException(
+                    Response.status(Status.NOT_FOUND).entity("Sensor no encontrado.").build()
+            );
+        } else {
+            Map<Date, Double> historico = administrador.obtenerHistoricoSensor(idSensor, fechaInicio, fechaFinal);
+            if (historico == null) {
+                throw new WebApplicationException(
+                        Response.status(Status.NOT_FOUND).entity("Sensor no encontrado.").build()
+                );
+            }
+            return Response.ok(historico).build();
+        }
     }
     
 }
