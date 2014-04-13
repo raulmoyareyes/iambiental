@@ -26,7 +26,7 @@
                 <div class="form-group">
                     <div class="col-sm-offset-2 col-sm-10">
                         <button type="submit" class="btn btn-success">Guardar</button>
-                        <a href="/clienteAdmin/dependencias/ver?id=${dependencia.id}" rol="button" class="btn btn-danger">Cancelar</a>
+                        <a href="/clienteAdmin/dependencias" rol="button" class="btn btn-danger">Cancelar</a>
                     </div>
                 </div>
             </form>

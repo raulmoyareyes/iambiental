@@ -69,6 +69,8 @@ public class dependencias extends HttpServlet {
                 request.setAttribute("dependencias", dependencias);
                 rd = request.getRequestDispatcher("/WEB-INF/dependencias/index.jsp");
                 rd.include(request, response);
+                rd = request.getRequestDispatcher("/WEB-INF/dependencias/modalEliminar.jsp");
+                rd.include(request, response);
                 break;
             case "/insertar": //Insertar dependencia
                 request.setAttribute("dependencias", dependencias);
@@ -77,14 +79,28 @@ public class dependencias extends HttpServlet {
                 break;
             case "/ver": //Ver dependencia
                 request.setAttribute("dependencias", dependencias);
-                request.setAttribute("dependencia", dependencias.get(Integer.parseInt(request.getParameter("id"))-1));
+                request.setAttribute("dependencia", dependencias.get(Integer.parseInt(request.getParameter("id"))));
                 rd = request.getRequestDispatcher("/WEB-INF/dependencias/ver.jsp");
+                rd.include(request, response);
+                rd = request.getRequestDispatcher("/WEB-INF/dependencias/modalEliminar.jsp");
+                rd.include(request, response);
+                break;
+            case "/eliminar": //Dependencia eliminada
+                int idEliminar = Integer.parseInt(request.getParameter("id"));
+                request.setAttribute("eliminado", dependencias.get(idEliminar).getNombre());
+                dependencias.remove(idEliminar); //¿Comprobar si hay error?
+                request.setAttribute("dependencias", dependencias);
+                rd = request.getRequestDispatcher("/WEB-INF/dependencias/index.jsp");
+                rd.include(request, response);
+                rd = request.getRequestDispatcher("/WEB-INF/dependencias/modalEliminar.jsp");
                 rd.include(request, response);
                 break;
             case "/editar": //Insertar dependencia
                 request.setAttribute("dependencias", dependencias);
-                request.setAttribute("dependencia", dependencias.get(Integer.parseInt(request.getParameter("id"))-1));
+                request.setAttribute("dependencia", dependencias.get(Integer.parseInt(request.getParameter("id"))));
                 rd = request.getRequestDispatcher("/WEB-INF/dependencias/editar.jsp");
+                rd.include(request, response);
+                rd = request.getRequestDispatcher("/WEB-INF/dependencias/modalEliminar.jsp");
                 rd.include(request, response);
                 break;
         }

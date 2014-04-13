@@ -7,12 +7,21 @@
             <button type="button" class="btn btn-primary btn-xs" data-toggle="offcanvas">Menú lateral</button>
         </p>
         <div class="row padding1em">
+
+            <c:if test="${eliminado != null}">
+                <div class="alert alert-warning alert-dismissable">
+                    <button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>
+                    <strong>Yeah!</strong> La dependencia "${eliminado}" ha sido eliminada del sistema.
+                </div>
+            </c:if>
+            
             <h1>Dependencias</h1>
             <div class="list-group">
                 <c:forEach var="d" items="${dependencias}" varStatus="estado">
                     <div class="list-group-item">
                         ${d.id} - ${d.nombre}
-                        <a href="#" class="btn pull-right">
+                        
+                        <a href="#" class="btn pull-right" onclick="modalEliminarDependencia('${d.id}', '${d.nombre}')">
                             <span class="glyphicon glyphicon-minus-sign"></span>
                         </a>
                         <a href="/clienteAdmin/dependencias/editar?id=${d.id}" class="btn pull-right">

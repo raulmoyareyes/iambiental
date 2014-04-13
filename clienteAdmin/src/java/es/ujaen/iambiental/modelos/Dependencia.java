@@ -21,7 +21,7 @@ public class Dependencia {
      * @author Agustín Ruiz Linares <www.agustruiz.es>
      */
     public Dependencia() {
-        this.id = ++contador;
+        this.id = contador++;
         this.nombre = "";
         this.descripcion = "";
     }
@@ -33,7 +33,7 @@ public class Dependencia {
      * @author Agustín Ruiz Linares <www.agustruiz.es>
      */
     public Dependencia(String nombre, String descripcion) {
-        this.id = ++contador;
+        this.id = contador++;
         this.nombre = nombre;
         this.descripcion = descripcion;
     }
