@@ -1,23 +1,40 @@
 
-#main {
-    position:relative;
-    background:red;
-    height:500px;
-    width:100%;
+.carousel-inner{
+    background-color: #222;
+    color: #eee;
+    text-align: center;
+    font-size: 24px;
+}
+.input-group-addon{
+    color: #333;
+    font-size: 12px;
+}
+
+#reloj{
+    margin-top: 10%;
+    /*font-size: 120px;*/
 }
 
 #temperaturaControl {
-    position:absolute;
-    width:45%; left:0%;
     background:#999;
-    top:-80%;
-    height:160%;
+    margin:5%;
+    width:35%;
+    /*font-size: 0.3em;*/
+    display:inline-block;
+    padding: 20px;
 }
 
 #lamparasControl {
-    position:absolute;
-    width:45%;
-    right:0%;
-    top:-80%;
-    height:160%;
+    margin:5%;
+    width:35%;
+    display:inline-block;
+    padding: 20px;
 }
+
+@media (min-width:500px) {
+
+}
+
+/* JQuery Mobile*/
+.ui-loading .ui-loader { display: block; }
+.ui-loader { display: none; position: absolute; opacity: .85; z-index: 100; left: 50%; width: 200px; margin-left: -130px; margin-top: -35px; padding: 10px 30px; }

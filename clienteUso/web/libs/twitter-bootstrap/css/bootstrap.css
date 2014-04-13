@@ -773,7 +773,7 @@ pre code {
 }
 
 .row {
-  margin-right: -15px;
+  /* margin-right: -15px; */
   margin-left: -15px;
 }
 
@@ -3623,6 +3623,9 @@ input[type="button"].btn-block {
   position: relative;
   display: table;
   border-collapse: separate;
+  /* width: 50%; */
+  /* height: 50px; */
+  font-size: 12px;
 }
 
 .input-group.col {
@@ -3710,6 +3713,7 @@ textarea.input-group-sm > .input-group-btn > .btn {
   background-color: #eeeeee;
   border: 1px solid #cccccc;
   border-radius: 4px;
+  color: black;
 }
 
 .input-group-addon.input-sm {

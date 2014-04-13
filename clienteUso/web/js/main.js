@@ -1,6 +1,6 @@
 
 $(function() {
-    $('.btn-toggle').click(function() {
+    $('.btn-toggle').on("click", function() {
         $(this).find('.btn').toggleClass('active');
 
         if ($(this).find('.btn-primary').size() > 0) {
@@ -18,16 +18,33 @@ $(function() {
         $(this).find('.btn').toggleClass('btn-default');
     });
 
-    $('form').submit(function() {
-        alert($(this["options"]).val());
-        return false;
+
+    $("input[name='spinner']").TouchSpin({min: 0,max: 40,step: 0.5,decimals: 1,
+        boostat: 5,maxboostedstep: 10,postfix: '\u00BAC'});
+
+    $(document).on("swipeleft", function() {
+        $('.carousel').carousel('next');
+    });
+    $(document).on("swiperight", function() {
+        $('.carousel').carousel('prev');
     });
 
-    setInterval(function(){startTime();}, 500);
+    $('.carousel-inner').height(window.innerHeight);
+    $('.carousel-inner').css('font-size',window.innerWidth*0.05);
+    $('#reloj').css('font-size',window.innerWidth*0.15);
+    $(window).resize(function() {
+        $('.carousel-inner').height(window.innerHeight);
+        $('.carousel-inner').css('font-size',window.innerWidth*0.05);
+        $('#reloj').css('font-size',window.innerWidth*0.15);
+    });
+
+    startTime();
+    setInterval(function() {
+        startTime();
+    }, 500);
 });
 
-$(function startTime() {
-    console.log("h");
+function startTime() {
     var today = new Date();
     var h = today.getHours();
     var m = today.getMinutes();
@@ -38,4 +55,4 @@ $(function startTime() {
     $('#reloj').html(h + ":" + m + ":" + s);
     $('#temperaturaDisplay').html(temp);
     $('#temperaturaDisplayControl').html(temp);
-});
+}
