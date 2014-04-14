@@ -23,6 +23,8 @@ public class Receptor {
         
         String[] splitChain = null;
         String mensaje = "null";
+        Integer checksum = null;
+        Date fecha = new Date();
 
         while (true) {
             DatagramPacket paqueteRecepcion =
@@ -36,6 +38,26 @@ public class Receptor {
                 System.out.println("Mensaje vacío");
             } else {
                 System.out.println("Conexión confirmada con el mensaje de prueba: " + mensaje);
+            
+                // Parte la cadena devuelta por Arduino que contiene varios campos
+                // separador por ";"
+                splitChain = mensaje.split(";");
+
+                fecha.setTime((long)Integer.parseInt(splitChain[0])*1000);
+
+                // Obtenemos el checksum en el servidor
+                checksum = (Integer.parseInt(splitChain[0]) 
+                        + Integer.parseInt(splitChain[1]) 
+                        + Integer.parseInt(splitChain[2]));
+                
+                if (checksum == Integer.parseInt(splitChain[3])) {
+                    System.out.println("Marca de tiempo: " + fecha.toString());
+                    System.out.println("ID sensor: " + splitChain[1]);
+                    System.out.println("Valor leido: " + splitChain[2]);
+                    System.out.println("Checksum: " + splitChain[3]);
+                } else {
+                    System.out.println("El checksum no coincide");
+                }
             }
         }
     }
