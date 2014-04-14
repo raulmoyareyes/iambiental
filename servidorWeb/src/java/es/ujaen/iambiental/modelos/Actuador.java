@@ -6,10 +6,24 @@
 
 package es.ujaen.iambiental.modelos;
 
+import java.io.Serializable;
+import javax.persistence.Entity;
+import javax.persistence.Id;
+import javax.persistence.Table;
+
 /**
  *
  * @author Gabriel
  */
-public class Actuador {
+@Entity
+@Table(name = "actuadores")
+public class Actuador implements Serializable {
+    
+    @Id
+    private int id;
+    
+    public Actuador(){
+        
+    }
     
 }

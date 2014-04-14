@@ -36,7 +36,7 @@
 
         <!--generar la DB-->
         <property name="generateDdl" value="true" />
-        <property name="showSql" value="false"/>
+        <property name="showSql" value="true"/>
     </bean>
     
     <bean id="emf" class="org.springframework.orm.jpa.LocalContainerEntityManagerFactoryBean">

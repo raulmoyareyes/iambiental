@@ -6,10 +6,23 @@
 
 package es.ujaen.iambiental.modelos;
 
+import java.io.Serializable;
+import javax.persistence.Entity;
+import javax.persistence.Id;
+import javax.persistence.Table;
+
 /**
  *
  * @author Gabriel
  */
-public class ReglaSensorActuador {
-    
+@Entity
+@Table(name = "reglassensoractuador")
+public class ReglaSensorActuador implements Serializable {
+
+    @Id
+    private int id;
+
+    public ReglaSensorActuador() {
+
+    }
 }
