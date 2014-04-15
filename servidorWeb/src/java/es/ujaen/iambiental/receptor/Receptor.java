@@ -6,8 +6,13 @@
 
 package es.ujaen.iambiental.receptor;
 
+import static es.ujaen.iambiental.daos.ReceptorDAO.closeConexion;
+import static es.ujaen.iambiental.daos.ReceptorDAO.openConexion;
+import static es.ujaen.iambiental.daos.ReceptorDAO.lecturaSensorBD;
+import es.ujaen.iambiental.modelos.Sensor;
 import java.net.DatagramPacket;
 import java.net.DatagramSocket;
+import java.sql.Connection;
 import java.util.Date;
 
 /**
@@ -60,7 +65,22 @@ public class Receptor {
                     System.out.println("Valor leido: " + splitChain[2]);
                     System.out.println("Checksum: " + splitChain[3]);
                     
+                    // Como comentario hasta implementación del modelo Sensor
+                    //Sensor s = new Sensor(fecha, splitChain[1], splitChain[2], splitChain[3]);
+                    
                     // AQUI VA LA INSERCION EN LA BD
+                    //Boolean inserta = insertaDatosSensor(s);  
+                    
+                    // Comprobación de los datos insertados en BD
+                    Connection cnx = openConexion();
+                    Sensor s_aux = lecturaSensorBD(Integer.parseInt(splitChain[1])); 
+                    
+                    /*if (s_aux.checksum == splitChain[3] && inserta) {
+                        System.out.println("Inserción realizada con éxito");
+                    }*/
+                    
+                    closeConexion();
+                    
                 } else {
                     // SE INFORMA DEL ERROR Y NO SE GUARDA EN BD
                     System.out.println("El checksum no coincide");
