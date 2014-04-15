@@ -29,7 +29,40 @@ public class ReglaProgramada implements Serializable {
 
     }
 
-    Integer getId() {
+    public int getID() {
         return id;
     }
+
+    public String getDescripcion() {
+        return descripcion;
+    }
+
+    public void setDescripcion(String descripcion) {
+        this.descripcion = descripcion;
+    }
+
+    public String getCondicion() {
+        return condicion;
+    }
+
+    public void setCondicion(String condicion) {
+        this.condicion = condicion;
+    }
+
+    public Sensor getSensor() {
+        return sensor;
+    }
+
+    public void setSensor(Sensor sensor) {
+        this.sensor = sensor;
+    }
+
+    public Actuador getActuador() {
+        return actuador;
+    }
+
+    public void setActuador(Actuador actuador) {
+        this.actuador = actuador;
+    }
+        
 }

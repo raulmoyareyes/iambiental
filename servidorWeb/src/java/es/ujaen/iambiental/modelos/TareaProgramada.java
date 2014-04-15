@@ -38,8 +38,17 @@ public class TareaProgramada implements Serializable {
         this.reglasProgramadas = reglasProgramadas;
     }
 
+    
     public void addReglaProgramada(ReglaProgramada reglaProgramada) {
-        reglasProgramadas.put(reglaProgramada.getId(), reglaProgramada);
+        reglasProgramadas.put(reglaProgramada.getID(), reglaProgramada);
+    }
+
+    public String getDescripcion() {
+        return descripcion;
+    }
+
+    public void setDescripcion(String descripcion) {
+        this.descripcion = descripcion;
     }
 
 }

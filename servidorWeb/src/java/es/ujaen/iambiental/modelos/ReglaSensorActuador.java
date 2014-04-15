@@ -27,6 +27,10 @@ public class ReglaSensorActuador implements Serializable {
         
     }
     
+    public int getID(){
+        return id;
+    }
+    
     public Sensor getSensor() {
         return sensor;
     }
@@ -41,6 +45,14 @@ public class ReglaSensorActuador implements Serializable {
 
     public void setActuador(Actuador actuador) {
         this.actuador = actuador;
+    }
+
+    public String getDescripcion() {
+        return descripcion;
+    }
+
+    public void setDescripcion(String descripcion) {
+        this.descripcion = descripcion;
     }
     
 }

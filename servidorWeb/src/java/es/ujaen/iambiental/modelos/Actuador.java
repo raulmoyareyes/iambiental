@@ -1,9 +1,3 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
-
 package es.ujaen.iambiental.modelos;
 
 import java.io.Serializable;
@@ -36,6 +30,10 @@ public class Actuador implements Serializable {
         
     }
     
+    public int getID(){
+        return id;
+    }
+    
     public int getDependencia() {
         return dependencia;
     }
@@ -50,6 +48,38 @@ public class Actuador implements Serializable {
 
     public void setDato(float dato) {
         this.dato = dato;
+    }
+
+    public String getDescripcion() {
+        return descripcion;
+    }
+
+    public void setDescripcion(String descripcion) {
+        this.descripcion = descripcion;
+    }
+
+    public String getIp() {
+        return ip;
+    }
+
+    public void setIp(String ip) {
+        this.ip = ip;
+    }
+
+    public String getPuerto() {
+        return puerto;
+    }
+
+    public void setPuerto(String puerto) {
+        this.puerto = puerto;
+    }
+
+    public int getEstado() {
+        return estado;
+    }
+
+    public void setEstado(int estado) {
+        this.estado = estado;
     }
     
 }
