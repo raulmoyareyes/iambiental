@@ -57,9 +57,9 @@ public class SensorDAO {
 
     /**
      * Actualiza un sensor en la BD.
-     * 
+     *
      * @param sensor
-     * @throws SensorErrorActualizar 
+     * @throws SensorErrorActualizar
      */
     @Transactional(propagation = Propagation.REQUIRED, readOnly = false,
             rollbackFor = es.ujaen.iambiental.excepciones.SensorErrorActualizar.class)
@@ -74,9 +74,9 @@ public class SensorDAO {
 
     /**
      * Elimina un sensor de la BD.
-     * 
+     *
      * @param sensor
-     * @throws SensorErrorEliminar 
+     * @throws SensorErrorEliminar
      */
     @Transactional(propagation = Propagation.REQUIRED, readOnly = false,
             rollbackFor = es.ujaen.iambiental.excepciones.SensorErrorEliminar.class)
@@ -90,25 +90,34 @@ public class SensorDAO {
     }
 
     /**
-     * 
-     * @return 
+     * Devuelve un mapa con el listado de todos los sensores.
+     *
+     * @return Mapa de sensores si existen sensores, mapa vacío si no existen.
      */
     public Map<Integer, Sensor> listar() {
         Map<Integer, Sensor> sensores = new HashMap();
         List<Sensor> lista = em.createQuery("Select s from Sensor s").getResultList();
 
         for (Sensor sensor : lista) {
-            sensores.put(sensor.getId(), sensor);
+            sensores.put(sensor.getID(), sensor);
         }
         return sensores;
     }
 
-    public Map<Integer, Sensor> consultarDependencia(Integer dependencia) {
+    /**
+     * Devuelve un mapa con el listado de todos los sensores que están en una
+     * dependencia.
+     *
+     * @param dependencia
+     * @return Mapa de sensores si existen sensores en esa dependencia, mapa
+     * vacío si no existen.
+     */
+    public Map<Integer, Sensor> consultarDependencia(int dependencia) {
         Map<Integer, Sensor> sensores = new HashMap();
         List<Sensor> lista = em.createQuery("Select s from Sensor s WHERE s.dependencia = ?1", Sensor.class).setParameter(1, dependencia).getResultList();
 
         for (Sensor sensor : lista) {
-            sensores.put(sensor.getId(), sensor);
+            sensores.put(sensor.getID(), sensor);
         }
         return sensores;
     }
