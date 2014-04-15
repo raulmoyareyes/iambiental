@@ -38,6 +38,10 @@ public class Receptor {
                 System.out.println("Mensaje vacío");
             } else {
                 System.out.println("Conexión confirmada con el mensaje de prueba: " + mensaje);
+                
+                // Esperamos el mensaje con la lectura del sensor
+                socketServidor.receive(paqueteRecepcion);
+                mensaje = new String(paqueteRecepcion.getData());
             
                 // Parte la cadena devuelta por Arduino que contiene varios campos
                 // separador por ";"
@@ -55,8 +59,13 @@ public class Receptor {
                     System.out.println("ID sensor: " + splitChain[1]);
                     System.out.println("Valor leido: " + splitChain[2]);
                     System.out.println("Checksum: " + splitChain[3]);
+                    
+                    // AQUI VA LA INSERCION EN LA BD
                 } else {
+                    // SE INFORMA DEL ERROR Y NO SE GUARDA EN BD
                     System.out.println("El checksum no coincide");
+                    
+                    // AQUI LA SOLICITUD DE REENVIO DE LA ULTIMA LECTURA??
                 }
             }
         }
