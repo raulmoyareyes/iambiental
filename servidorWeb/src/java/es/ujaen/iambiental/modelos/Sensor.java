@@ -9,7 +9,7 @@ import javax.persistence.Table;
 
 /**
  *
- * @author raulm
+ * @author Raúl Moya Reyes <www.raulmoya.es>
  */
 @Entity
 @Table(name = "sensores")
@@ -18,7 +18,12 @@ public class Sensor implements Serializable {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     private int id;
+    private String descripcion;
     private int dependencia; //No es necesario tener un objeto dependencia.
+    private float dato;
+    private String ip;
+    private String puerto;
+    private int estado;
 
     public Sensor() {
 
@@ -35,4 +40,45 @@ public class Sensor implements Serializable {
     public void setDependencia(int dependencia) {
         this.dependencia = dependencia;
     }
+
+    public float getDato() {
+        return dato;
+    }
+
+    public void setDato(float dato) {
+        this.dato = dato;
+    }
+
+    public String getDescripcion() {
+        return descripcion;
+    }
+
+    public void setDescripcion(String descripcion) {
+        this.descripcion = descripcion;
+    }
+
+    public String getIp() {
+        return ip;
+    }
+
+    public void setIp(String ip) {
+        this.ip = ip;
+    }
+
+    public String getPuerto() {
+        return puerto;
+    }
+
+    public void setPuerto(String puerto) {
+        this.puerto = puerto;
+    }
+
+    public int getEstado() {
+        return estado;
+    }
+
+    public void setEstado(int estado) {
+        this.estado = estado;
+    }
+    
 }
