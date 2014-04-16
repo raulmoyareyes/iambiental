@@ -29,7 +29,7 @@ public class Sensor implements Serializable {
 
     }
 
-    public Integer getId() {
+    public Integer getID() {
         return id;
     }
 

@@ -30,6 +30,10 @@ public class TareaProgramada implements Serializable {
 
     }
 
+    public int getID(){
+        return id;
+    }
+    
     public Map<Integer, ReglaProgramada> getReglasProgramadas() {
         return reglasProgramadas;
     }
