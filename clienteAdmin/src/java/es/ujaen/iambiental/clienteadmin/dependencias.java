@@ -5,7 +5,7 @@
  */
 package es.ujaen.iambiental.clienteadmin;
 
-import es.ujaen.iambiental.modelos.Dependencia;
+import es.ujaen.iambiental.modelos.Dependencia_provisional;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
@@ -18,8 +18,8 @@ import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
 /**
- *
- * @author agustin
+ * 
+ * @author Agustín Ruiz Linares <www.agustruiz.es>
  */
 @WebServlet(name = "dependencias", urlPatterns = {"/dependencias/*"})
 public class dependencias extends HttpServlet {
@@ -36,24 +36,36 @@ public class dependencias extends HttpServlet {
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
         response.setContentType("text/html;charset=UTF-8");
-
-        String srvUrl = request.getContextPath() + request.getServletPath();
+        
         RequestDispatcher rd;
-
+        
+        //Variables de las url del servidor
+        String srvUrl = request.getContextPath() + request.getServletPath();
         request.setAttribute("srvUrl", srvUrl);
-        HttpSession session = request.getSession();
+        request.setAttribute("appUrl", request.getContextPath());
+        
+        //Pathinfo
+        String action = (request.getPathInfo() != null ? request.getPathInfo() : "");
+        
+        //Cliente para JSON
+//        DefaultClientConfig defaultClientConfig = new DefaultClientConfig();
+//        defaultClientConfig.getClasses().add(JacksonJsonProvider.class);
+//        Client cliente = Client.create(defaultClientConfig);
+//        WebResource recurso = null;
+//        WebResource recurso = cliente.resource("http://localhost:8080/Hoteles-DAE-REST/recursos");
+        
 
         /* SÓLO PARA PRUEBAS */
-        Dependencia.reset(); //Resetear id de dependencia
-        List<Dependencia> dependencias;
+        Dependencia_provisional.reset(); //Resetear id de dependencia
+        List<Dependencia_provisional> dependencias;
         dependencias = new ArrayList<>();
-        dependencias.add(new Dependencia("Salón", "Descripción del salón"));
-        dependencias.add(new Dependencia("Cocina", "Descripción de cocina"));
-        dependencias.add(new Dependencia("Baño", "Descripción de baño"));
-        dependencias.add(new Dependencia("Dormitorio principal", "Descripción de dormitorio principal"));
-        dependencias.add(new Dependencia("Dormitorio individual", "Descripción de dormitorio individual"));
-        dependencias.add(new Dependencia("Pasillo", "Descripción de pasillo"));
-        dependencias.add(new Dependencia("Piscina", "Descripción de piscina"));
+        dependencias.add(new Dependencia_provisional("Salón", "Descripción del salón"));
+        dependencias.add(new Dependencia_provisional("Cocina", "Descripción de cocina"));
+        dependencias.add(new Dependencia_provisional("Baño", "Descripción de baño"));
+        dependencias.add(new Dependencia_provisional("Dormitorio principal", "Descripción de dormitorio principal"));
+        dependencias.add(new Dependencia_provisional("Dormitorio individual", "Descripción de dormitorio individual"));
+        dependencias.add(new Dependencia_provisional("Pasillo", "Descripción de pasillo"));
+        dependencias.add(new Dependencia_provisional("Piscina", "Descripción de piscina"));
         /* FIN DE PRUEBAS */
 
         //Cabecera
@@ -62,7 +74,6 @@ public class dependencias extends HttpServlet {
         rd.include(request, response);
 
         //Cuerpo
-        String action = (request.getPathInfo() != null ? request.getPathInfo() : "");
         switch (action) {
             case "/listado":
             default: //Ninguna opción seleccionada

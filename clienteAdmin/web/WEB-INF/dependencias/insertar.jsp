@@ -26,7 +26,7 @@
                 <div class="form-group">
                     <div class="col-sm-offset-2 col-sm-10">
                         <button type="submit" class="btn btn-success">Guardar</button>
-                        <a href="/clienteAdmin/dependencias" rol="button" class="btn btn-danger">Cancelar</a>
+                        <a href="${appUrl}/dependencias" rol="button" class="btn btn-danger">Cancelar</a>
                     </div>
                 </div>
             </form>
@@ -39,7 +39,7 @@
         </div>
         <div class="list-group">
             <c:forEach var="d" items="${dependencias}" varStatus="estado">
-                <a href="/clienteAdmin/dependencias/ver?id=${d.id}" class="list-group-item">${d.id} - ${d.nombre}</a>
+                <a href="${appUrl}/dependencias/ver?id=${d.id}" class="list-group-item">${d.id} - ${d.nombre}</a>
             </c:forEach>
         </div>
     </div><!--/span-->

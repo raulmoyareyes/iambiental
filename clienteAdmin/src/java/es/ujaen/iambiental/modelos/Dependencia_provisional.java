@@ -7,20 +7,20 @@
 package es.ujaen.iambiental.modelos;
 
 /**
- * Modelo de dependencias
+ * Modelo de dependencias (clase provisional, para pruebas)
  * @author Agustín Ruiz Linares <arl00029@red.ujaen.es>
  */
-public class Dependencia {
-    static int contador = 0;
-    Integer id;
-    String nombre;
-    String descripcion;
+public class Dependencia_provisional {
+    static private int contador = 0;
+    private Integer id;
+    private String nombre;
+    private String descripcion;
 
     /**
      * Constructor por defecto
      * @author Agustín Ruiz Linares <www.agustruiz.es>
      */
-    public Dependencia() {
+    public Dependencia_provisional() {
         this.id = contador++;
         this.nombre = "";
         this.descripcion = "";
@@ -32,7 +32,7 @@ public class Dependencia {
      * @param descripcion Descripción de la dependencia
      * @author Agustín Ruiz Linares <www.agustruiz.es>
      */
-    public Dependencia(String nombre, String descripcion) {
+    public Dependencia_provisional(String nombre, String descripcion) {
         this.id = contador++;
         this.nombre = nombre;
         this.descripcion = descripcion;
@@ -86,7 +86,7 @@ public class Dependencia {
      * Reset de id (para pruebas)
      */
     public static void reset(){
-        Dependencia.contador = 0;
+        Dependencia_provisional.contador = 0;
     }
     
 }

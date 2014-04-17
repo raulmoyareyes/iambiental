@@ -23,11 +23,11 @@
                     </div>
                 </div>
 
-                    <div class="form-group">
-                        <div class="col-sm-offset-2 col-sm-10">
-                            <a href="/clienteAdmin/dependencias" rol="button" class="btn btn-default">Volver al listado</a>
-                        </div>
+                <div class="form-group">
+                    <div class="col-sm-offset-2 col-sm-10">
+                        <a href="${appUrl}/dependencias" rol="button" class="btn btn-default">Volver al listado</a>
                     </div>
+                </div>
             </form>
 
         </div><!--/row-->
@@ -35,8 +35,8 @@
 
     <div class="col-xs-6 col-sm-3 sidebar-offcanvas" id="sidebar" role="navigation">
         <div class="list-group">
-            <a href="/clienteAdmin/dependencias/insertar" class="list-group-item"><span class="glyphicon glyphicon-plus-sign"></span> Insertar nueva dependencia</a>
-            <a href="/clienteAdmin/dependencias/editar?id=${dependencia.id}" class="list-group-item"><span class="glyphicon glyphicon-edit"></span> Editar dependencia</a>
+            <a href="${appUrl}/dependencias/insertar" class="list-group-item"><span class="glyphicon glyphicon-plus-sign"></span> Insertar nueva dependencia</a>
+            <a href="${appUrl}/dependencias/editar?id=${dependencia.id}" class="list-group-item"><span class="glyphicon glyphicon-edit"></span> Editar dependencia</a>
             <a href="#" class="list-group-item" onclick="modalEliminarDependencia('${dependencia.id}', '${dependencia.nombre}')"><span class="glyphicon glyphicon-minus-sign"></span> Eliminar dependencia</a>
         </div>
         <div class="list-group">

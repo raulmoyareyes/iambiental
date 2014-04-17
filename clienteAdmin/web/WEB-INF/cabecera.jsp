@@ -8,13 +8,13 @@
             %></title>
 
         <!-- Bootstrap core CSS -->
-        <link href="/clienteAdmin/css/bootstrap.min.css" rel="stylesheet">
+        <link href="${appUrl}/css/bootstrap.min.css" rel="stylesheet">
 
         <!-- Custom styles for this template -->
-        <link href="/clienteAdmin/css/offcanvas.css" rel="stylesheet">
+        <link href="${appUrl}/css/offcanvas.css" rel="stylesheet">
 
         <!-- Estilos para este proyecto -->
-        <link href="/clienteAdmin/css/iAmbiental.css" rel="stylesheet">
+        <link href="${appUrl}/css/iAmbiental.css" rel="stylesheet">
 
         <!-- HTML5 shim and Respond.js IE8 support of HTML5 elements and media queries -->
         <!--[if lt IE 9]>
@@ -38,12 +38,12 @@
             <div class="collapse navbar-collapse">
                 <ul class="nav navbar-nav">
                     <!--<li ${(mainMenuOption == 'home')?'class="active"':''} ><a href="home">Home</a></li>-->
-                    <li ${(mainMenuOption == 'dependencias')?'class="active"':''} ><a href="/clienteAdmin/dependencias">Dependencias</a></li>
-                    <li ${(mainMenuOption == 'dispositivos')?'class="active"':''} ><a href="/clienteAdmin/dispositivos">Dispositivos</a></li>
-                    <li ${(mainMenuOption == 'sensores')?'class="active"':''} ><a href="/clienteAdmin/sensores">Sensores</a></li>
-                    <li ${(mainMenuOption == 'actuadores')?'class="active"':''} ><a href="/clienteAdmin/actuadores">Actuadores</a></li>
-                    <li ${(mainMenuOption == 'reglas')?'class="active"':''} ><a href="/clienteAdmin/reglas">Reglas</a></li>
-                    <li ${(mainMenuOption == 'tareas')?'class="active"':''} ><a href="/clienteAdmin/tareas">Tareas</a></li>
+                    <li ${(mainMenuOption == 'dependencias')?'class="active"':''} ><a href="${appUrl}/dependencias">Dependencias</a></li>
+                    <li ${(mainMenuOption == 'dispositivos')?'class="active"':''} ><a href="${appUrl}/dispositivos">Dispositivos</a></li>
+                    <li ${(mainMenuOption == 'sensores')?'class="active"':''} ><a href="${appUrl}/sensores">Sensores</a></li>
+                    <li ${(mainMenuOption == 'actuadores')?'class="active"':''} ><a href="${appUrl}/actuadores">Actuadores</a></li>
+                    <li ${(mainMenuOption == 'reglas')?'class="active"':''} ><a href="${appUrl}/reglas">Reglas</a></li>
+                    <li ${(mainMenuOption == 'tareas')?'class="active"':''} ><a href="${appUrl}/tareas">Tareas</a></li>
                 </ul>
             </div><!-- /.nav-collapse -->
         </div><!-- /.container -->
