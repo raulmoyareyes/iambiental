@@ -1,13 +1,14 @@
 /* FUNCIONES NECESARIAS */
 
+//Variable de URL de la aplicación
+var appUrl = "/clienteAdmin/"; //${appUrl};
+
 /**
  * Mostrar modal para eliminar dependencia
  * @param string idItemEliminar Id de la dependencia a eliminar
  * @param string nombreDependencia Nombre de la dependencia a eliminar
  * @returns void
  */
-
-var appUrl = "/clienteAdmin/";
 function modalEliminarDependencia(idItemEliminar, nombreDependencia) {
     $('#nombreDependenciaEliminar').text(nombreDependencia);
     $('#botonEliminarDependencia').attr("href", appUrl+"dependencias/eliminar?id="+idItemEliminar);
@@ -27,13 +28,25 @@ function modalEliminarSensor(idItemEliminar, descripcionSensor) {
 }
 
 /**
- * Mostrar modal para eliminar sensor
- * @param string idItemEliminar Id del sensor a eliminar
- * @param string descripcionSensor Nombre del sensor a eliminar
+ * Mostrar modal para eliminar actuador
+ * @param string idItemEliminar Id del actuador a eliminar
+ * @param string descripcionActuador Nombre del actuador a eliminar
  * @returns void
  */
 function modalEliminarActuador(idItemEliminar, descripcionActuador) {
     $('#descripcionActuadorEliminar').text(descripcionActuador);
     $('#botonEliminarActuador').attr("href", appUrl+"actuadores/eliminar?id="+idItemEliminar);
     $('#modalEliminarActuador').modal();
+}
+
+/**
+ * Mostrar modal para eliminar regla sensor-actuador
+ * @param {type} idItemEliminar
+ * @param {type} descripcionRegla
+ * @returns {undefined}
+ */
+function modalEliminarReglaSensorActuador(idItemEliminar, descripcionRegla) {
+    $('#descripcionReglaEliminar').text(descripcionRegla);
+    $('#botonEliminarRegla').attr("href", appUrl+"reglas/eliminar?id="+idItemEliminar);
+    $('#modalEliminarRegla').modal();
 }

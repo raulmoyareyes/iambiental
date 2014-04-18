@@ -38,12 +38,12 @@
             <div class="collapse navbar-collapse">
                 <ul class="nav navbar-nav">
                     <!--<li ${(mainMenuOption == 'home')?'class="active"':''} ><a href="home">Home</a></li>-->
-                    <li ${(mainMenuOption == 'dependencias')?'class="active"':''} ><a href="${appUrl}/dependencias">Dependencias</a></li>
-                    <li ${(mainMenuOption == 'dispositivos')?'class="active"':''} ><a href="${appUrl}/dispositivos">Dispositivos</a></li>
+                    <!--<li ${(mainMenuOption == 'dependencias')?'class="active"':''} ><a href="${appUrl}/dependencias">Dependencias</a></li>-->
+                    <!--<li ${(mainMenuOption == 'dispositivos')?'class="active"':''} ><a href="${appUrl}/dispositivos">Dispositivos</a></li>-->
                     <li ${(mainMenuOption == 'sensores')?'class="active"':''} ><a href="${appUrl}/sensores">Sensores</a></li>
                     <li ${(mainMenuOption == 'actuadores')?'class="active"':''} ><a href="${appUrl}/actuadores">Actuadores</a></li>
-                    <li ${(mainMenuOption == 'reglas')?'class="active"':''} ><a href="${appUrl}/reglas">Reglas</a></li>
-                    <li ${(mainMenuOption == 'tareas')?'class="active"':''} ><a href="${appUrl}/tareas">Tareas</a></li>
+                    <li ${(mainMenuOption == 'reglas')?'class="active"':''} ><a href="${appUrl}/reglas">Reglas sensor-actuador</a></li>
+                    <li ${(mainMenuOption == 'tareas')?'class="active"':''} ><a href="${appUrl}/tareas">Tareas programadas</a></li>
                 </ul>
             </div><!-- /.nav-collapse -->
         </div><!-- /.container -->
