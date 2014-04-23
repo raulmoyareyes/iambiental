@@ -34,12 +34,12 @@ public class dispositivos extends HttpServlet {
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
         response.setContentType("text/html;charset=UTF-8");
-
-        String srvUrl = request.getContextPath() + request.getServletPath();
+        
         RequestDispatcher rd;
-
+        
+        String srvUrl = request.getContextPath() + request.getServletPath();
         request.setAttribute("srvUrl", srvUrl);
-        HttpSession session = request.getSession();
+        request.setAttribute("appUrl", request.getContextPath());
 
         //Cabecera
         request.setAttribute("mainMenuOption", "dispositivos");

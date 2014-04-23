@@ -1,52 +1,45 @@
+
+<%@taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <div class="row row-offcanvas row-offcanvas-right">
 
     <div class="col-xs-12 col-sm-9">
         <p class="pull-right visible-xs">
             <button type="button" class="btn btn-primary btn-xs" data-toggle="offcanvas">Menú lateral</button>
         </p>
-        <div class="row">
-            <h1>Editar dependencia - Dormitorio principal</h1>
+        <div class="row padding1em">
 
-            <form class="form-horizontal" role="form">
-                <div class="form-group">
-                    <label for="inputNombreDependencia" class="col-sm-2 control-label">Nombre</label>
-                    <div class="col-sm-10">
-                        <input type="text" class="form-control" id="inputNombreDependencia" placeholder="Nombre de la dependencia">
-                    </div>
+            <c:if test="${eliminado != null}">
+                <div class="alert alert-warning alert-dismissable">
+                    <button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>
+                    <strong>Yeah!</strong> La dependencia "${eliminado}" ha sido eliminada del sistema.
                 </div>
-                <div class="form-group">
-                    <label for="textAreaDescripcionDependencia" class="col-sm-2 control-label">Descripción</label>
-                    <div class="col-sm-10">
-                        <textarea class="form-control" id="textAreaDescripcionDependencia" placeholder="Descripción de la dependencia"></textarea>
+            </c:if>
+            
+            <h1>Dependencias</h1>
+            <div class="list-group">
+                <c:forEach var="d" items="${dependencias}" varStatus="estado">
+                    <div class="list-group-item">
+                        ${d.id} - ${d.nombre}
+                        
+                        <a href="#" class="btn pull-right" onclick="modalEliminarDependencia('${d.id}', '${d.nombre}')">
+                            <span class="glyphicon glyphicon-minus-sign"></span>
+                        </a>
+                        <a href="/clienteAdmin/dependencias/editar?id=${d.id}" class="btn pull-right">
+                            <span class="glyphicon glyphicon-edit"></span>
+                        </a>
+                        <a href="/clienteAdmin/dependencias/ver?id=${d.id}" class="btn pull-right">
+                            <span class="glyphicon glyphicon-eye-open"></span>
+                        </a>
                     </div>
-                </div>
-
-                <div class="form-group">
-                    <div class="col-sm-offset-2 col-sm-10">
-                        <button type="submit" class="btn btn-success">Enviar</button>
-                        <button type="reset" class="btn btn-primary">Limpiar formulario</button>
-                        <button type="button" class="btn btn-danger">Cancelar</button>
-                    </div>
-                </div>
-            </form>
-
+                </c:forEach>
+            </div>
         </div><!--/row-->
     </div><!--/span-->
 
     <div class="col-xs-6 col-sm-3 sidebar-offcanvas" id="sidebar" role="navigation">
         <div class="list-group">
-            <a href="#" class="list-group-item"><span class="glyphicon glyphicon-plus-sign"></span> Insertar</a>
-            <a href="#" class="list-group-item active"><span class="glyphicon glyphicon-edit"></span> Editar</a>
-            <a href="#" class="list-group-item"><span class="glyphicon glyphicon-minus-sign"></span> Eliminar</a>
-        </div>
-        <div class="list-group">
-            <a href="#" class="list-group-item">Salón</a>
-            <a href="#" class="list-group-item">Cocina</a>
-            <a href="#" class="list-group-item">Baño</a>
-            <a href="#" class="list-group-item active">Dormitorio principal</a>
-            <a href="#" class="list-group-item">Dormitorio individual</a>
-            <a href="#" class="list-group-item">Pasillo</a>
-            <a href="#" class="list-group-item">Piscina</a>
+            <a href="${appUrl}/dependencias/insertar" class="list-group-item"><span class="glyphicon glyphicon-plus-sign"></span> Insertar nueva dependencia</a>
         </div>
     </div><!--/span-->
 </div><!--/row-->
+
