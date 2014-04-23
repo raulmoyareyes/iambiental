@@ -29,6 +29,13 @@ public class ReglaProgramada implements Serializable {
 
     }
 
+    public ReglaProgramada(String descripcion, String condicion, Sensor sensor, Actuador actuador) {
+        this.descripcion = descripcion;
+        this.condicion = condicion;
+        this.sensor = sensor;
+        this.actuador = actuador;
+    }
+
     public int getID() {
         return id;
     }

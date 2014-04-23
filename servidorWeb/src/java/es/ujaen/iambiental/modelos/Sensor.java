@@ -1,11 +1,15 @@
 package es.ujaen.iambiental.modelos;
 
 import java.io.Serializable;
+import java.util.Date;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.OneToOne;
 import javax.persistence.Table;
+import javax.persistence.Temporal;
+import javax.persistence.TemporalType;
 
 /**
  *
@@ -19,7 +23,10 @@ public class Sensor implements Serializable {
     @GeneratedValue(strategy = GenerationType.AUTO)
     private int id;
     private String descripcion;
-    private int dependencia; //No es necesario tener un objeto dependencia.
+    @OneToOne
+    private Dependencia dependencia; //No es necesario tener un objeto dependencia.
+    @Temporal(TemporalType.DATE)
+    private Date fecha;
     private float dato;
     private String ip;
     private String puerto;
@@ -29,15 +36,25 @@ public class Sensor implements Serializable {
 
     }
 
+    public Sensor(String descripcion, Dependencia dependencia, Date fecha, float dato, String ip, String puerto, int estado) {
+        this.descripcion = descripcion;
+        this.dependencia = dependencia;
+        this.fecha = fecha;
+        this.dato = dato;
+        this.ip = ip;
+        this.puerto = puerto;
+        this.estado = estado;
+    }
+
     public Integer getID() {
         return id;
     }
 
-    public int getDependencia() {
+    public Dependencia getDependencia() {
         return dependencia;
     }
 
-    public void setDependencia(int dependencia) {
+    public void setDependencia(Dependencia dependencia) {
         this.dependencia = dependencia;
     }
 

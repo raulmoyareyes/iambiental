@@ -30,6 +30,11 @@ public class TareaProgramada implements Serializable {
 
     }
 
+    public TareaProgramada(String descripcion, Map<Integer, ReglaProgramada> reglasProgramadas) {
+        this.descripcion = descripcion;
+        this.reglasProgramadas = reglasProgramadas;
+    }
+
     public int getID(){
         return id;
     }

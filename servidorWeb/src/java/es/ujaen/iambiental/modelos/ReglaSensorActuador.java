@@ -26,7 +26,13 @@ public class ReglaSensorActuador implements Serializable {
     public ReglaSensorActuador() {
         
     }
-    
+
+    public ReglaSensorActuador(String descripcion, Sensor sensor, Actuador actuador) {
+        this.descripcion = descripcion;
+        this.sensor = sensor;
+        this.actuador = actuador;
+    }
+
     public int getID(){
         return id;
     }
