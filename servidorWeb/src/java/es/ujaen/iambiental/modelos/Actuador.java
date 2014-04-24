@@ -6,6 +6,7 @@ import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.OneToOne;
 import javax.persistence.Table;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
@@ -23,7 +24,8 @@ public class Actuador implements Serializable {
     @GeneratedValue(strategy = GenerationType.AUTO)
     private int id;
     private String descripcion;
-    private int dependencia; //No es necesario tener un objeto dependencia.
+    @OneToOne
+    private Dependencia dependencia;
     @Temporal(TemporalType.TIMESTAMP)
     private Date fecha;
     private float dato;
@@ -35,7 +37,7 @@ public class Actuador implements Serializable {
         
     }
 
-    public Actuador(String descripcion, int dependencia, Date fecha, float dato, String ip, String puerto, int estado) {
+    public Actuador(String descripcion, Dependencia dependencia, Date fecha, float dato, String ip, String puerto, int estado) {
         this.descripcion = descripcion;
         this.dependencia = dependencia;
         this.fecha = fecha;
@@ -49,11 +51,11 @@ public class Actuador implements Serializable {
         return id;
     }
     
-    public int getDependencia() {
+    public Dependencia getDependencia() {
         return dependencia;
     }
 
-    public void setDependencia(int dependencia) {
+    public void setDependencia(Dependencia dependencia) {
         this.dependencia = dependencia;
     }
 

@@ -24,7 +24,7 @@ public class Sensor implements Serializable {
     private int id;
     private String descripcion;
     @OneToOne
-    private Dependencia dependencia; //No es necesario tener un objeto dependencia.
+    private Dependencia dependencia;
     @Temporal(TemporalType.TIMESTAMP)
     private Date fecha;
     private float dato;
