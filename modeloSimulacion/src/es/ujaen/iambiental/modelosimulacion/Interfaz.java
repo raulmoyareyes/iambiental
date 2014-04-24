@@ -18,6 +18,7 @@ public class Interfaz extends javax.swing.JFrame {
 
     //Variables del sistema
     boolean enFuncionamiento;
+    ClienteUDP socket;
 
     /**
      * Creates new form Main
@@ -47,6 +48,11 @@ public class Interfaz extends javax.swing.JFrame {
         txtIp = new javax.swing.JTextField();
         txtPuerto = new javax.swing.JTextField();
         jLabel13 = new javax.swing.JLabel();
+        jSeparator1 = new javax.swing.JSeparator();
+        jLabel14 = new javax.swing.JLabel();
+        txtMensaje = new javax.swing.JTextField();
+        btnEnviarMensaje = new javax.swing.JButton();
+        jSeparator2 = new javax.swing.JSeparator();
         jpLog = new javax.swing.JScrollPane();
         txtLog = new javax.swing.JTextArea();
 
@@ -78,19 +84,41 @@ public class Interfaz extends javax.swing.JFrame {
 
         jLabel13.setText("Puerto");
 
+        jLabel14.setText("Mensaje");
+
+        txtMensaje.setEnabled(false);
+
+        btnEnviarMensaje.setText("Enviar");
+        btnEnviarMensaje.setEnabled(false);
+        btnEnviarMensaje.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnEnviarMensajeActionPerformed(evt);
+            }
+        });
+
         javax.swing.GroupLayout jpConfiguracionLayout = new javax.swing.GroupLayout(jpConfiguracion);
         jpConfiguracion.setLayout(jpConfiguracionLayout);
         jpConfiguracionLayout.setHorizontalGroup(
             jpConfiguracionLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jpConfiguracionLayout.createSequentialGroup()
                 .addContainerGap()
-                .addGroup(jpConfiguracionLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                    .addComponent(jLabel12, javax.swing.GroupLayout.PREFERRED_SIZE, 73, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(jLabel13, javax.swing.GroupLayout.PREFERRED_SIZE, 73, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addGroup(jpConfiguracionLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(txtPuerto, javax.swing.GroupLayout.DEFAULT_SIZE, 493, Short.MAX_VALUE)
-                    .addComponent(txtIp))
+                    .addGroup(jpConfiguracionLayout.createSequentialGroup()
+                        .addGroup(jpConfiguracionLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                            .addComponent(jLabel12, javax.swing.GroupLayout.PREFERRED_SIZE, 73, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(jLabel13, javax.swing.GroupLayout.PREFERRED_SIZE, 73, javax.swing.GroupLayout.PREFERRED_SIZE))
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addGroup(jpConfiguracionLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(txtPuerto, javax.swing.GroupLayout.DEFAULT_SIZE, 493, Short.MAX_VALUE)
+                            .addComponent(txtIp)))
+                    .addComponent(jSeparator1)
+                    .addGroup(jpConfiguracionLayout.createSequentialGroup()
+                        .addComponent(jLabel14, javax.swing.GroupLayout.PREFERRED_SIZE, 73, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(txtMensaje)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(btnEnviarMensaje))
+                    .addComponent(jSeparator2))
                 .addContainerGap())
         );
         jpConfiguracionLayout.setVerticalGroup(
@@ -104,7 +132,16 @@ public class Interfaz extends javax.swing.JFrame {
                 .addGroup(jpConfiguracionLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(txtPuerto, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(jLabel13))
-                .addContainerGap(342, Short.MAX_VALUE))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(jSeparator1, javax.swing.GroupLayout.PREFERRED_SIZE, 10, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addGroup(jpConfiguracionLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(jLabel14)
+                    .addComponent(txtMensaje, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(btnEnviarMensaje))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(jSeparator2, javax.swing.GroupLayout.PREFERRED_SIZE, 10, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addContainerGap(276, Short.MAX_VALUE))
         );
 
         jtpPrincipal.addTab("Configuración", jpConfiguracion);
@@ -147,7 +184,7 @@ public class Interfaz extends javax.swing.JFrame {
                         .addComponent(jLabel3, javax.swing.GroupLayout.PREFERRED_SIZE, 28, javax.swing.GroupLayout.PREFERRED_SIZE))
                     .addComponent(btnIniciarSimulacion, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(jtpPrincipal, javax.swing.GroupLayout.DEFAULT_SIZE, 446, Short.MAX_VALUE))
+                .addComponent(jtpPrincipal))
         );
 
         pack();
@@ -158,16 +195,29 @@ public class Interfaz extends javax.swing.JFrame {
         if (!this.enFuncionamiento) {
             //Iniciar
             if (this.comprobarIp(this.txtIp.getText()) && this.comprobarPuerto(this.txtPuerto.getText())) {
-                //Ip y Puerto correctos
-                this.enFuncionamiento = true;
-                this.btnIniciarSimulacion.setText("Detener");
-                this.jtpPrincipal.setSelectedIndex(1);
-                this.txtIp.setEnabled(false);
-                this.txtPuerto.setEnabled(false);
-                this.txtLog.setText(this.txtLog.getText() + "[INICIANDO SIM. ]\n");
+                //Puerto a entero
+                int puerto = Integer.parseInt(this.txtPuerto.getText());
+                this.socket = new ClienteUDP(txtIp.getText(), puerto);
+                if (this.socket.isOk()) {
+                    //Ip y Puerto correctos
+                    this.enFuncionamiento = true;
+                    this.btnIniciarSimulacion.setText("Detener");
+//                this.jtpPrincipal.setSelectedIndex(1);
+                    this.txtIp.setEnabled(false);
+                    this.txtPuerto.setEnabled(false);
+                    this.txtMensaje.setEnabled(true);
+                    this.btnEnviarMensaje.setEnabled(true);
+
+                    this.txtLog.setText(this.txtLog.getText() + "[INICIANDO SIM. ]\n");
+                } else {
+                    //Error al crear el socket
+                    showMessageDialog(null, "Ha ocurrido un error al intentar crear el socket", "No se puede iniciar", 2);
+                    this.jtpPrincipal.setSelectedIndex(0);
+                }
             } else {
                 //Error en IP o Puerto
-                showMessageDialog(null, "La dirección IP y/o el puerto son incorrectos.", "Cómorl?!", 2);
+                showMessageDialog(null, "La dirección IP y/o el puerto son incorrectos.", "No se puede iniciar", 2);
+                this.jtpPrincipal.setSelectedIndex(0);
             }
         } else {
             //Apagar
@@ -176,8 +226,20 @@ public class Interfaz extends javax.swing.JFrame {
             this.txtIp.setEnabled(true);
             this.txtPuerto.setEnabled(true);
             this.txtLog.setText(this.txtLog.getText() + "[DETENIENDO SIM.]\n");
+            this.txtMensaje.setEnabled(false);
+            this.btnEnviarMensaje.setEnabled(false);
+            this.socket = null;
         }
     }//GEN-LAST:event_btnIniciarSimulacionActionPerformed
+
+    private void btnEnviarMensajeActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnEnviarMensajeActionPerformed
+        if("".equals(this.txtMensaje.getText())){
+            //No hay nada que enviar
+            showMessageDialog(null, "No ha indicado nada para enviar", "No se ejecutó la operación", 2);
+        }else{
+//            this.socket
+        }
+    }//GEN-LAST:event_btnEnviarMensajeActionPerformed
 
     /**
      * @param args the command line arguments
@@ -248,11 +310,15 @@ public class Interfaz extends javax.swing.JFrame {
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.JButton btnEnviarMensaje;
     private javax.swing.JButton btnIniciarSimulacion;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel12;
     private javax.swing.JLabel jLabel13;
+    private javax.swing.JLabel jLabel14;
     private javax.swing.JLabel jLabel3;
+    private javax.swing.JSeparator jSeparator1;
+    private javax.swing.JSeparator jSeparator2;
     private javax.swing.JPanel jpConfiguracion;
     private javax.swing.JScrollPane jpLog;
     private javax.swing.JTabbedPane jtpPrincipal;
@@ -260,6 +326,7 @@ public class Interfaz extends javax.swing.JFrame {
     private javax.swing.JLabel lblHora;
     private javax.swing.JTextField txtIp;
     private javax.swing.JTextArea txtLog;
+    private javax.swing.JTextField txtMensaje;
     private javax.swing.JTextField txtPuerto;
     // End of variables declaration//GEN-END:variables
 }
