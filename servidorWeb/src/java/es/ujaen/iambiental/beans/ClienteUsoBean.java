@@ -6,9 +6,14 @@
 
 package es.ujaen.iambiental.beans;
 
+import es.ujaen.iambiental.daos.ActuadorDAO;
+import es.ujaen.iambiental.daos.SensorDAO;
+import es.ujaen.iambiental.excepciones.ActuadorErrorActualizar;
+import es.ujaen.iambiental.excepciones.ActuadorNoEncontrado;
 import es.ujaen.iambiental.modelos.Actuador;
 import es.ujaen.iambiental.modelos.Sensor;
 import java.util.Map;
+import javax.annotation.Resource;
 
 /**
  *
@@ -16,54 +21,30 @@ import java.util.Map;
  */
 public class ClienteUsoBean {
     
+    @Resource
+    SensorDAO sensorDAO;
+    
+    @Resource
+    ActuadorDAO actuadorDAO;
+    
     /**
      * Devuelve un mapa con la lista de sensores de la habitación indicada.
      *
-     * @param idHabitacion
+     * @param idDependencia
      * @return Devuelve un mapa con la lista de sensores de la habitación indicada
      */
-    public Map<String, Sensor> listarSensores(String idHabitacion) {
-        return null;
+    public Map<Integer, Sensor> listarSensores(Integer idDependencia) {
+        return sensorDAO.consultarDependencia(idDependencia);
     }
     
     /**
      * Devuelve un mapa con la lista de actuadores de la habitación indicada.
      *
-     * @param idHabitacion
+     * @param idDependencia
      * @return Devuelve un mapa con la lista de actuadores de la habitación indicada
      */
-    public Map<String, Actuador> listarActuadores(String idHabitacion) {
-        return null;
-    }
-    
-    /**
-     * Devuelve el estado del sensor indicado.
-     *
-     * @param idSensor
-     * @return Devuelve el estado del sensor indicado
-     */
-    public Double obtenerEstadoSensor(String idSensor){
-        return null;
-    }
-    
-    /**
-     * Devuelve el estado del actuador indicado.
-     *
-     * @param idActuador
-     * @return Devuelve el estado del actuador indicado
-     */
-    public Double obtenerEstadoActuador(String idActuador){
-        return null;
-    }
-    
-    /**
-     * Modifica el estado del actuador indicado con el valor indicado.
-     *
-     * @param idActuador
-     * @param valor
-     */
-    public void modificarEstadoActuador(String idActuador, Double valor) {
-        
+    public Map<Integer, Actuador> listarActuadores(Integer idDependencia) {
+        return actuadorDAO.consultarDependencia(idDependencia);
     }
     
 }
