@@ -6,6 +6,11 @@
 
 package es.ujaen.iambiental.beans;
 
+import es.ujaen.iambiental.daos.ActuadorDAO;
+import es.ujaen.iambiental.daos.ReglaProgramadaDAO;
+import es.ujaen.iambiental.daos.ReglaSensorActuadorDAO;
+import es.ujaen.iambiental.daos.SensorDAO;
+import es.ujaen.iambiental.daos.TareaProgramadaDAO;
 import es.ujaen.iambiental.excepciones.ActuadorErrorActualizar;
 import es.ujaen.iambiental.excepciones.ActuadorErrorDatos;
 import es.ujaen.iambiental.excepciones.ActuadorErrorEliminar;
@@ -47,6 +52,21 @@ import org.springframework.stereotype.Component;
  */
 @Component(value = "beanAdmin")
 public class AdminBean {
+    
+    @Resource
+    SensorDAO sensorDAO;
+    
+    @Resource
+    ActuadorDAO actuadorDAO;
+    
+    @Resource
+    TareaProgramadaDAO tareaProgramadaDAO;
+    
+    @Resource
+    ReglaProgramadaDAO reglaProgramadaDAO;
+    
+    @Resource
+    ReglaSensorActuadorDAO reglaSensorActuadorDAO;
 
     /**
      * Crear un sensor.
@@ -57,6 +77,12 @@ public class AdminBean {
      */
     public void crearSensor(Sensor sensor) throws SensorErrorDatos, SensorErrorPersistir{
         
+        try {
+            sensorDAO.insertar(sensor);
+        } catch (SensorErrorPersistir e) {
+            throw new SensorErrorPersistir();
+        }
+
     }
     
     /**
@@ -65,8 +91,8 @@ public class AdminBean {
      * @param idSensor
      * @return Devuelve el sensor, null si no es encontrado.
      */
-    public Sensor obtenerSensor(String idSensor) {
-        return null;
+    public Sensor obtenerSensor(Integer idSensor) {
+        return sensorDAO.buscar(idSensor);
     }
     
     /**
@@ -76,8 +102,12 @@ public class AdminBean {
      * @throws es.ujaen.iambiental.excepciones.SensorErrorEliminar
      * @throws es.ujaen.iambiental.excepciones.SensorNoEncontrado
      */
-    public void eliminarSensor(String idSensor) throws SensorErrorEliminar, SensorNoEncontrado{
-        
+    public void eliminarSensor(Integer idSensor) throws SensorErrorEliminar, SensorNoEncontrado{
+        Sensor s = sensorDAO.buscar(idSensor);
+        if (s == null) {
+            throw new SensorNoEncontrado();
+        }
+        sensorDAO.eliminar(s);
     }
     
     /**
@@ -87,7 +117,7 @@ public class AdminBean {
      * @throws es.ujaen.iambiental.excepciones.SensorErrorActualizar
      */
     public void modificarSensor(Sensor sensor) throws SensorErrorActualizar{
-        
+        sensorDAO.actualizar(sensor);
     }
     
     /**
@@ -98,7 +128,11 @@ public class AdminBean {
      * @throws es.ujaen.iambiental.excepciones.ActuadorErrorPersistir
      */
     public void crearActuador(Actuador actuador) throws ActuadorErrorDatos, ActuadorErrorPersistir{
-        
+        try {
+            actuadorDAO.insertar(actuador);
+        } catch (ActuadorErrorPersistir e) {
+            throw new ActuadorErrorPersistir();
+        }
     }
     
     /**
@@ -107,8 +141,8 @@ public class AdminBean {
      * @param idActuador
      * @return Devuelve el actuador, null si no es encontrado.
      */
-    public Actuador obtenerActuador(String idActuador) {
-        return null;
+    public Actuador obtenerActuador(Integer idActuador) {
+        return actuadorDAO.buscar(idActuador);
     }
     
     /**
@@ -118,8 +152,12 @@ public class AdminBean {
      * @throws es.ujaen.iambiental.excepciones.ActuadorErrorEliminar
      * @throws es.ujaen.iambiental.excepciones.ActuadorNoEncontrado
      */
-    public void eliminarActuador(String idActuador) throws ActuadorErrorEliminar, ActuadorNoEncontrado {
-        
+    public void eliminarActuador(Integer idActuador) throws ActuadorErrorEliminar, ActuadorNoEncontrado {
+        Actuador a = actuadorDAO.buscar(idActuador);
+        if (a == null) {
+            throw new ActuadorNoEncontrado();
+        }
+        actuadorDAO.eliminar(a);
     }
     
     /**
@@ -129,7 +167,7 @@ public class AdminBean {
      * @throws es.ujaen.iambiental.excepciones.ActuadorErrorActualizar
      */
     public void modificarActuador(Actuador actuador) throws ActuadorErrorActualizar {
-        
+        actuadorDAO.actualizar(actuador);
     }
     
     /**
@@ -140,7 +178,11 @@ public class AdminBean {
      * @throws es.ujaen.iambiental.excepciones.TareaProgramadaErrorPersistir
      */
     public void crearTareaProgramada(TareaProgramada tareaProgramada) throws TareaProgramadaErrorDatos, TareaProgramadaErrorPersistir{
-        
+        try {
+            tareaProgramadaDAO.insertar(tareaProgramada);
+        } catch (TareaProgramadaErrorPersistir e) {
+            throw new TareaProgramadaErrorPersistir();
+        }
     }
     
     /**
@@ -149,8 +191,8 @@ public class AdminBean {
      * @param idTareaProgramada
      * @return Devuelve la tarea programada, null si no es encontrada.
      */
-    public TareaProgramada obtenerTareaProgramada(String idTareaProgramada) {
-        return null;
+    public TareaProgramada obtenerTareaProgramada(Integer idTareaProgramada) {
+        return tareaProgramadaDAO.buscar(idTareaProgramada);
     }
     
     /**
@@ -160,8 +202,12 @@ public class AdminBean {
      * @throws es.ujaen.iambiental.excepciones.TareaProgramadaErrorEliminar
      * @throws es.ujaen.iambiental.excepciones.TareaProgramadaNoEncontrada
      */
-    public void eliminarTareaProgramada(String idTareaProgramada) throws TareaProgramadaErrorEliminar, TareaProgramadaNoEncontrada {
-        
+    public void eliminarTareaProgramada(Integer idTareaProgramada) throws TareaProgramadaErrorEliminar, TareaProgramadaNoEncontrada {
+        TareaProgramada tp = tareaProgramadaDAO.buscar(idTareaProgramada);
+        if (tp == null) {
+            throw new TareaProgramadaNoEncontrada();
+        }
+        tareaProgramadaDAO.eliminar(tp);
     }
     
     /**
@@ -171,7 +217,7 @@ public class AdminBean {
      * @throws es.ujaen.iambiental.excepciones.TareaProgramadaErrorActualizar
      */
     public void modificarTareaProgramada(TareaProgramada tareaProgramada) throws TareaProgramadaErrorActualizar {
-        
+        tareaProgramadaDAO.actualizar(tareaProgramada);
     }
     
     /**
@@ -183,7 +229,11 @@ public class AdminBean {
      * @throws es.ujaen.iambiental.excepciones.ReglaProgramadaErrorPersistir
      */
     public void crearReglaProgramada(ReglaProgramada reglaProgramada, String idTareaProgramada) throws ReglaProgramadaErrorDatos, ReglaProgramadaErrorPersistir{
-        
+        try {
+            reglaProgramadaDAO.insertar(reglaProgramada);
+        } catch (ReglaProgramadaErrorPersistir e) {
+            throw new ReglaProgramadaErrorPersistir();
+        }
     }
     
     /**
@@ -192,8 +242,8 @@ public class AdminBean {
      * @param idReglaProgramada
      * @return Devuelve el actuador, null si no es encontrado.
      */
-    public ReglaProgramada obtenerReglaProgramada(String idReglaProgramada) {
-        return null;
+    public ReglaProgramada obtenerReglaProgramada(Integer idReglaProgramada) {
+        return reglaProgramadaDAO.buscar(idReglaProgramada);
     }
     
     /**
@@ -203,8 +253,12 @@ public class AdminBean {
      * @throws es.ujaen.iambiental.excepciones.ReglaProgramadaErrorEliminar
      * @throws es.ujaen.iambiental.excepciones.ReglaProgramadaNoEncontrada
      */
-    public void eliminarReglaProgramada(String idReglaProgramada) throws ReglaProgramadaErrorEliminar, ReglaProgramadaNoEncontrada {
-        
+    public void eliminarReglaProgramada(Integer idReglaProgramada) throws ReglaProgramadaErrorEliminar, ReglaProgramadaNoEncontrada {
+        ReglaProgramada rp = reglaProgramadaDAO.buscar(idReglaProgramada);
+        if (rp == null) {
+            throw new ReglaProgramadaNoEncontrada();
+        }
+        reglaProgramadaDAO.eliminar(rp);
     }
     
     /**
@@ -214,7 +268,7 @@ public class AdminBean {
      * @throws es.ujaen.iambiental.excepciones.ReglaProgramadaErrorActualizar
      */
     public void modificarReglaProgramada(ReglaProgramada reglaProgramada) throws ReglaProgramadaErrorActualizar {
-        
+        reglaProgramadaDAO.actualizar(reglaProgramada);
     }
     
     /**
@@ -225,7 +279,11 @@ public class AdminBean {
      * @throws es.ujaen.iambiental.excepciones.ReglaSensorActuadorErrorPersistir
      */
     public void crearReglaSensorActuador(ReglaSensorActuador reglaSensorActuador) throws ReglaSensorActuadorErrorDatos, ReglaSensorActuadorErrorPersistir{
-        
+        try {
+            reglaSensorActuadorDAO.insertar(reglaSensorActuador);
+        } catch (ReglaSensorActuadorErrorPersistir e) {
+            throw new ReglaSensorActuadorErrorPersistir();
+        }
     }
     
     /**
@@ -234,8 +292,8 @@ public class AdminBean {
      * @param idReglaSensorActuador
      * @return Devuelve la regla sensor-actuador, null si no es encontrado.
      */
-    public ReglaSensorActuador obtenerReglaSensorActuador(String idReglaSensorActuador) {
-        return null;
+    public ReglaSensorActuador obtenerReglaSensorActuador(Integer idReglaSensorActuador) {
+        return reglaSensorActuadorDAO.buscar(idReglaSensorActuador);
     }
     
     /**
@@ -245,8 +303,12 @@ public class AdminBean {
      * @throws es.ujaen.iambiental.excepciones.ReglaSensorActuadorErrorEliminar
      * @throws es.ujaen.iambiental.excepciones.ReglaSensorActuadorNoEncontrada
      */
-    public void eliminarReglaSensorActuador(String idReglaSensorActuador) throws ReglaSensorActuadorErrorEliminar, ReglaSensorActuadorNoEncontrada {
-        
+    public void eliminarReglaSensorActuador(Integer idReglaSensorActuador) throws ReglaSensorActuadorErrorEliminar, ReglaSensorActuadorNoEncontrada {
+        ReglaSensorActuador rsa = reglaSensorActuadorDAO.buscar(idReglaSensorActuador);
+        if (rsa == null) {
+            throw new ReglaSensorActuadorNoEncontrada();
+        }
+        reglaSensorActuadorDAO.eliminar(rsa);
     }
     
     /**
@@ -256,7 +318,7 @@ public class AdminBean {
      * @throws es.ujaen.iambiental.excepciones.ReglaSensorActuadorErrorActualizar
      */
     public void modificarReglaSensorActuador(ReglaSensorActuador reglaSensorActuador) throws ReglaSensorActuadorErrorActualizar {
-        
+        reglaSensorActuadorDAO.actualizar(reglaSensorActuador);
     }
     
     /**
@@ -264,8 +326,8 @@ public class AdminBean {
      *
      * @return Devuelve un mapa con la lista de sensores
      */
-    public Map<String, Sensor> listarSensores() {
-        return null;
+    public Map<Integer, Sensor> listarSensores() {
+        return sensorDAO.listar();
     }
     
     /**
@@ -273,8 +335,8 @@ public class AdminBean {
      *
      * @return Devuelve un mapa con la lista de actuadores
      */
-    public Map<String, Actuador> listarActuadores() {
-        return null;
+    public Map<Integer, Actuador> listarActuadores() {
+        return actuadorDAO.listar();
     }
     
     /**
@@ -282,8 +344,8 @@ public class AdminBean {
      *
      * @return Devuelve un mapa con la lista de tareas programadas
      */
-    public Map<String, TareaProgramada> listarTareasProgramadas() {
-        return null;
+    public Map<Integer, TareaProgramada> listarTareasProgramadas() {
+        return tareaProgramadaDAO.listar();
     }
     
     /**
@@ -291,8 +353,8 @@ public class AdminBean {
      *
      * @return Devuelve un mapa con la lista de reglas programadas
      */
-    public Map<String, ReglaProgramada> listarReglasProgramadas() {
-        return null;
+    public Map<Integer, ReglaProgramada> listarReglasProgramadas() {
+        return reglaProgramadaDAO.listar();
     }
     
     /**
@@ -300,8 +362,8 @@ public class AdminBean {
      *
      * @return Devuelve un mapa con la lista de reglas sensor-actuador
      */
-    public Map<String, ReglaSensorActuador> listarReglasSensorActuador() {
-        return null;
+    public Map<Integer, ReglaSensorActuador> listarReglasSensorActuador() {
+        return reglaSensorActuadorDAO.listar();
     }
     
     /**
@@ -312,7 +374,7 @@ public class AdminBean {
      * @param fechaFinal
      * @return Devuelve un mapa con el histórico de valores de un sensor
      */
-    public Map<Date, Double> obtenerHistoricoSensor(String idSensor, Date fechaInicio, Date fechaFinal) {
+    public Map<Date, Double> obtenerHistoricoSensor(Integer idSensor, Date fechaInicio, Date fechaFinal) {
         return null;
     }
     
@@ -324,7 +386,7 @@ public class AdminBean {
      * @param fechaFinal
      * @return Devuelve un mapa con el histórico de valores de un actuador
      */
-    public Map<Date, Double> obtenerHistoricoActuador(String idActuador, Date fechaInicio, Date fechaFinal) {
+    public Map<Date, Double> obtenerHistoricoActuador(Integer idActuador, Date fechaInicio, Date fechaFinal) {
         return null;
     }
     

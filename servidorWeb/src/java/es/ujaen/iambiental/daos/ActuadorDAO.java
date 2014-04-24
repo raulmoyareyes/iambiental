@@ -121,4 +121,6 @@ public class ActuadorDAO {
         }
         return actuadores;
     }
+    
+    //Capullo necesito el histórico de los actuadores YAAAA!!!!!
 }

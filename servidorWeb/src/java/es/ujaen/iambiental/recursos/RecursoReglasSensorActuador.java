@@ -33,7 +33,7 @@ public class RecursoReglasSensorActuador {
     @GET
     @Path("/{idReglaSensorActuador}")
     @Produces("application/json; charset=utf-8")
-    public Response obtenerReglaSensorActuador(@PathParam("idReglaSensorActuador") String idReglaSensorActuador) {
+    public Response obtenerReglaSensorActuador(@PathParam("idReglaSensorActuador") Integer idReglaSensorActuador) {
         ReglaSensorActuador reglaSensorActuador = administrador.obtenerReglaSensorActuador(idReglaSensorActuador);
         if (reglaSensorActuador == null) {
             throw new WebApplicationException(
@@ -51,20 +51,15 @@ public class RecursoReglasSensorActuador {
     }
     
     @PUT
-    @Path("/{idReglaSensorActuador}")
+    @Path("")
     @Consumes("application/json")
-    public Response crearReglaSensorActuador(@PathParam("idReglaSensorActuador") String idReglaSensorActuador, ReglaSensorActuador reglaSensorActuador) {
+    public Response crearReglaSensorActuador(ReglaSensorActuador reglaSensorActuador) {
         if (reglaSensorActuador == null) {
             throw new WebApplicationException(
                     Response.status(Response.Status.BAD_REQUEST).entity("Falta el objeto regla sensor-actuador.").build()
             );
         }
 
-        if (administrador.obtenerReglaSensorActuador(idReglaSensorActuador) != null) {
-            throw new WebApplicationException(
-                    Response.status(Response.Status.CONFLICT).entity("Regla sensor-actuador existente.").build()
-            );
-        }
         try {
             administrador.crearReglaSensorActuador(reglaSensorActuador);
         } catch (ReglaSensorActuadorErrorDatos | ReglaSensorActuadorErrorPersistir e) {
@@ -78,7 +73,7 @@ public class RecursoReglasSensorActuador {
     @DELETE
     @Path("/{idReglaSensorActuador}")
     //@Consumes("application/json")
-    public Response eliminarReglaSensorActuador(@PathParam("idReglaSensorActuador") String idReglaSensorActuador) {
+    public Response eliminarReglaSensorActuador(@PathParam("idReglaSensorActuador") Integer idReglaSensorActuador) {
         ReglaSensorActuador reglaSensorActuador = administrador.obtenerReglaSensorActuador(idReglaSensorActuador);
         if (reglaSensorActuador == null) {
             throw new WebApplicationException(
@@ -98,7 +93,7 @@ public class RecursoReglasSensorActuador {
     
     @Path("/{idReglaSensorActuador}")
     @Consumes("application/json")
-    public Response modificarReglaSensorActuador(@PathParam("idReglaSensorActuador") String idReglaSensorActuador, ReglaSensorActuador reglaSensorActuador) {
+    public Response modificarReglaSensorActuador(@PathParam("idReglaSensorActuador") Integer idReglaSensorActuador, ReglaSensorActuador reglaSensorActuador) {
         if (reglaSensorActuador == null) {
             throw new WebApplicationException(
                     Response.status(Response.Status.BAD_REQUEST).entity("Falta el objeto regla sensor-actuador.").build()

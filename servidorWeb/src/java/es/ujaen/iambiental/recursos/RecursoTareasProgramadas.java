@@ -33,7 +33,7 @@ public class RecursoTareasProgramadas {
     @GET
     @Path("/{idTareaProgramada}")
     @Produces("application/json; charset=utf-8")
-    public Response obtenerTareaProgramada(@PathParam("idTareaProgramada") String idTareaProgramada) {
+    public Response obtenerTareaProgramada(@PathParam("idTareaProgramada") Integer idTareaProgramada) {
         TareaProgramada tareaProgramada = administrador.obtenerTareaProgramada(idTareaProgramada);
         if (tareaProgramada == null) {
             throw new WebApplicationException(
@@ -51,20 +51,15 @@ public class RecursoTareasProgramadas {
     }
     
     @PUT
-    @Path("/{idTareaProgramada}")
+    @Path("")
     @Consumes("application/json")
-    public Response crearTareaProgramada(@PathParam("idTareaProgramada") String idTareaProgramada, TareaProgramada tareaProgramada) {
+    public Response crearTareaProgramada(TareaProgramada tareaProgramada) {
         if (tareaProgramada == null) {
             throw new WebApplicationException(
                     Response.status(Response.Status.BAD_REQUEST).entity("Falta el objeto tarea programada.").build()
             );
         }
 
-        if (administrador.obtenerTareaProgramada(idTareaProgramada) != null) {
-            throw new WebApplicationException(
-                    Response.status(Response.Status.CONFLICT).entity("Tarea programada existente.").build()
-            );
-        }
         try {
             administrador.crearTareaProgramada(tareaProgramada);
         } catch (TareaProgramadaErrorDatos | TareaProgramadaErrorPersistir e) {
@@ -78,7 +73,7 @@ public class RecursoTareasProgramadas {
     @DELETE
     @Path("/{idTareaProgramada}")
     //@Consumes("application/json")
-    public Response eliminarTareaProgramada(@PathParam("idTareaProgramada") String idTareaProgramada) {
+    public Response eliminarTareaProgramada(@PathParam("idTareaProgramada") Integer idTareaProgramada) {
         TareaProgramada tareaProgramada = administrador.obtenerTareaProgramada(idTareaProgramada);
         if (tareaProgramada == null) {
             throw new WebApplicationException(
@@ -98,7 +93,7 @@ public class RecursoTareasProgramadas {
     
     @Path("/{idTareaProgramada}")
     @Consumes("application/json")
-    public Response modificarTareaProgramada(@PathParam("idTareaProgramada") String idTareaProgramada, TareaProgramada tareaProgramada) {
+    public Response modificarTareaProgramada(@PathParam("idTareaProgramada") Integer idTareaProgramada, TareaProgramada tareaProgramada) {
         if (tareaProgramada == null) {
             throw new WebApplicationException(
                     Response.status(Response.Status.BAD_REQUEST).entity("Falta el objeto tarea programada.").build()

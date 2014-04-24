@@ -38,7 +38,7 @@ public class RecursoSensores {
     @GET
     @Path("/{idSensor}")
     @Produces("application/json; charset=utf-8")
-    public Response obtenerSensor(@PathParam("idSensor") String idSensor) {
+    public Response obtenerSensor(@PathParam("idSensor") Integer idSensor) {
         Sensor sensor = administrador.obtenerSensor(idSensor);
         if (sensor == null) {
             throw new WebApplicationException(
@@ -56,20 +56,15 @@ public class RecursoSensores {
     }
     
     @PUT
-    @Path("/{idSensor}")
+    @Path("")
     @Consumes("application/json")
-    public Response crearSensor(@PathParam("idSensor") String idSensor, Sensor sensor) {
+    public Response crearSensor(Sensor sensor) {
         if (sensor == null) {
             throw new WebApplicationException(
                     Response.status(Status.BAD_REQUEST).entity("Falta el objeto sensor.").build()
             );
         }
 
-        if (administrador.obtenerSensor(idSensor) != null) {
-            throw new WebApplicationException(
-                    Response.status(Status.CONFLICT).entity("Sensor existente.").build()
-            );
-        }
         try {
             administrador.crearSensor(sensor);
         } catch (SensorErrorDatos | SensorErrorPersistir e) {
@@ -83,7 +78,7 @@ public class RecursoSensores {
     @DELETE
     @Path("/{idSensor}")
     //@Consumes("application/json")
-    public Response eliminarSensor(@PathParam("idSensor") String idSensor) {
+    public Response eliminarSensor(@PathParam("idSensor") Integer idSensor) {
         Sensor sensor = administrador.obtenerSensor(idSensor);
         if (sensor == null) {
             throw new WebApplicationException(
@@ -103,7 +98,7 @@ public class RecursoSensores {
     
     @Path("/{idSensor}")
     @Consumes("application/json")
-    public Response modificarSensor(@PathParam("idSensor") String idSensor, Sensor sensor) {
+    public Response modificarSensor(@PathParam("idSensor") Integer idSensor, Sensor sensor) {
         if (sensor == null) {
             throw new WebApplicationException(
                     Response.status(Status.BAD_REQUEST).entity("Falta el objeto sensor.").build()
@@ -128,7 +123,7 @@ public class RecursoSensores {
     @GET
     @Path("/{idSensor}/{fechaInicio}/{fechaFinal}")
     @Produces("application/json; charset=utf-8")
-    public Response obtenerHistoricoSensor(@QueryParam("idSensor") String idSensor, @QueryParam("fechaInicio") Date fechaInicio, @QueryParam("fechaFinal") Date fechaFinal) {
+    public Response obtenerHistoricoSensor(@QueryParam("idSensor") Integer idSensor, @QueryParam("fechaInicio") Date fechaInicio, @QueryParam("fechaFinal") Date fechaFinal) {
         Sensor sensor = administrador.obtenerSensor(idSensor);
         if (sensor == null) {
             throw new WebApplicationException(

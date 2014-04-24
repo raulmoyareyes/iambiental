@@ -7,7 +7,6 @@ import es.ujaen.iambiental.excepciones.ActuadorErrorEliminar;
 import es.ujaen.iambiental.excepciones.ActuadorErrorPersistir;
 import es.ujaen.iambiental.excepciones.ActuadorNoEncontrado;
 import es.ujaen.iambiental.modelos.Actuador;
-import es.ujaen.iambiental.modelos.Sensor;
 import java.util.Date;
 import java.util.Map;
 import javax.ws.rs.Consumes;
@@ -37,7 +36,7 @@ public class RecursoActuadores {
     @GET
     @Path("/{idActuador}")
     @Produces("application/json; charset=utf-8")
-    public Response obtenerActuador(@PathParam("idActuador") String idActuador) {
+    public Response obtenerActuador(@PathParam("idActuador") Integer idActuador) {
         Actuador actuador = administrador.obtenerActuador(idActuador);
         if (actuador == null) {
             throw new WebApplicationException(
@@ -55,20 +54,15 @@ public class RecursoActuadores {
     }
     
     @PUT
-    @Path("/{idActuador}")
+    @Path("")
     @Consumes("application/json")
-    public Response crearActuador(@PathParam("idActuador") String idActuador, Actuador actuador) {
+    public Response crearActuador(Actuador actuador) {
         if (actuador == null) {
             throw new WebApplicationException(
                     Response.status(Response.Status.BAD_REQUEST).entity("Falta el objeto actuador.").build()
             );
         }
 
-        if (administrador.obtenerActuador(idActuador) != null) {
-            throw new WebApplicationException(
-                    Response.status(Response.Status.CONFLICT).entity("Actuador existente.").build()
-            );
-        }
         try {
             administrador.crearActuador(actuador);
         } catch (ActuadorErrorDatos | ActuadorErrorPersistir e) {
@@ -82,7 +76,7 @@ public class RecursoActuadores {
     @DELETE
     @Path("/{idActuador}")
     //@Consumes("application/json")
-    public Response eliminarActuador(@PathParam("idActuador") String idActuador) {
+    public Response eliminarActuador(@PathParam("idActuador") Integer idActuador) {
         Actuador actuador = administrador.obtenerActuador(idActuador);
         if (actuador == null) {
             throw new WebApplicationException(
@@ -102,7 +96,7 @@ public class RecursoActuadores {
     
     @Path("/{idActuador}")
     @Consumes("application/json")
-    public Response modificarActuador(@PathParam("idActuador") String idActuador, Actuador actuador) {
+    public Response modificarActuador(@PathParam("idActuador") Integer idActuador, Actuador actuador) {
         if (actuador == null) {
             throw new WebApplicationException(
                     Response.status(Response.Status.BAD_REQUEST).entity("Falta el objeto actuador.").build()
@@ -127,7 +121,7 @@ public class RecursoActuadores {
     @GET
     @Path("/{idActuador}/{fechaInicio}/{fechaFinal}")
     @Produces("application/json; charset=utf-8")
-    public Response obtenerHistoricoActuador(@QueryParam("idActuador") String idActuador, @QueryParam("fechaInicio") Date fechaInicio, @QueryParam("fechaFinal") Date fechaFinal) {
+    public Response obtenerHistoricoActuador(@QueryParam("idActuador") Integer idActuador, @QueryParam("fechaInicio") Date fechaInicio, @QueryParam("fechaFinal") Date fechaFinal) {
         Actuador actuador = administrador.obtenerActuador(idActuador);
         if (actuador == null) {
             throw new WebApplicationException(
