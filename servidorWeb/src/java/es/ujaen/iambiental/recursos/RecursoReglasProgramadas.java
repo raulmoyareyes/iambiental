@@ -32,7 +32,7 @@ public class RecursoReglasProgramadas {
     @GET
     @Path("/{idReglaProgramada}")
     @Produces("application/json; charset=utf-8")
-    public Response obtenerReglaProgramada(@PathParam("idReglaProgramada") String idReglaProgramada) {
+    public Response obtenerReglaProgramada(@PathParam("idReglaProgramada") Integer idReglaProgramada) {
         ReglaProgramada reglaProgramada = administrador.obtenerReglaProgramada(idReglaProgramada);
         if (reglaProgramada == null) {
             throw new WebApplicationException(
@@ -50,20 +50,15 @@ public class RecursoReglasProgramadas {
     }
     
     @PUT
-    @Path("/{idReglaProgramada}/{idTareaProgramada}")
+    @Path("/{idTareaProgramada}")
     @Consumes("application/json")
-    public Response crearReglaProgramada(@PathParam("idReglaProgramada") String idReglaProgramada, ReglaProgramada reglaProgramada, @PathParam("idTareaProgramada") String idTareaProgramada) {
+    public Response crearReglaProgramada(ReglaProgramada reglaProgramada, @PathParam("idTareaProgramada") String idTareaProgramada) {
         if (reglaProgramada == null) {
             throw new WebApplicationException(
                     Response.status(Response.Status.BAD_REQUEST).entity("Falta el objeto regla programada.").build()
             );
         }
 
-        if (administrador.obtenerReglaProgramada(idReglaProgramada) != null) {
-            throw new WebApplicationException(
-                    Response.status(Response.Status.CONFLICT).entity("Regla programada existente.").build()
-            );
-        }
         try {
             administrador.crearReglaProgramada(reglaProgramada, idTareaProgramada);
         } catch (ReglaProgramadaErrorDatos | ReglaProgramadaErrorPersistir e) {
@@ -77,7 +72,7 @@ public class RecursoReglasProgramadas {
     @DELETE
     @Path("/{idReglaProgramada}")
     //@Consumes("application/json")
-    public Response eliminarReglaProgramada(@PathParam("idReglaProgramada") String idReglaProgramada) {
+    public Response eliminarReglaProgramada(@PathParam("idReglaProgramada") Integer idReglaProgramada) {
         ReglaProgramada reglaProgramada = administrador.obtenerReglaProgramada(idReglaProgramada);
         if (reglaProgramada == null) {
             throw new WebApplicationException(
@@ -97,7 +92,7 @@ public class RecursoReglasProgramadas {
     
     @Path("/{idReglaProgramada}")
     @Consumes("application/json")
-    public Response modificarReglaProgramada(@PathParam("idReglaProgramada") String idReglaProgramada, ReglaProgramada reglaProgramada) {
+    public Response modificarReglaProgramada(@PathParam("idReglaProgramada") Integer idReglaProgramada, ReglaProgramada reglaProgramada) {
         if (reglaProgramada == null) {
             throw new WebApplicationException(
                     Response.status(Response.Status.BAD_REQUEST).entity("Falta el objeto regla programada.").build()
