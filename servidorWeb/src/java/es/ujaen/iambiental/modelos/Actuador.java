@@ -24,7 +24,7 @@ public class Actuador implements Serializable {
     private int id;
     private String descripcion;
     private int dependencia; //No es necesario tener un objeto dependencia.
-    @Temporal(TemporalType.DATE)
+    @Temporal(TemporalType.TIMESTAMP)
     private Date fecha;
     private float dato;
     private String ip;
