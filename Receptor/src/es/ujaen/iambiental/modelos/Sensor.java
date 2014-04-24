@@ -1,3 +1,9 @@
+/*
+ * To change this license header, choose License Headers in Project Properties.
+ * To change this template file, choose Tools | Templates
+ * and open the template in the editor.
+ */
+
 package es.ujaen.iambiental.modelos;
 
 import java.io.Serializable;
@@ -5,8 +11,8 @@ import java.util.Date;
 
 /**
  *
- * @author Raúl Moya Reyes <www.raulmoya.es> // Modificado por Vicente para el Receptor
- */
+ * @author Vicente_2
+ */  
 
 public class Sensor implements Serializable {
     private int id;
@@ -20,7 +26,7 @@ public class Sensor implements Serializable {
 
     public Sensor() {
 
-    }
+}
 
     public Sensor(int id, String descripcion, Dependencia dependencia, Date fecha, float dato, String ip, String puerto, int estado) {
         this.id = id;

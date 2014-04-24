@@ -29,7 +29,7 @@ import javax.sql.DataSource;
 public class ReceptorDAO {
     private static Connection cnx;
     private static String coonPoolName = "iAmbiental";
-
+    
     /**
      * Abre la conexion con la BD
      * @return Devuelve la conexion
@@ -44,7 +44,7 @@ public class ReceptorDAO {
 
         } catch (Exception ex) {
             Logger.getLogger(ReceptorDAO.class.getName()).log(Level.SEVERE, ex.getMessage(), ex);
-        }
+}
 
         return cnx;
     }
@@ -106,10 +106,10 @@ public class ReceptorDAO {
         try {
             //int id, String descripcion, Dependencia dependencia, Date fecha,
             //float dato, String ip, String puerto, int estado          
-            s = new Sensor(Integer.valueOf(rs.getString("id")), rs.getString("descripcion"),
+           /* s = new Sensor(Integer.valueOf(rs.getString("id")), rs.getString("descripcion"),
                     rs.getString("dependencia"), rs.getString("fecha")),
                     rs.getString("dato"), rs.getString("ip")),
-                    rs.getString("puerto"), rs.getString("estado"));
+                    rs.getString("puerto"), rs.getString("estado"));*/
         } catch (Exception ex) {
             Logger.getLogger(ReceptorDAO.class.getName()).log(Level.SEVERE, ex.getMessage(), ex);
         }
