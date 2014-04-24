@@ -9,11 +9,12 @@ package es.ujaen.iambiental.receptor;
 import static es.ujaen.iambiental.daos.ReceptorDAO.closeConexion;
 import static es.ujaen.iambiental.daos.ReceptorDAO.openConexion;
 import static es.ujaen.iambiental.daos.ReceptorDAO.lecturaSensorBD;
-import es.ujaen.iambiental.modelos.Sensor;
 import java.net.DatagramPacket;
 import java.net.DatagramSocket;
 import java.sql.Connection;
+import java.sql.Timestamp;
 import java.util.Date;
+import sun.management.Sensor;
 
 /**
  *
@@ -30,6 +31,7 @@ public class Receptor {
         String mensaje = "null";
         Integer checksum = null;
         Date fecha = new Date();
+        Timestamp time_stamp = null;
 
         while (true) {
             DatagramPacket paqueteRecepcion =
@@ -51,23 +53,50 @@ public class Receptor {
                 // Parte la cadena devuelta por Arduino que contiene varios campos
                 // separador por ";"
                 splitChain = mensaje.split(";");
+ 
+                // Si recibimos un paquete Sensor o Actuador se trata de manera diferente
+                if (splitChain[0].compareTo("s") == 0) {
+                    // Pasamos de segundos a milisegundos ya que llega asi desde Arduino
+                    fecha.setTime((long)Integer.parseInt(splitChain[4])*1000);
+                    time_stamp = Timestamp.valueOf(String.valueOf(fecha.getTime()));
+                    
+                    // Obtenemos el checksum en el servidor
+                    // id, dato, descripcion, estado, fecha, ip, puerto, dependencia_id
+                    checksum = (Integer.parseInt(splitChain[0]) 
+                            + Integer.parseInt(splitChain[1]) 
+                            + Integer.parseInt(splitChain[2])
+                            + Integer.parseInt(splitChain[3])
+                            + Integer.parseInt(splitChain[4])
+                            + Integer.parseInt(splitChain[5])
+                            + Integer.parseInt(splitChain[6])
+                            + Integer.parseInt(splitChain[7])
+                            + Integer.parseInt(splitChain[8])
+                            );
 
-                fecha.setTime((long)Integer.parseInt(splitChain[0])*1000);
+                } else { // Sino pues Actuador
+                    // Obtenemos el checksum en el servidor
+                    // id, dato, dependencia, descripcion, estado, fecha, ip, puerto
+                    checksum = (Integer.parseInt(splitChain[0]) 
+                            + Integer.parseInt(splitChain[1]) 
+                            + Integer.parseInt(splitChain[2])
+                            + Integer.parseInt(splitChain[3])
+                            + Integer.parseInt(splitChain[4])
+                            + Integer.parseInt(splitChain[5])
+                            + Integer.parseInt(splitChain[6])
+                            + Integer.parseInt(splitChain[7])
+                            + Integer.parseInt(splitChain[8])
+                            );
 
-                // Obtenemos el checksum en el servidor
-                checksum = (Integer.parseInt(splitChain[0]) 
-                        + Integer.parseInt(splitChain[1]) 
-                        + Integer.parseInt(splitChain[2]));
+                }
                 
-                if (checksum == Integer.parseInt(splitChain[3])) {
+                if (checksum == Integer.parseInt(splitChain[9])) {
+                    /*
                     System.out.println("Marca de tiempo: " + fecha.toString());
                     System.out.println("ID sensor: " + splitChain[1]);
                     System.out.println("Valor leido: " + splitChain[2]);
                     System.out.println("Checksum: " + splitChain[3]);
-                    
-                    // Como comentario hasta implementación del modelo Sensor
-                    //Sensor s = new Sensor(fecha, splitChain[1], splitChain[2], splitChain[3]);
-                    
+                    */
+                                        
                     // AQUI VA LA INSERCION EN LA BD
                     //Boolean inserta = insertaDatosSensor(s);  
                     

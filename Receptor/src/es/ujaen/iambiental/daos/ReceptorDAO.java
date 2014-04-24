@@ -6,17 +6,18 @@
 
 package es.ujaen.iambiental.daos;
 
-import es.ujaen.iambiental.modelos.Sensor;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
-import java.util.Date;
+import java.sql.Timestamp;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.naming.Context;
 import javax.naming.InitialContext;
 import javax.sql.DataSource;
+import oracle.net.aso.s;
+import sun.management.Sensor;
 
 /**
  *
@@ -28,7 +29,7 @@ import javax.sql.DataSource;
  */
 public class ReceptorDAO {
     private static Connection cnx;
-    private static String coonPoolName = "iAmbiental";
+    private static String coonPoolName = ":mysql://localhost:3306/iambiental";
     
     /**
      * Abre la conexion con la BD
@@ -39,7 +40,7 @@ public class ReceptorDAO {
         try {
 
             Context context = new InitialContext();
-            DataSource ds = (DataSource) context.lookup("jdbc/" + coonPoolName);
+            DataSource ds = (DataSource) context.lookup("jdbc" + coonPoolName);
             cnx = ds.getConnection();
 
         } catch (Exception ex) {
@@ -65,20 +66,21 @@ public class ReceptorDAO {
      * @param s Instancia de Sensor donde se encuentran los datos
      * @return Devuelve 'true' o 'false' dependiendo del éxito de la operación.
      */
-    public static boolean insertaDatosSensor(Sensor s) {
+    public static boolean insertaDatosSensor(int id, float dato, String descripcion,
+            int estado, Timestamp fecha, String ip, String puerto, int dependencia_id) {
         boolean salida = false;
         if (openConexion() != null) {
             try {
-                String qry = "INSERT INTO actuadores(id, descripcion, dependencia,"
-                        + "fecha, dato, ip, puerto, estado) VALUES(?, ?, ?, ?, ?, ?, ?, ?)";
+                // id, dato, descripcion, estado, fecha, ip, puerto, dependencia_id
+                String qry = "INSERT INTO actuadores(id, dato, descripcion, estado, fecha, ip, puerto, dependencia_id) VALUES(?, ?, ?, ?, ?, ?, ?, ?)";
                 PreparedStatement stmn = cnx.prepareStatement(qry);
 
                 // Atributos de sensor y el time_stamp en segundos
-                stmn.setString(1, String.valueOf(s.getID()));
-                stmn.setString(2, String.valueOf(s.getDescripcion()));
-                stmn.setString(3, String.valueOf(s.getDependencia()));
-                stmn.setString(4, String.valueOf(s.getFecha()));
-                stmn.setString(5, String.valueOf(s.getDato()));
+                stmn.setInt(1, id);
+                stmn.setFloat(2, dato);
+                stmn.setString(3, descripcion);
+                stmn.setInt(4, estado);
+                stmn.setTimestamp(5, String.valueOf(s.getDato()));
                 stmn.setString(6, String.valueOf(s.getIp()));
                 stmn.setString(7, String.valueOf(s.getPuerto()));
                 stmn.setString(8, String.valueOf(s.getEstado()));
