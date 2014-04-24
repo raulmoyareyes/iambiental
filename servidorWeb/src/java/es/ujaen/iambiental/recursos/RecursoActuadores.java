@@ -1,6 +1,7 @@
 package es.ujaen.iambiental.recursos;
 
 import es.ujaen.iambiental.beans.AdminBean;
+import es.ujaen.iambiental.beans.ClienteUsoBean;
 import es.ujaen.iambiental.excepciones.ActuadorErrorActualizar;
 import es.ujaen.iambiental.excepciones.ActuadorErrorDatos;
 import es.ujaen.iambiental.excepciones.ActuadorErrorEliminar;
@@ -32,6 +33,9 @@ public class RecursoActuadores {
     
     @Autowired
     AdminBean administrador;
+    
+    @Autowired
+    ClienteUsoBean clienteUso;
     
     @GET
     @Path("/{idActuador}")
@@ -136,6 +140,13 @@ public class RecursoActuadores {
             }
             return Response.ok(historico).build();
         }
+    }
+    
+    @GET
+    @Path("/dependencia")
+    @Produces("application/json; charset=utf-8")
+    public Response listarSensores(@QueryParam("idDependencia") Integer idDependencia) {
+        return Response.ok(clienteUso.listarActuadores(idDependencia)).build();
     }
     
 }
