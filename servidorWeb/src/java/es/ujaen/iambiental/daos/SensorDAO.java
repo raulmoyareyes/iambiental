@@ -121,4 +121,6 @@ public class SensorDAO {
         }
         return sensores;
     }
+    
+    //Capullo necesito el histórico de los sensores YAAAA!!!!!
 }
