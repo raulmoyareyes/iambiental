@@ -7,6 +7,7 @@
 package es.ujaen.iambiental.beans;
 
 import es.ujaen.iambiental.daos.ActuadorDAO;
+import es.ujaen.iambiental.daos.DependenciaDAO;
 import es.ujaen.iambiental.daos.ReglaProgramadaDAO;
 import es.ujaen.iambiental.daos.ReglaSensorActuadorDAO;
 import es.ujaen.iambiental.daos.SensorDAO;
@@ -16,6 +17,11 @@ import es.ujaen.iambiental.excepciones.ActuadorErrorDatos;
 import es.ujaen.iambiental.excepciones.ActuadorErrorEliminar;
 import es.ujaen.iambiental.excepciones.ActuadorErrorPersistir;
 import es.ujaen.iambiental.excepciones.ActuadorNoEncontrado;
+import es.ujaen.iambiental.excepciones.DependenciaErrorActualizar;
+import es.ujaen.iambiental.excepciones.DependenciaErrorDatos;
+import es.ujaen.iambiental.excepciones.DependenciaErrorEliminar;
+import es.ujaen.iambiental.excepciones.DependenciaErrorPersistir;
+import es.ujaen.iambiental.excepciones.DependenciaNoEncontrada;
 import es.ujaen.iambiental.excepciones.ReglaProgramadaErrorActualizar;
 import es.ujaen.iambiental.excepciones.ReglaProgramadaErrorDatos;
 import es.ujaen.iambiental.excepciones.ReglaProgramadaErrorEliminar;
@@ -37,6 +43,7 @@ import es.ujaen.iambiental.excepciones.TareaProgramadaErrorEliminar;
 import es.ujaen.iambiental.excepciones.TareaProgramadaErrorPersistir;
 import es.ujaen.iambiental.excepciones.TareaProgramadaNoEncontrada;
 import es.ujaen.iambiental.modelos.Actuador;
+import es.ujaen.iambiental.modelos.Dependencia;
 import es.ujaen.iambiental.modelos.ReglaProgramada;
 import es.ujaen.iambiental.modelos.ReglaSensorActuador;
 import es.ujaen.iambiental.modelos.Sensor;
@@ -67,6 +74,9 @@ public class AdminBean {
     
     @Resource
     ReglaSensorActuadorDAO reglaSensorActuadorDAO;
+    
+    @Resource
+    DependenciaDAO dependenciaDAO;
 
     /**
      * Crear un sensor.
@@ -322,6 +332,58 @@ public class AdminBean {
     }
     
     /**
+     * Crear una dependencia.
+     *
+     * @param dependencia
+     * @throws es.ujaen.iambiental.excepciones.DependenciaErrorDatos
+     * @throws es.ujaen.iambiental.excepciones.DependenciaErrorPersistir
+     */
+    public void crearDependencia(Dependencia dependencia) throws DependenciaErrorDatos, DependenciaErrorPersistir{
+        
+        try {
+            dependenciaDAO.insertar(dependencia);
+        } catch (DependenciaErrorPersistir e) {
+            throw new DependenciaErrorPersistir();
+        }
+
+    }
+    
+    /**
+     * Devuelve la dependencia con el id indicado
+     *
+     * @param idDependencia
+     * @return Devuelve la dependencia, null si no es encontrada.
+     */
+    public Dependencia obtenerDependencia(Integer idDependencia) {
+        return dependenciaDAO.buscar(idDependencia);
+    }
+    
+    /**
+     * Elimina una dependencia del sistema.
+     *
+     * @param idDependencia
+     * @throws es.ujaen.iambiental.excepciones.DependenciaErrorEliminar
+     * @throws es.ujaen.iambiental.excepciones.DependenciaNoEncontrada
+     */
+    public void eliminarDependencia(Integer idDependencia) throws DependenciaErrorEliminar, DependenciaNoEncontrada{
+        Dependencia d = dependenciaDAO.buscar(idDependencia);
+        if (d == null) {
+            throw new DependenciaNoEncontrada();
+        }
+        dependenciaDAO.eliminar(d);
+    }
+    
+    /**
+     * Modifica una dependencia del sistema.
+     *
+     * @param dependencia
+     * @throws es.ujaen.iambiental.excepciones.DependenciaErrorActualizar
+     */
+    public void modificarDependencia(Dependencia dependencia) throws DependenciaErrorActualizar{
+        dependenciaDAO.actualizar(dependencia);
+    }
+    
+    /**
      * Devuelve un mapa con la lista de sensores.
      *
      * @return Devuelve un mapa con la lista de sensores
@@ -364,6 +426,15 @@ public class AdminBean {
      */
     public Map<Integer, ReglaSensorActuador> listarReglasSensorActuador() {
         return reglaSensorActuadorDAO.listar();
+    }
+    
+    /**
+     * Devuelve un mapa con la lista de dependencias.
+     *
+     * @return Devuelve un mapa con la lista de dependencias
+     */
+    public Map<Integer, Dependencia> listarDependencias() {
+        return dependenciaDAO.listar();
     }
     
     /**
