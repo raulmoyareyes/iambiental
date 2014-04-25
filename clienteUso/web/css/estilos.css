@@ -1,4 +1,4 @@
-::selection {
+::selection, ::-moz-selection {
     background: none;
 }
 
@@ -8,13 +8,7 @@
 }
 
 .bootstrap-touchspin-down, #spinner, .bootstrap-touchspin-up{
-    height: 150%;
-    font-size: 1em;
-}
-
-.input-group-addon{
-    color: #333;
-    font-size: 1em;
+    height: 3em;
 }
 
 #reloj{
@@ -44,17 +38,17 @@
 
 /* Botones toggle */
 .toggle-button {
-    height: 50px;
+    height: 1.5em;
     background: #eee;
     border-radius: 3px;
-    padding: 5px;
+    padding: 0.1em;
 }
 
 .toggle-button div {
     width: 50%;
-    height: 40px;
+    height: 1.5em;
     border-radius: 3px;
-    font-size: 30px;
+    font-size: 0.85em;
     background: #47a447;
 }
 

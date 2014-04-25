@@ -1,24 +1,5 @@
 
 $(function() {
-    $('.btn-toggle').on("click", function() {
-        $(this).find('.btn').toggleClass('active');
-
-        if ($(this).find('.btn-primary').size() > 0) {
-            $(this).find('.btn').toggleClass('btn-primary');
-        }
-        if ($(this).find('.btn-danger').size() > 0) {
-            $(this).find('.btn').toggleClass('btn-danger');
-        }
-        if ($(this).find('.btn-success').size() > 0) {
-            $(this).find('.btn').toggleClass('btn-success');
-        }
-        if ($(this).find('.btn-info').size() > 0) {
-            $(this).find('.btn').toggleClass('btn-info');
-        }
-        $(this).find('.btn').toggleClass('btn-default');
-    });
-
-
     $("input[name='spinner']").TouchSpin({min: 0, max: 40, step: 0.5, decimals: 1,
         boostat: 5, maxboostedstep: 10, postfix: '\u00BAC'});
 
@@ -64,10 +45,12 @@ function startTime() {
     $('#temperaturaDisplayControl').html(temp);
 }
 
-function responsive(){
-    $('.carousel-inner').height(window.innerHeight-(window.innerHeight*0.21));
+function responsive() {
+    $('.carousel-inner').height(window.innerHeight - (window.innerHeight * 0.21));
     $('.carousel-inner').css('font-size', window.innerWidth * 0.05);
     $('#reloj').css('font-size', window.innerWidth * 0.15);
-    $('#temperaturaControl').height(window.innerHeight-(window.innerHeight*0.21));
-    $('#lamparasControl').height(window.innerHeight-(window.innerHeight*0.21));
+    $('#temperaturaControl').height(window.innerHeight - (window.innerHeight * 0.21));
+    $('#lamparasControl').height(window.innerHeight - (window.innerHeight * 0.21));
+    $('#lamparasControl').css('line-height', (window.innerHeight - (window.innerHeight * 0.21))/2);
+    
 }
