@@ -52,7 +52,7 @@
     
     <!--Transacciones-->
     <tx:annotation-driven transaction-manager="txManager" />
-    <context:component-scan base-package="es.ujaen.iambiental.dao"/>
+    <context:component-scan base-package="es.ujaen.iambiental.daos"/>
     <bean id="txManager" class="org.springframework.orm.jpa.JpaTransactionManager">
         <property name="entityManagerFactory" ref="emf"/>
     </bean>
