@@ -4,12 +4,12 @@
         <meta charset="UTF-8">
         <title>Cliente Táctil</title>
         <script src="libs/jquery/jquery.js"></script>
-        <!--<script src="libs/jquery-mobile/jquery-mobile.js"></script>-->
+        <script src="libs/jquery-mobile/jquery-mobile.js"></script>
         <script src="libs/twitter-bootstrap/js/bootstrap.js"></script>
         <script src="libs/spinner/spinner.js"></script>
 
         <link href="libs/twitter-bootstrap/css/bootstrap.css" rel="stylesheet" type="text/css" />
-        <link href="libs/toggle-switch/toggle-switch.css" rel="stylesheet" type="text/css" >
+        <!--<link href="libs/toggle-switch/toggle-switch.css" rel="stylesheet" type="text/css" >-->
 
         <script src="js/main.js"></script>
         <link href="css/estilos.css" rel="stylesheet" type="text/css"/>
@@ -27,7 +27,7 @@
 
                 <!-- Definicion de pantallas -->
                 <div class="carousel-inner">
-                    <div class="item active">
+                    <div class="item active color777">
 
                         <div id="reloj"></div>
                         <div><span id="temperaturaDisplay"></span> ºC</div>
@@ -37,7 +37,7 @@
 
                         <div id="temperaturaControl">
                             <p>TEMPERATURA ACTUAL</p>
-                            <div style="font-size:40px;"><span id="temperaturaDisplayControl"></span> ºC</div>
+                            <div class="temperaturaDisplay"><span id="temperaturaDisplayControl"></span> ºC</div>
 
                             <p>TEMPERATURA DESEADA</p>
                             <input id="spinner" type="text" value="21" name="spinner">
@@ -47,26 +47,21 @@
 
                             <p>LAMPARAS</p>
                             <div>
-                                <label class="switch-light well">
-                                    <input type="checkbox">
-                                    <span>
-                                        Pasillo
-                                        <span>Off</span>
-                                        <span>On</span>
-                                    </span>
-                                    <a class="btn btn-primary"></a>
-                                </label>
-                                <hr>
-                                <label class="switch-light well">
-                                    <input type="checkbox">
-                                    <span>
-                                        Salón
-                                        <span>Off</span>
-                                        <span>On</span>
-                                    </span>
-                                    <a class="btn btn-primary"></a>
-                                </label>
-                                </hr>
+                                <label>Bombilla</label>
+                                <div class="toggle-button">
+                                    <div class="on">
+                                        ON
+                                    </div>
+                                </div>
+                            </div>
+                            
+                            <div>
+                                <label>Bombilla 2</label>
+                                <div class="toggle-button">
+                                    <div class="on">
+                                        ON
+                                    </div>
+                                </div>
                             </div>
                         </div>
 
@@ -74,9 +69,11 @@
                 </div>
 
                 <!-- Controls -->
+                
                 <a class="left carousel-control" href="#carousel-example-generic" data-slide="prev">
                     <span class="glyphicon glyphicon-chevron-left"></span>
                 </a>
+                
                 <a class="right carousel-control" href="#carousel-example-generic" data-slide="next">
                     <span class="glyphicon glyphicon-chevron-right"></span>
                 </a>

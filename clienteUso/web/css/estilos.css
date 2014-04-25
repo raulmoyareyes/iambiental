@@ -1,40 +1,81 @@
+::selection {
+    background: none;
+}
 
 .carousel-inner{
-    background-color: #222;
     color: #eee;
     text-align: center;
-    font-size: 24px;
 }
+
+.bootstrap-touchspin-down, #spinner, .bootstrap-touchspin-up{
+    height: 150%;
+    font-size: 1em;
+}
+
 .input-group-addon{
     color: #333;
-    font-size: 12px;
+    font-size: 1em;
 }
 
 #reloj{
     margin-top: 10%;
-    /*font-size: 120px;*/
 }
 
 #temperaturaControl {
     background:#999;
-    margin:5%;
-    width:35%;
-    /*font-size: 0.3em;*/
-    display:inline-block;
-    padding: 20px;
+    width: 45%;
+    font-size: 0.5em;
+    display: inline-block;
+    padding: 10% 5%;
+    vertical-align: top;
+}
+
+.temperaturaDisplay{
+    font-size: 5em;
+    margin-bottom: 15%;
 }
 
 #lamparasControl {
-    margin:5%;
-    width:35%;
-    display:inline-block;
-    padding: 20px;
+    width: 45%;
+    display: inline-block;
+    padding: 5%;
+    vertical-align: top;
+}
+
+/* Botones toggle */
+.toggle-button {
+    height: 50px;
+    background: #eee;
+    border-radius: 3px;
+    padding: 5px;
+}
+
+.toggle-button div {
+    width: 50%;
+    height: 40px;
+    border-radius: 3px;
+    font-size: 30px;
+    background: #47a447;
+}
+
+.toggle-button div .on{
+    margin-right: auto;
+    background: #47a447;
+}
+
+.toggle-button .off{
+    margin-left: auto;
+    background: #c12e2a;
+}
+
+.color777{
+    color: #777;
 }
 
 @media (min-width:500px) {
 
 }
 
-/* JQuery Mobile*/
+/* jQuery */
 .ui-loading .ui-loader { display: block; }
-.ui-loader { display: none; position: absolute; opacity: .85; z-index: 100; left: 50%; width: 200px; margin-left: -130px; margin-top: -35px; padding: 10px 30px; }
+.ui-loader { display: none; position: absolute; opacity: .85; z-index: 100; left: 50%; width: 200px; margin-left: -130px; margin-top: -35px; padding: 10px 30px;}

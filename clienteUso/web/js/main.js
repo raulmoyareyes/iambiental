@@ -19,8 +19,8 @@ $(function() {
     });
 
 
-    $("input[name='spinner']").TouchSpin({min: 0,max: 40,step: 0.5,decimals: 1,
-        boostat: 5,maxboostedstep: 10,postfix: '\u00BAC'});
+    $("input[name='spinner']").TouchSpin({min: 0, max: 40, step: 0.5, decimals: 1,
+        boostat: 5, maxboostedstep: 10, postfix: '\u00BAC'});
 
     $(document).on("swipeleft", function() {
         $('.carousel').carousel('next');
@@ -29,13 +29,20 @@ $(function() {
         $('.carousel').carousel('prev');
     });
 
-    $('.carousel-inner').height(window.innerHeight);
-    $('.carousel-inner').css('font-size',window.innerWidth*0.05);
-    $('#reloj').css('font-size',window.innerWidth*0.15);
+    responsive();
     $(window).resize(function() {
-        $('.carousel-inner').height(window.innerHeight);
-        $('.carousel-inner').css('font-size',window.innerWidth*0.05);
-        $('#reloj').css('font-size',window.innerWidth*0.15);
+        responsive();
+    });
+
+    /* Toggle Button */
+    $('.toggle-button').click(function() {
+        if ($(this).children().attr('class') === 'on') {
+            $(this).children().attr('class', "off");
+            $(this).children().html("OFF");
+        } else {
+            $(this).children().attr('class', "on");
+            $(this).children().html("ON");
+        }
     });
 
     startTime();
@@ -55,4 +62,12 @@ function startTime() {
     $('#reloj').html(h + ":" + m + ":" + s);
     $('#temperaturaDisplay').html(temp);
     $('#temperaturaDisplayControl').html(temp);
+}
+
+function responsive(){
+    $('.carousel-inner').height(window.innerHeight-(window.innerHeight*0.21));
+    $('.carousel-inner').css('font-size', window.innerWidth * 0.05);
+    $('#reloj').css('font-size', window.innerWidth * 0.15);
+    $('#temperaturaControl').height(window.innerHeight-(window.innerHeight*0.21));
+    $('#lamparasControl').height(window.innerHeight-(window.innerHeight*0.21));
 }
