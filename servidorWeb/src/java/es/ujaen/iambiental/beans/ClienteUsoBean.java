@@ -8,17 +8,17 @@ package es.ujaen.iambiental.beans;
 
 import es.ujaen.iambiental.daos.ActuadorDAO;
 import es.ujaen.iambiental.daos.SensorDAO;
-import es.ujaen.iambiental.excepciones.ActuadorErrorActualizar;
-import es.ujaen.iambiental.excepciones.ActuadorNoEncontrado;
 import es.ujaen.iambiental.modelos.Actuador;
 import es.ujaen.iambiental.modelos.Sensor;
 import java.util.Map;
 import javax.annotation.Resource;
+import org.springframework.stereotype.Component;
 
 /**
  *
  * @author raulm
  */
+@Component(value = "beanClienteUso")
 public class ClienteUsoBean {
     
     @Resource

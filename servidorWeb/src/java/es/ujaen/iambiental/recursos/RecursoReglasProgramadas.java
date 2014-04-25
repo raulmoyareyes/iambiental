@@ -7,9 +7,11 @@ import es.ujaen.iambiental.excepciones.ReglaProgramadaErrorEliminar;
 import es.ujaen.iambiental.excepciones.ReglaProgramadaErrorPersistir;
 import es.ujaen.iambiental.excepciones.ReglaProgramadaNoEncontrada;
 import es.ujaen.iambiental.modelos.ReglaProgramada;
+import java.util.ArrayList;
 import javax.ws.rs.Consumes;
 import javax.ws.rs.DELETE;
 import javax.ws.rs.GET;
+import javax.ws.rs.POST;
 import javax.ws.rs.PUT;
 import javax.ws.rs.Path;
 import javax.ws.rs.PathParam;
@@ -26,9 +28,10 @@ import org.springframework.stereotype.Component;
 @Path("/reglasProgramadas")
 @Component(value = "recursoReglasProgramadas")
 public class RecursoReglasProgramadas {
+
     @Autowired
     AdminBean administrador;
-    
+
     @GET
     @Path("/{idReglaProgramada}")
     @Produces("application/json; charset=utf-8")
@@ -42,13 +45,13 @@ public class RecursoReglasProgramadas {
         return Response.ok(reglaProgramada).build();
 
     }
-    
+
     @GET
     @Produces("application/json; charset=utf-8")
-    public Response listarReglasProgramadas() {
-        return Response.ok(administrador.listarReglasProgramadas()).build();
+    public ArrayList<ReglaProgramada> listarReglasProgramadas() {
+        return new ArrayList(administrador.listarReglasProgramadas().values());
     }
-    
+
     @PUT
     @Path("/{idTareaProgramada}")
     @Consumes("application/json")
@@ -68,7 +71,7 @@ public class RecursoReglasProgramadas {
         }
         return Response.status(Response.Status.ACCEPTED).build();
     }
-    
+
     @DELETE
     @Path("/{idReglaProgramada}")
     //@Consumes("application/json")
@@ -89,7 +92,8 @@ public class RecursoReglasProgramadas {
             return Response.status(Response.Status.ACCEPTED).build();
         }
     }
-    
+
+    @POST
     @Path("/{idReglaProgramada}")
     @Consumes("application/json")
     public Response modificarReglaProgramada(@PathParam("idReglaProgramada") Integer idReglaProgramada, ReglaProgramada reglaProgramada) {

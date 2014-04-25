@@ -8,11 +8,13 @@ import es.ujaen.iambiental.excepciones.ActuadorErrorEliminar;
 import es.ujaen.iambiental.excepciones.ActuadorErrorPersistir;
 import es.ujaen.iambiental.excepciones.ActuadorNoEncontrado;
 import es.ujaen.iambiental.modelos.Actuador;
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.Map;
 import javax.ws.rs.Consumes;
 import javax.ws.rs.DELETE;
 import javax.ws.rs.GET;
+import javax.ws.rs.POST;
 import javax.ws.rs.PUT;
 import javax.ws.rs.Path;
 import javax.ws.rs.PathParam;
@@ -30,17 +32,17 @@ import org.springframework.stereotype.Component;
 @Path("/actuadores")
 @Component(value = "recursoActuadores")
 public class RecursoActuadores {
-    
+
     @Autowired
     AdminBean administrador;
-    
+
     @Autowired
     ClienteUsoBean clienteUso;
-    
+
     @GET
     @Path("/{idActuador}")
     @Produces("application/json; charset=utf-8")
-    public Response obtenerActuador(@PathParam("idActuador") Integer idActuador) {
+    public Response obtenerActuador(@PathParam("idActuador") int idActuador) {
         Actuador actuador = administrador.obtenerActuador(idActuador);
         if (actuador == null) {
             throw new WebApplicationException(
@@ -50,13 +52,13 @@ public class RecursoActuadores {
         return Response.ok(actuador).build();
 
     }
-    
+
     @GET
     @Produces("application/json; charset=utf-8")
-    public Response listarActuadores() {
-        return Response.ok(administrador.listarActuadores()).build();
+    public ArrayList<Actuador> listarActuadores() {
+        return new ArrayList(administrador.listarActuadores().values());
     }
-    
+
     @PUT
     @Path("")
     @Consumes("application/json")
@@ -76,11 +78,11 @@ public class RecursoActuadores {
         }
         return Response.status(Response.Status.ACCEPTED).build();
     }
-    
+
     @DELETE
     @Path("/{idActuador}")
     //@Consumes("application/json")
-    public Response eliminarActuador(@PathParam("idActuador") Integer idActuador) {
+    public Response eliminarActuador(@PathParam("idActuador") int idActuador) {
         Actuador actuador = administrador.obtenerActuador(idActuador);
         if (actuador == null) {
             throw new WebApplicationException(
@@ -97,10 +99,11 @@ public class RecursoActuadores {
             return Response.status(Response.Status.ACCEPTED).build();
         }
     }
-    
+
+    @POST
     @Path("/{idActuador}")
     @Consumes("application/json")
-    public Response modificarActuador(@PathParam("idActuador") Integer idActuador, Actuador actuador) {
+    public Response modificarActuador(@PathParam("idActuador") int idActuador, Actuador actuador) {
         if (actuador == null) {
             throw new WebApplicationException(
                     Response.status(Response.Status.BAD_REQUEST).entity("Falta el objeto actuador.").build()
@@ -121,11 +124,11 @@ public class RecursoActuadores {
         }
         return Response.status(Response.Status.ACCEPTED).build();
     }
-    
+
     @GET
     @Path("/{idActuador}/{fechaInicio}/{fechaFinal}")
     @Produces("application/json; charset=utf-8")
-    public Response obtenerHistoricoActuador(@QueryParam("idActuador") Integer idActuador, @QueryParam("fechaInicio") Date fechaInicio, @QueryParam("fechaFinal") Date fechaFinal) {
+    public Response obtenerHistoricoActuador(@QueryParam("idActuador") int idActuador, @QueryParam("fechaInicio") Date fechaInicio, @QueryParam("fechaFinal") Date fechaFinal) {
         Actuador actuador = administrador.obtenerActuador(idActuador);
         if (actuador == null) {
             throw new WebApplicationException(
@@ -141,12 +144,12 @@ public class RecursoActuadores {
             return Response.ok(historico).build();
         }
     }
-    
+
     @GET
     @Path("/dependencia")
     @Produces("application/json; charset=utf-8")
-    public Response listarSensores(@QueryParam("idDependencia") Integer idDependencia) {
-        return Response.ok(clienteUso.listarActuadores(idDependencia)).build();
+    public ArrayList<Actuador> listarSensores(@QueryParam("idDependencia") int idDependencia) {
+        return new ArrayList(clienteUso.listarActuadores(idDependencia).values());
     }
-    
+
 }

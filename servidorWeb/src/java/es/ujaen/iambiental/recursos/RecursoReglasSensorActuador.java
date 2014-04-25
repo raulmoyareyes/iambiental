@@ -7,9 +7,11 @@ import es.ujaen.iambiental.excepciones.ReglaSensorActuadorErrorEliminar;
 import es.ujaen.iambiental.excepciones.ReglaSensorActuadorErrorPersistir;
 import es.ujaen.iambiental.excepciones.ReglaSensorActuadorNoEncontrada;
 import es.ujaen.iambiental.modelos.ReglaSensorActuador;
+import java.util.ArrayList;
 import javax.ws.rs.Consumes;
 import javax.ws.rs.DELETE;
 import javax.ws.rs.GET;
+import javax.ws.rs.POST;
 import javax.ws.rs.PUT;
 import javax.ws.rs.Path;
 import javax.ws.rs.PathParam;
@@ -26,10 +28,10 @@ import org.springframework.stereotype.Component;
 @Path("/reglasSensorActuador")
 @Component(value = "recursoReglasSensorActuador")
 public class RecursoReglasSensorActuador {
-    
+
     @Autowired
     AdminBean administrador;
-    
+
     @GET
     @Path("/{idReglaSensorActuador}")
     @Produces("application/json; charset=utf-8")
@@ -43,13 +45,13 @@ public class RecursoReglasSensorActuador {
         return Response.ok(reglaSensorActuador).build();
 
     }
-    
+
     @GET
     @Produces("application/json; charset=utf-8")
-    public Response listarReglasActuadorSensor() {
-        return Response.ok(administrador.listarReglasSensorActuador()).build();
+    public ArrayList<ReglaSensorActuador> listarReglasActuadorSensor() {
+        return new ArrayList(administrador.listarReglasSensorActuador().values());
     }
-    
+
     @PUT
     @Path("")
     @Consumes("application/json")
@@ -69,7 +71,7 @@ public class RecursoReglasSensorActuador {
         }
         return Response.status(Response.Status.ACCEPTED).build();
     }
-    
+
     @DELETE
     @Path("/{idReglaSensorActuador}")
     //@Consumes("application/json")
@@ -90,7 +92,8 @@ public class RecursoReglasSensorActuador {
             return Response.status(Response.Status.ACCEPTED).build();
         }
     }
-    
+
+    @POST
     @Path("/{idReglaSensorActuador}")
     @Consumes("application/json")
     public Response modificarReglaSensorActuador(@PathParam("idReglaSensorActuador") Integer idReglaSensorActuador, ReglaSensorActuador reglaSensorActuador) {
@@ -114,5 +117,5 @@ public class RecursoReglasSensorActuador {
         }
         return Response.status(Response.Status.ACCEPTED).build();
     }
-    
+
 }

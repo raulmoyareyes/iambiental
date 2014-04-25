@@ -18,6 +18,8 @@
     
     <!--Beans (quitando datos de ejemplo)-->
     <context:component-scan base-package="es.ujaen.iambiental.beans"/>
+    <!--Recursos-->
+    <context:component-scan base-package="es.ujaen.iambiental.recursos"/>
     
     <!--Base de datos-->
     <bean id="dataSource" class="org.springframework.jdbc.datasource.DriverManagerDataSource">
@@ -35,8 +37,8 @@
         <property name="database" value="MYSQL"/>
 
         <!--generar la DB-->
-        <property name="generateDdl" value="true" />
-        <property name="showSql" value="true"/>
+<!--        <property name="generateDdl" value="true" />
+        <property name="showSql" value="true"/>-->
     </bean>
     
     <bean id="emf" class="org.springframework.orm.jpa.LocalContainerEntityManagerFactoryBean">
