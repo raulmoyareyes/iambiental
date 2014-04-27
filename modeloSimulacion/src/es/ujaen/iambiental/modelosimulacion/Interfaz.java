@@ -6,8 +6,16 @@
 package es.ujaen.iambiental.modelosimulacion;
 
 import com.sun.deploy.trace.Trace;
+import java.io.BufferedReader;
+import java.io.File;
+import java.io.FileReader;
+import java.io.IOException;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
+import static javax.swing.JOptionPane.showMessageDialog;
+import static javax.swing.JOptionPane.showMessageDialog;
+import static javax.swing.JOptionPane.showMessageDialog;
+import static javax.swing.JOptionPane.showMessageDialog;
 import static javax.swing.JOptionPane.showMessageDialog;
 
 /**
@@ -53,8 +61,13 @@ public class Interfaz extends javax.swing.JFrame {
         txtMensaje = new javax.swing.JTextField();
         btnEnviarMensaje = new javax.swing.JButton();
         jSeparator2 = new javax.swing.JSeparator();
+        jLabel15 = new javax.swing.JLabel();
+        txtFile = new javax.swing.JTextField();
+        btnCargarFichero = new javax.swing.JButton();
         jpLog = new javax.swing.JScrollPane();
         txtLog = new javax.swing.JTextArea();
+        jpFilepicker = new javax.swing.JPanel();
+        jFileChooser1 = new javax.swing.JFileChooser();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
         setTitle("iAmbiental - Modelo de Simulación");
@@ -96,6 +109,18 @@ public class Interfaz extends javax.swing.JFrame {
             }
         });
 
+        jLabel15.setText("Fichero");
+
+        txtFile.setEnabled(false);
+
+        btnCargarFichero.setText("Enviar lecturas");
+        btnCargarFichero.setEnabled(false);
+        btnCargarFichero.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnCargarFicheroActionPerformed(evt);
+            }
+        });
+
         javax.swing.GroupLayout jpConfiguracionLayout = new javax.swing.GroupLayout(jpConfiguracion);
         jpConfiguracion.setLayout(jpConfiguracionLayout);
         jpConfiguracionLayout.setHorizontalGroup(
@@ -118,7 +143,13 @@ public class Interfaz extends javax.swing.JFrame {
                         .addComponent(txtMensaje)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addComponent(btnEnviarMensaje))
-                    .addComponent(jSeparator2))
+                    .addComponent(jSeparator2)
+                    .addGroup(jpConfiguracionLayout.createSequentialGroup()
+                        .addComponent(jLabel15, javax.swing.GroupLayout.PREFERRED_SIZE, 73, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(txtFile)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(btnCargarFichero)))
                 .addContainerGap())
         );
         jpConfiguracionLayout.setVerticalGroup(
@@ -141,7 +172,12 @@ public class Interfaz extends javax.swing.JFrame {
                     .addComponent(btnEnviarMensaje))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(jSeparator2, javax.swing.GroupLayout.PREFERRED_SIZE, 10, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(276, Short.MAX_VALUE))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addGroup(jpConfiguracionLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(jLabel15)
+                    .addComponent(txtFile, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(btnCargarFichero))
+                .addContainerGap(242, Short.MAX_VALUE))
         );
 
         jtpPrincipal.addTab("Configuración", jpConfiguracion);
@@ -154,6 +190,26 @@ public class Interfaz extends javax.swing.JFrame {
         txtLog.getAccessibleContext().setAccessibleParent(jtpPrincipal);
 
         jtpPrincipal.addTab("Log", jpLog);
+
+        jFileChooser1.setEnabled(false);
+        jFileChooser1.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jFileChooser1ActionPerformed(evt);
+            }
+        });
+
+        javax.swing.GroupLayout jpFilepickerLayout = new javax.swing.GroupLayout(jpFilepicker);
+        jpFilepicker.setLayout(jpFilepickerLayout);
+        jpFilepickerLayout.setHorizontalGroup(
+            jpFilepickerLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addComponent(jFileChooser1, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, 602, Short.MAX_VALUE)
+        );
+        jpFilepickerLayout.setVerticalGroup(
+            jpFilepickerLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addComponent(jFileChooser1, javax.swing.GroupLayout.DEFAULT_SIZE, 416, Short.MAX_VALUE)
+        );
+
+        jtpPrincipal.addTab("Cargar Fichero", jpFilepicker);
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
@@ -207,6 +263,9 @@ public class Interfaz extends javax.swing.JFrame {
                     this.txtPuerto.setEnabled(false);
                     this.txtMensaje.setEnabled(true);
                     this.btnEnviarMensaje.setEnabled(true);
+                    this.jFileChooser1.setEnabled(true);
+                    this.txtFile.setEnabled(true);
+                    this.btnCargarFichero.setEnabled(true);
 
                     this.txtLog.setText(this.txtLog.getText() + "[INICIANDO SIM. ]\n");
                 } else {
@@ -228,18 +287,54 @@ public class Interfaz extends javax.swing.JFrame {
             this.txtLog.setText(this.txtLog.getText() + "[DETENIENDO SIM.]\n");
             this.txtMensaje.setEnabled(false);
             this.btnEnviarMensaje.setEnabled(false);
+            this.jFileChooser1.setEnabled(false);
+            this.txtFile.setEnabled(false);
+            this.btnCargarFichero.setEnabled(false);
             this.socket = null;
         }
     }//GEN-LAST:event_btnIniciarSimulacionActionPerformed
 
     private void btnEnviarMensajeActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnEnviarMensajeActionPerformed
-        if("".equals(this.txtMensaje.getText())){
+        if ("".equals(this.txtMensaje.getText())) {
             //No hay nada que enviar
             showMessageDialog(null, "No ha indicado nada para enviar", "No se ejecutó la operación", 2);
-        }else{
-//            this.socket
+        } else {
+            if (this.socket.mandarMensajeUDP(this.txtMensaje.getText())) {
+                showMessageDialog(null, "¡Mensaje enviado!", "Éxito", 2);
+            } else {
+                showMessageDialog(null, "Ha ocurrido un error en el envío del mensaje", "Error", 2);
+            }
         }
     }//GEN-LAST:event_btnEnviarMensajeActionPerformed
+
+    private void btnCargarFicheroActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnCargarFicheroActionPerformed
+        // TODO add your handling code here:
+        try {
+            String sCadena;
+            BufferedReader bf = new BufferedReader(new FileReader(this.txtFile.getText()));
+            while ((sCadena = bf.readLine()) != null) {
+                System.out.println(sCadena);
+            }
+        } catch (Exception e) {
+            showMessageDialog(null, "Ha ocurrido un error en la lectura del fichero de datos", "Error", 2);
+        }
+    }//GEN-LAST:event_btnCargarFicheroActionPerformed
+
+    private void jFileChooser1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jFileChooser1ActionPerformed
+        // TODO add your handling code here:
+        int returnVal = jFileChooser1.showOpenDialog(this);
+        if (returnVal == jFileChooser1.APPROVE_OPTION) {
+            File file = jFileChooser1.getSelectedFile();
+            try {
+                // What to do with the file, e.g. display it in a TextArea
+                txtFile.setText(file.getPath());
+            } catch (Exception e) {
+                System.out.println("problem accessing file" + file.getAbsolutePath());
+            }
+        } else {
+            System.out.println("File access cancelled by user.");
+        }
+    }//GEN-LAST:event_jFileChooser1ActionPerformed
 
     /**
      * @param args the command line arguments
@@ -291,7 +386,7 @@ public class Interfaz extends javax.swing.JFrame {
                 + "([01]?\\d\\d?|2[0-4]\\d|25[0-5])$";
         Pattern pattern = Pattern.compile(ipPattern);
         Matcher matcher = pattern.matcher(ip);
-        return matcher.matches();
+        return matcher.matches() || "localhost".equals(ip);
     }
 
     /**
@@ -310,20 +405,25 @@ public class Interfaz extends javax.swing.JFrame {
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.JButton btnCargarFichero;
     private javax.swing.JButton btnEnviarMensaje;
     private javax.swing.JButton btnIniciarSimulacion;
+    private javax.swing.JFileChooser jFileChooser1;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel12;
     private javax.swing.JLabel jLabel13;
     private javax.swing.JLabel jLabel14;
+    private javax.swing.JLabel jLabel15;
     private javax.swing.JLabel jLabel3;
     private javax.swing.JSeparator jSeparator1;
     private javax.swing.JSeparator jSeparator2;
     private javax.swing.JPanel jpConfiguracion;
+    private javax.swing.JPanel jpFilepicker;
     private javax.swing.JScrollPane jpLog;
     private javax.swing.JTabbedPane jtpPrincipal;
     private javax.swing.JLabel lblFecha;
     private javax.swing.JLabel lblHora;
+    private javax.swing.JTextField txtFile;
     private javax.swing.JTextField txtIp;
     private javax.swing.JTextArea txtLog;
     private javax.swing.JTextField txtMensaje;
