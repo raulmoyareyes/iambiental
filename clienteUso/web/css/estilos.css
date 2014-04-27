@@ -1,0 +1,90 @@
+::selection, ::-moz-selection {
+    background: none;
+}
+
+body{
+    background: #222;
+}
+
+.carousel-inner{
+    color: #eee;
+    text-align: center;
+}
+
+.bootstrap-touchspin-down, #spinner, .bootstrap-touchspin-up{
+    height: 3em;
+}
+
+#reloj{
+    margin-top: 10%;
+}
+
+#temperaturaControl {
+    background:#999;
+    width: 45%;
+    font-size: 0.5em;
+    display: inline-block;
+    padding: 10% 5%;
+    vertical-align: top;
+}
+
+.temperaturaDisplay{
+    font-size: 5em;
+    margin-bottom: 15%;
+}
+
+#lamparasControl {
+    width: 45%;
+    display: inline-block;
+    padding: 5%;
+    vertical-align: top;
+}
+
+#lamparasControl>a{
+    float: right;
+    position: absolute;
+    top: 0px;
+    right: 0px;
+}
+
+.modal{
+    overflow-y: hidden;
+}
+
+/* Botones toggle */
+.toggle-button {
+    height: 1.5em;
+    background: #eee;
+    border-radius: 3px;
+    padding: 0.1em;
+}
+
+.toggle-button div {
+    width: 50%;
+    height: 1.5em;
+    border-radius: 3px;
+    font-size: 0.85em;
+    background: #47a447;
+}
+
+.toggle-button div .on{
+    margin-right: auto;
+    background: #47a447;
+}
+
+.toggle-button .off{
+    margin-left: auto;
+    background: #c12e2a;
+}
+
+.color777{
+    color: #777;
+}
+
+@media (min-width:500px) {
+
+}
+
+/* jQuery */
+.ui-loading .ui-loader { display: block; }
+.ui-loader { display: none; position: absolute; opacity: .85; z-index: 100; left: 50%; width: 200px; margin-left: -130px; margin-top: -35px; padding: 10px 30px;}
