@@ -1,8 +1,10 @@
 
 $(function() {
+    /* Spinner */
     $("input[name='spinner']").TouchSpin({min: 0, max: 40, step: 0.5, decimals: 1,
         boostat: 5, maxboostedstep: 10, postfix: '\u00BAC'});
 
+    /* Swipe */
     $(document).on("swipeleft", function() {
         $('.carousel').carousel('next');
     });
@@ -10,6 +12,7 @@ $(function() {
         $('.carousel').carousel('prev');
     });
 
+    /* Redimensionar objetos */
     responsive();
     $(window).resize(function() {
         responsive();
@@ -24,6 +27,10 @@ $(function() {
             $(this).children().attr('class', "on");
             $(this).children().html("ON");
         }
+    });
+    
+    $(".dropdown-menu li a").click(function(){
+        $("input[name='dependencia']").val($(this).html());
     });
 
     startTime();
@@ -51,6 +58,6 @@ function responsive() {
     $('#reloj').css('font-size', window.innerWidth * 0.15);
     $('#temperaturaControl').height(window.innerHeight - (window.innerHeight * 0.21));
     $('#lamparasControl').height(window.innerHeight - (window.innerHeight * 0.21));
-    $('#lamparasControl').css('line-height', (window.innerHeight - (window.innerHeight * 0.21))/2);
+//    $('#lamparasControl').css('line-height', (window.innerHeight - (window.innerHeight * 0.21))/2);
     
 }

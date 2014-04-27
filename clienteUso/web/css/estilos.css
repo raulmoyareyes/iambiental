@@ -2,6 +2,10 @@
     background: none;
 }
 
+body{
+    background: #222;
+}
+
 .carousel-inner{
     color: #eee;
     text-align: center;
@@ -34,6 +38,17 @@
     display: inline-block;
     padding: 5%;
     vertical-align: top;
+}
+
+#lamparasControl>a{
+    float: right;
+    position: absolute;
+    top: 0px;
+    right: 0px;
+}
+
+.modal{
+    overflow-y: hidden;
 }
 
 /* Botones toggle */
