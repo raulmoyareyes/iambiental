@@ -7,9 +7,7 @@
         <script src="libs/jquery-mobile/jquery-mobile.js"></script>
         <script src="libs/twitter-bootstrap/js/bootstrap.js"></script>
         <script src="libs/spinner/spinner.js"></script>
-
         <link href="libs/twitter-bootstrap/css/bootstrap.css" rel="stylesheet" type="text/css" />
-        <!--<link href="libs/toggle-switch/toggle-switch.css" rel="stylesheet" type="text/css" >-->
 
         <script src="js/main.js"></script>
         <link href="css/estilos.css" rel="stylesheet" type="text/css"/>
@@ -103,9 +101,9 @@
 <!--                                    <li class="divider"></li>
                                     <li><a href="#">Separated link</a></li>-->
                                 </ul>
-                            </div><!-- /btn-group -->
+                            </div>
                             <input type="text" class="form-control" name="dependencia">
-                        </div><!-- /input-group -->
+                        </div>
                     </div>
                     <div class="modal-footer">
                         <button type="button" class="btn btn-default" data-dismiss="modal">Cancelar</button>

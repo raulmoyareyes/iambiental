@@ -37,6 +37,13 @@ $(function() {
     setInterval(function() {
         startTime();
     }, 500);
+    
+    /* Salta reloj cuando esta sin uso */
+    var sinUso = setInterval(function(){$('.carousel').carousel(0);},15000);
+    $(document).click(function(){
+        clearInterval(sinUso);
+        sinUso = setInterval(function(){$('.carousel').carousel(0);},15000);
+    });
 });
 
 function startTime() {
