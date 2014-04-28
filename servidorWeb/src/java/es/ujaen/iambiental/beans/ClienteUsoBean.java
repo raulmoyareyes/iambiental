@@ -33,10 +33,10 @@ public class ClienteUsoBean {
      * @param idDependencia
      * @return Devuelve un mapa con la lista de sensores de la habitación indicada
      */
-    public Map<Integer, Sensor> listarSensores(Integer idDependencia) {
+    public Map<Integer, Sensor> listarSensores(int idDependencia) {
         return sensorDAO.consultarDependencia(idDependencia);
     }
-    
+        
     /**
      * Devuelve un mapa con la lista de actuadores de la habitación indicada.
      *

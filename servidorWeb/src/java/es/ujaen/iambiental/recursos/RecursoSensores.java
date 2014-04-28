@@ -8,7 +8,9 @@ import es.ujaen.iambiental.excepciones.SensorErrorEliminar;
 import es.ujaen.iambiental.excepciones.SensorErrorPersistir;
 import es.ujaen.iambiental.excepciones.SensorNoEncontrado;
 import es.ujaen.iambiental.modelos.Sensor;
+import java.util.ArrayList;
 import java.util.Date;
+import java.util.List;
 import java.util.Map;
 import javax.ws.rs.Consumes;
 import javax.ws.rs.DELETE;
@@ -20,6 +22,7 @@ import javax.ws.rs.PathParam;
 import javax.ws.rs.Produces;
 import javax.ws.rs.QueryParam;
 import javax.ws.rs.WebApplicationException;
+import javax.ws.rs.core.GenericEntity;
 import javax.ws.rs.core.Response;
 import javax.ws.rs.core.Response.Status;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -29,17 +32,18 @@ import org.springframework.stereotype.Component;
  * Recurso REST para el cliente de administración
  *
  * @author Gabri
+ * @author Raúl Moya Reyes <www.raulmoya.es>
  */
 @Path("/sensores")
 @Component(value = "recursoSensores")
 public class RecursoSensores {
-    
+
     @Autowired
     AdminBean administrador;
-    
+
     @Autowired
     ClienteUsoBean clienteUso;
-    
+
     @GET
     @Path("/{idSensor}")
     @Produces("application/json; charset=utf-8")
@@ -53,13 +57,14 @@ public class RecursoSensores {
         return Response.ok(sensor).build();
 
     }
-    
+
     @GET
     @Produces("application/json; charset=utf-8")
-    public Response listarSensores() {
-        return Response.ok(administrador.listarSensores()).build();
+    public ArrayList listarSensores() {
+        return new ArrayList(administrador.listarSensores().values());
+
     }
-    
+
     @PUT
     @Path("")
     @Consumes("application/json")
@@ -79,10 +84,9 @@ public class RecursoSensores {
         }
         return Response.status(Status.ACCEPTED).build();
     }
-    
+
     @DELETE
     @Path("/{idSensor}")
-    //@Consumes("application/json")
     public Response eliminarSensor(@PathParam("idSensor") Integer idSensor) {
         Sensor sensor = administrador.obtenerSensor(idSensor);
         if (sensor == null) {
@@ -100,7 +104,7 @@ public class RecursoSensores {
             return Response.status(Status.ACCEPTED).build();
         }
     }
-    
+
     @POST
     @Path("/{idSensor}")
     @Consumes("application/json")
@@ -125,11 +129,16 @@ public class RecursoSensores {
         }
         return Response.status(Status.ACCEPTED).build();
     }
-    
+
+    /**
+     * @since Esto hay que penserlo para hacerlo en la query si no se cambia a la
+     * query hay que recoger los dtos con pathparam tambien devolver list en vez
+     * de map
+     */
     @GET
     @Path("/{idSensor}/{fechaInicio}/{fechaFinal}")
     @Produces("application/json; charset=utf-8")
-    public Response obtenerHistoricoSensor(@QueryParam("idSensor") Integer idSensor, @QueryParam("fechaInicio") Date fechaInicio, @QueryParam("fechaFinal") Date fechaFinal) {
+    public Response obtenerHistoricoSensor(@PathParam("idSensor") Integer idSensor, @QueryParam("fechaInicio") Date fechaInicio, @QueryParam("fechaFinal") Date fechaFinal) {
         Sensor sensor = administrador.obtenerSensor(idSensor);
         if (sensor == null) {
             throw new WebApplicationException(
@@ -145,12 +154,13 @@ public class RecursoSensores {
             return Response.ok(historico).build();
         }
     }
-    
+
     @GET
-    @Path("/dependencia")
+    @Path("/dependencia/{idDependencia}")
     @Produces("application/json; charset=utf-8")
-    public Response listarSensores(@QueryParam("idDependencia") Integer idDependencia) {
-        return Response.ok(clienteUso.listarSensores(idDependencia)).build();
+    public ArrayList listarSensores(@PathParam("idDependencia") int idDependencia) {
+        return new ArrayList(clienteUso.listarSensores(idDependencia).values());
+//   return Response.ok().entity(new ArrayList(clienteUso.listarSensores(idDependencia).values())).build();
     }
-    
+
 }

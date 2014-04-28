@@ -114,7 +114,7 @@ public class SensorDAO {
      */
     public Map<Integer, Sensor> consultarDependencia(int dependencia) {
         Map<Integer, Sensor> sensores = new HashMap();
-        List<Sensor> lista = em.createQuery("Select s from Sensor s WHERE s.dependencia = ?1", Sensor.class).setParameter(1, dependencia).getResultList();
+        List<Sensor> lista = em.createQuery("Select s from Sensor s WHERE s.idDependencia = ?1", Sensor.class).setParameter(1, dependencia).getResultList();
 
         for (Sensor sensor : lista) {
             sensores.put(sensor.getID(), sensor);

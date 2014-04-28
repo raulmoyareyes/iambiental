@@ -1,8 +1,9 @@
+<%@page contentType="text/html" pageEncoding="UTF-8"%>
 <!DOCTYPE html>
 <html lang="es">
     <head>
         <meta charset="UTF-8">
-        <title>Cliente Táctil</title>
+        <title>Cliente TÃ¡ctil</title>
         <script src="libs/jquery/jquery.js"></script>
         <script src="libs/jquery-mobile/jquery-mobile.js"></script>
         <script src="libs/twitter-bootstrap/js/bootstrap.js"></script>
@@ -28,14 +29,14 @@
                     <div class="item active color777">
 
                         <div id="reloj"></div>
-                        <div><span id="temperaturaDisplay"></span> ºC</div>
+                        <div><span id="temperaturaDisplay"></span> ÂºC</div>
 
                     </div>
                     <div class="item">
 
                         <div id="temperaturaControl">
                             <p>TEMPERATURA ACTUAL</p>
-                            <div class="temperaturaDisplay"><span id="temperaturaDisplayControl"></span> ºC</div>
+                            <div class="temperaturaDisplay"><span id="temperaturaDisplayControl">${temperatura}</span> ÂºC</div>
 
                             <p>TEMPERATURA DESEADA</p>
                             <input id="spinner" type="text" value="21" name="spinner" disabled="true">
@@ -87,7 +88,7 @@
                 <div class="modal-content">
                     <div class="modal-header">
                         <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
-                        <h4 class="modal-title" id="myModalLabel">Configuración</h4>
+                        <h4 class="modal-title" id="myModalLabel">ConfiguraciÃ³n</h4>
                     </div>
                     <div class="modal-body">
                         <label>Seleccione la dependencia</label>
@@ -95,7 +96,7 @@
                             <div class="input-group-btn">
                                 <button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown">Listado<span class="caret"></span></button>
                                 <ul class="dropdown-menu">
-                                    <li><a href="#">Salón</a></li>
+                                    <li><a href="#">SalÃ³n</a></li>
                                     <li><a href="#">Cocina</a></li>
                                     <li><a href="#">Dormitorio</a></li>
 <!--                                    <li class="divider"></li>
@@ -112,5 +113,6 @@
                 </div>
             </div>
         </div>
+        
     </body>
 </html>

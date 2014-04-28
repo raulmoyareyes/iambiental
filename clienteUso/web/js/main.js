@@ -53,9 +53,9 @@ function startTime() {
     var s = today.getSeconds();
     var rm = (m < 10) ? m = "0" + m : m;
     var s = (s < 10) ? s = "0" + s : s;
-    var temp = "15";
+//    var temp = "15";
     $('#reloj').html(h + ":" + m + ":" + s);
-    $('#temperaturaDisplay').html(temp);
+//    $('#temperaturaDisplay').html(temp);
     $('#temperaturaDisplayControl').html(temp);
 }
 

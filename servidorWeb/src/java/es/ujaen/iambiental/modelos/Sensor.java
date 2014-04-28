@@ -6,7 +6,6 @@ import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
-import javax.persistence.OneToOne;
 import javax.persistence.Table;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
@@ -23,22 +22,22 @@ public class Sensor implements Serializable {
     @GeneratedValue(strategy = GenerationType.AUTO)
     private int id;
     private String descripcion;
-    @OneToOne
-    private Dependencia dependencia;
+    private int idDependencia;
     @Temporal(TemporalType.TIMESTAMP)
     private Date fecha;
     private float dato;
     private String ip;
     private String puerto;
-    private int estado;
+    private int estado; //para que era??
+    private int tipo; // 1 si es temperatura, 0 si es de otra cosa. Esto hay que ver como hacerlo bien 
 
     public Sensor() {
-
+//        dependencia = new Dependencia();
     }
 
-    public Sensor(String descripcion, Dependencia dependencia, Date fecha, float dato, String ip, String puerto, int estado) {
+    public Sensor(String descripcion, int dependencia, Date fecha, float dato, String ip, String puerto, int estado) {
         this.descripcion = descripcion;
-        this.dependencia = dependencia;
+        this.idDependencia = dependencia;
         this.fecha = fecha;
         this.dato = dato;
         this.ip = ip;
@@ -50,12 +49,12 @@ public class Sensor implements Serializable {
         return id;
     }
 
-    public Dependencia getDependencia() {
-        return dependencia;
+    public int getDependencia() {
+        return idDependencia;
     }
 
-    public void setDependencia(Dependencia dependencia) {
-        this.dependencia = dependencia;
+    public void setDependencia(int dependencia) {
+        this.idDependencia = dependencia;
     }
 
     public float getDato() {
@@ -96,6 +95,22 @@ public class Sensor implements Serializable {
 
     public void setEstado(int estado) {
         this.estado = estado;
+    }
+
+    public Date getFecha() {
+        return fecha;
+    }
+
+    public void setFecha(Date fecha) {
+        this.fecha = fecha;
+    }
+
+    public int getTipo() {
+        return tipo;
+    }
+
+    public void setTipo(int tipo) {
+        this.tipo = tipo;
     }
     
 }
