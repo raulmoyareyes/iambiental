@@ -60,7 +60,6 @@ public class RecursoActuadores {
     }
 
     @PUT
-    @Path("")
     @Consumes("application/json")
     public Response crearActuador(Actuador actuador) {
         if (actuador == null) {

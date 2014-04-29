@@ -53,7 +53,6 @@ public class RecursoReglasSensorActuador {
     }
 
     @PUT
-    @Path("")
     @Consumes("application/json")
     public Response crearReglaSensorActuador(ReglaSensorActuador reglaSensorActuador) {
         if (reglaSensorActuador == null) {

@@ -54,7 +54,6 @@ public class RecursoDependencias {
     }
 
     @PUT
-    @Path("")
     @Consumes("application/json")
     public Response crearDependencia(Dependencia dependencia) {
         if (dependencia == null) {

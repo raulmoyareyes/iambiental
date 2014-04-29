@@ -61,7 +61,6 @@ public class RecursoSensores {
     }
     
     @PUT
-    @Path("")
     @Consumes("application/json")
     public Response crearSensor(Sensor sensor) {
         if (sensor == null) {

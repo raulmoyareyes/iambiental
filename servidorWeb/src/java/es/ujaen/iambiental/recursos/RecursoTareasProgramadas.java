@@ -52,7 +52,6 @@ public class RecursoTareasProgramadas {
     }
     
     @PUT
-    @Path("")
     @Consumes("application/json")
     public Response crearTareaProgramada(TareaProgramada tareaProgramada) {
         if (tareaProgramada == null) {
