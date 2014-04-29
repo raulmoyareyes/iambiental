@@ -80,7 +80,6 @@ public class RecursoActuadores {
 
     @DELETE
     @Path("/{idActuador}")
-    //@Consumes("application/json")
     public Response eliminarActuador(@PathParam("idActuador") int idActuador) {
         Actuador actuador = administrador.obtenerActuador(idActuador);
         if (actuador == null) {
@@ -124,6 +123,7 @@ public class RecursoActuadores {
         return Response.status(Response.Status.ACCEPTED).build();
     }
 
+    // Repasar
     @GET
     @Path("/{idActuador}/{fechaInicio}/{fechaFinal}")
     @Produces("application/json; charset=utf-8")
@@ -145,9 +145,9 @@ public class RecursoActuadores {
     }
 
     @GET
-    @Path("/dependencia")
+    @Path("/dependencia/{idDependencia}")
     @Produces("application/json; charset=utf-8")
-    public ArrayList<Actuador> listarSensores(@QueryParam("idDependencia") int idDependencia) {
+    public ArrayList<Actuador> listarSensores(@PathParam("idDependencia") int idDependencia) {
         return new ArrayList(clienteUso.listarActuadores(idDependencia).values());
     }
 

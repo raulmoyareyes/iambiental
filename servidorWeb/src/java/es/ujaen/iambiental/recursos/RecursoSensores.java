@@ -127,6 +127,7 @@ public class RecursoSensores {
         return Response.status(Status.ACCEPTED).build();
     }
 
+    //Repasar
     @GET
     @Path("/{idSensor}/{fechaInicio}/{fechaFinal}")
     @Produces("application/json; charset=utf-8")
