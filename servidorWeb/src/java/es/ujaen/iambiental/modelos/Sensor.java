@@ -30,10 +30,11 @@ public class Sensor implements Serializable {
     private float dato;
     private String ip;
     private String puerto;
-    private int estado;
+    private int estado; //para que era??
+    private int tipo; // 1 si es temperatura, 0 si es de otra cosa. Esto hay que ver como hacerlo bien 
 
     public Sensor() {
-
+        dependencia = new Dependencia();
     }
 
     public Sensor(String descripcion, Dependencia dependencia, Date fecha, float dato, String ip, String puerto, int estado) {
@@ -96,6 +97,22 @@ public class Sensor implements Serializable {
 
     public void setEstado(int estado) {
         this.estado = estado;
+    }
+
+    public Date getFecha() {
+        return fecha;
+    }
+
+    public void setFecha(Date fecha) {
+        this.fecha = fecha;
+    }
+
+    public int getTipo() {
+        return tipo;
+    }
+
+    public void setTipo(int tipo) {
+        this.tipo = tipo;
     }
     
 }
