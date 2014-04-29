@@ -4,6 +4,7 @@ import java.io.Serializable;
 
 /**
  *
+ * @author Gabriel
  * @author Raúl Moya Reyes <www.raulmoya.es>
  */
 public class ReglaSensorActuador implements Serializable {

@@ -5,6 +5,7 @@ import java.util.Map;
 
 /**
  *
+ * @author Gabriel
  * @author Raúl Moya Reyes <www.raulmoya.es>
  */
 public class TareaProgramada implements Serializable {

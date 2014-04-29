@@ -10,7 +10,6 @@ import es.ujaen.iambiental.excepciones.SensorNoEncontrado;
 import es.ujaen.iambiental.modelos.Sensor;
 import java.util.ArrayList;
 import java.util.Date;
-import java.util.List;
 import java.util.Map;
 import javax.ws.rs.Consumes;
 import javax.ws.rs.DELETE;
@@ -22,7 +21,6 @@ import javax.ws.rs.PathParam;
 import javax.ws.rs.Produces;
 import javax.ws.rs.QueryParam;
 import javax.ws.rs.WebApplicationException;
-import javax.ws.rs.core.GenericEntity;
 import javax.ws.rs.core.Response;
 import javax.ws.rs.core.Response.Status;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -60,7 +58,7 @@ public class RecursoSensores {
 
     @GET
     @Produces("application/json; charset=utf-8")
-    public ArrayList listarSensores() {
+    public ArrayList<Sensor> listarSensores() {
         return new ArrayList(administrador.listarSensores().values());
 
     }
@@ -130,11 +128,6 @@ public class RecursoSensores {
         return Response.status(Status.ACCEPTED).build();
     }
 
-    /**
-     * @since Esto hay que penserlo para hacerlo en la query si no se cambia a la
-     * query hay que recoger los dtos con pathparam tambien devolver list en vez
-     * de map
-     */
     @GET
     @Path("/{idSensor}/{fechaInicio}/{fechaFinal}")
     @Produces("application/json; charset=utf-8")
@@ -158,9 +151,8 @@ public class RecursoSensores {
     @GET
     @Path("/dependencia/{idDependencia}")
     @Produces("application/json; charset=utf-8")
-    public ArrayList listarSensores(@PathParam("idDependencia") int idDependencia) {
+    public ArrayList<Sensor> listarSensores(@PathParam("idDependencia") int idDependencia) {
         return new ArrayList(clienteUso.listarSensores(idDependencia).values());
-//   return Response.ok().entity(new ArrayList(clienteUso.listarSensores(idDependencia).values())).build();
     }
 
 }

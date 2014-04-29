@@ -6,9 +6,12 @@ import com.sun.jersey.api.client.Client;
 import com.sun.jersey.api.client.ClientResponse;
 import com.sun.jersey.api.client.WebResource;
 import com.sun.jersey.api.client.config.DefaultClientConfig;
+import es.ujaen.iambiental.clienteuso.modelos.Actuador;
 import es.ujaen.iambiental.clienteuso.modelos.Dependencia;
 import es.ujaen.iambiental.clienteuso.modelos.Sensor;
 import java.io.IOException;
+import java.util.ArrayList;
+import java.util.LinkedHashMap;
 import java.util.List;
 import javax.servlet.RequestDispatcher;
 import javax.servlet.ServletException;
@@ -17,14 +20,14 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import org.codehaus.jackson.jaxrs.JacksonJsonProvider;
-//import org.codehaus.jackson.jaxrs.JacksonJsonProvider;
+import org.codehaus.jackson.map.ObjectMapper;
 
 
 /**
  *
- * @author Setic
+ * @author Raúl Moya Reyes
  */
-@WebServlet(name = "ControladorPrincipal", urlPatterns = {"/"})
+@WebServlet(name = "ControladorPrincipal", urlPatterns = {"/c/*"})
 public class ControladorPrincipal extends HttpServlet {
 
     /**
@@ -44,21 +47,28 @@ public class ControladorPrincipal extends HttpServlet {
         defaultClientConfig.getClasses().add(JacksonJsonProvider.class);
         Client cliente = Client.create(defaultClientConfig);
         WebResource recurso = cliente.resource("http://localhost:8084/servidorWeb/recursos");
+        ObjectMapper mapper = new ObjectMapper();
 
         /* obtener las dependencias del servidor */
         Dependencia dependencia = new Dependencia();
         
-        ClientResponse responseJSON = recurso.path("/sensores").accept("application/json").get(ClientResponse.class);
-        List<Sensor> sensores = responseJSON.getEntity(List.class);
+        ClientResponse responseJSONS = recurso.path("/sensores/dependencia/1").accept("application/json").get(ClientResponse.class);
+        List<Sensor> sensores = responseJSONS.getEntity(List.class);
         
         float temperatura = 0;
-        for(Sensor s : sensores){
+        for(int i=0; i<sensores.size(); i++){
+            // Hay que hacer la conversion ya que no se puede utilizar directamente.
+            Sensor s = mapper.convertValue(sensores.get(i), Sensor.class);
             if(s.getTipo() == 1){
                 temperatura = s.getDato();
             }
         }
         
+        ClientResponse responseJSONA = recurso.path("/actuadores").accept("application/json").get(ClientResponse.class);
+        List<Actuador> actuadores = responseJSONA.getEntity(List.class);
+        
         request.setAttribute("temperatura", temperatura);
+        request.setAttribute("actuadores", actuadores);
         
         RequestDispatcher rd = request.getRequestDispatcher("/WEB-INF/clienteTactil.jsp");
         rd.forward(request, response);

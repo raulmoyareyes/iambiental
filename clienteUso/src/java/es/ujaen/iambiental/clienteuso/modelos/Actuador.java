@@ -6,9 +6,9 @@ import java.util.Date;
 
 /**
  *
+ * @author Gabriel
  * @author Raúl Moya Reyes <www.raulmoya.es>
  */
-
 public class Actuador implements Serializable {
     
     private int id;
@@ -19,6 +19,7 @@ public class Actuador implements Serializable {
     private String ip;
     private String puerto;
     private int estado;
+    private int tipo; // 1 si es interruptor, 0 si es de otra cosa. Esto hay que ver como hacerlo bien 
 
     public Actuador(){
         
@@ -40,6 +41,22 @@ public class Actuador implements Serializable {
     
     public Dependencia getDependencia() {
         return dependencia;
+    }
+
+    public Date getFecha() {
+        return fecha;
+    }
+
+    public void setFecha(Date fecha) {
+        this.fecha = fecha;
+    }
+
+    public int getTipo() {
+        return tipo;
+    }
+
+    public void setTipo(int tipo) {
+        this.tipo = tipo;
     }
 
     public void setDependencia(Dependencia dependencia) {

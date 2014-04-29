@@ -1,4 +1,5 @@
 <%@page contentType="text/html" pageEncoding="UTF-8"%>
+<%@taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <!DOCTYPE html>
 <html lang="es">
     <head>
@@ -29,7 +30,7 @@
                     <div class="item active color777">
 
                         <div id="reloj"></div>
-                        <div><span id="temperaturaDisplay"></span> ºC</div>
+                        <div><span id="temperaturaDisplay">${temperatura}</span> ºC</div>
 
                     </div>
                     <div class="item">
