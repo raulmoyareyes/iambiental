@@ -40,52 +40,84 @@ public class ControladorPrincipal extends HttpServlet {
             throws ServletException, IOException {
         response.setContentType("text/html;charset=UTF-8");
 
+        String action = (request.getPathInfo() != null ? request.getPathInfo() : "");
+
         DefaultClientConfig defaultClientConfig = new DefaultClientConfig();
         defaultClientConfig.getClasses().add(JacksonJsonProvider.class);
         Client cliente = Client.create(defaultClientConfig);
         WebResource recurso = cliente.resource("http://localhost:8084/servidorWeb/recursos");
         ObjectMapper mapper = new ObjectMapper();
 
-        /* Dependencias */
-        ClientResponse responseJSOND = recurso.path("/dependencias").accept("application/json").get(ClientResponse.class);
-        List<Dependencia> dependencias = responseJSOND.getEntity(List.class);
-        request.setAttribute("dependencias", dependencias);
+        switch (action) {
+            case "": {
+                /* Dependencias */
+                ClientResponse responseJSOND = recurso.path("/dependencias").accept("application/json").get(ClientResponse.class);
+                List<Dependencia> dependencias = responseJSOND.getEntity(List.class);
+                request.setAttribute("dependencias", dependencias);
 
-        /* Sensores */
-        ClientResponse responseJSONS = recurso.path("/sensores/dependencia/1").accept("application/json").get(ClientResponse.class);
-        List<Sensor> sensores = responseJSONS.getEntity(List.class);
+                /* Sensores */ // Seleccionar dependencia
+                ClientResponse responseJSONS = recurso.path("/sensores/dependencia/1").accept("application/json").get(ClientResponse.class);
+                List<Sensor> sensores = responseJSONS.getEntity(List.class);
 
-        Sensor temperatura = new Sensor();
-        for (int i = 0; i < sensores.size(); i++) {
-            // Hay que hacer la conversion ya que no se puede utilizar directamente.
-            Sensor s = mapper.convertValue(sensores.get(i), Sensor.class);
-            if (s.getTipo() == 1) {
-                temperatura = s;
+                Sensor temperatura = new Sensor();
+                for (int i = 0; i < sensores.size(); i++) {
+                    // Hay que hacer la conversion ya que no se puede utilizar directamente.
+                    Sensor s = mapper.convertValue(sensores.get(i), Sensor.class);
+                    if (s.getTipo() == 1) {
+                        temperatura = s;
+                    }
+                }
+                request.setAttribute("temperatura", temperatura);
+
+                /* Actuadores */
+                ClientResponse responseJSONA = recurso.path("/actuadores").accept("application/json").get(ClientResponse.class);
+                List<Actuador> actuadores = responseJSONA.getEntity(List.class);
+
+                List<Actuador> actuadoresI = new ArrayList();
+                Actuador termostato = new Actuador();
+                for (int i = 0; i < actuadores.size(); i++) {
+                    // Hay que hacer la conversion ya que no se puede utilizar directamente.
+                    Actuador a = mapper.convertValue(actuadores.get(i), Actuador.class);
+                    if (a.getTipo() == 1) {
+                        actuadoresI.add(a);
+                    } else if (a.getTipo() == 0) {
+                        termostato = a;
+                    }
+                }
+                request.setAttribute("termostato", termostato);
+                request.setAttribute("actuadores", actuadoresI);
+
+                RequestDispatcher rd = request.getRequestDispatcher("/WEB-INF/clienteTactil.jsp");
+
+                rd.forward(request, response);
+                break;
+            }
+
+            case "/datos": {
+
+                break;
+            }
+
+            case "/actuador": {
+                String dato = request.getParameter("dato");
+                String id = dato.split(":")[0];
+                String contenido = dato.split(":")[1];
+
+                ClientResponse responseJSONA = recurso.path("/actuadores/" + id).accept("application/json").get(ClientResponse.class);
+                Actuador actuador = responseJSONA.getEntity(Actuador.class);
+
+                if (actuador.getTipo() == 0) {
+                    actuador.setDato(Integer.parseInt(contenido));
+                } else if (actuador.getTipo() == 1) {
+                    actuador.setEstado(Integer.parseInt(contenido));
+                }
+
+                recurso.path("/actuadores/" + id)
+                        .type("application/json")
+                        .post(ClientResponse.class, actuador);
+                break;
             }
         }
-        request.setAttribute("temperatura", temperatura);
-
-        /* Actuadores */
-        ClientResponse responseJSONA = recurso.path("/actuadores").accept("application/json").get(ClientResponse.class);
-        List<Actuador> actuadores = responseJSONA.getEntity(List.class);
-        
-        List<Actuador> actuadoresI = new ArrayList();
-        Actuador termostato = new Actuador();
-        for (int i = 0; i < actuadores.size(); i++) {
-            // Hay que hacer la conversion ya que no se puede utilizar directamente.
-            Actuador a = mapper.convertValue(actuadores.get(i), Actuador.class);
-            if (a.getTipo() == 1) {
-                actuadoresI.add(a);
-            } else if (a.getTipo() == 0) {
-                termostato = a;
-            }
-        }
-        request.setAttribute("termostato", termostato);
-        request.setAttribute("actuadores", actuadoresI);
-
-        RequestDispatcher rd = request.getRequestDispatcher("/WEB-INF/clienteTactil.jsp");
-
-        rd.forward(request, response);
 
     }
 

@@ -49,7 +49,7 @@
 
                             <div class="botones">
                                 <c:forEach var="a" items="${actuadores}" varStatus="estado">
-                                    <div>
+                                    <div id="${a.id}">
                                         <label>${a.descripcion}</label>
                                         <div class="toggle-button">
                                             <c:if test="${a.estado == 1}">
@@ -114,5 +114,6 @@
             </div>
         </div>
 
+        <input type="hidden" name="dato"></input>
     </body>
 </html>

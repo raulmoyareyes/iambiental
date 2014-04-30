@@ -33,7 +33,7 @@ public class ReglaSensorActuador implements Serializable {
         this.actuador = actuador;
     }
 
-    public int getID(){
+    public int getId(){
         return id;
     }
     

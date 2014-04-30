@@ -104,7 +104,7 @@ public class TareaProgramadaDAO {
         List<TareaProgramada> lista = em.createQuery("Select t from TareaProgramada t").getResultList();
 
         for (TareaProgramada tareaProgramada : lista) {
-            tareasProgramadas.put(tareaProgramada.getID(), tareaProgramada);
+            tareasProgramadas.put(tareaProgramada.getId(), tareaProgramada);
         }
         return tareasProgramadas;
     }
@@ -122,7 +122,7 @@ public class TareaProgramadaDAO {
         List<TareaProgramada> lista = em.createQuery("Select t from TareaProgramada t WHERE t.dependencia = ?1", TareaProgramada.class).setParameter(1, dependencia).getResultList();
 
         for (TareaProgramada tareaProgramada : lista) {
-            tareasProgramadas.put(tareaProgramada.getID(), tareaProgramada);
+            tareasProgramadas.put(tareaProgramada.getId(), tareaProgramada);
         }
         return tareasProgramadas;
     }
