@@ -1,6 +1,4 @@
-
 package es.ujaen.iambiental.clienteuso.controladores;
-
 
 import com.sun.jersey.api.client.Client;
 import com.sun.jersey.api.client.ClientResponse;
@@ -21,7 +19,6 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import org.codehaus.jackson.jaxrs.JacksonJsonProvider;
 import org.codehaus.jackson.map.ObjectMapper;
-
 
 /**
  *
@@ -51,31 +48,47 @@ public class ControladorPrincipal extends HttpServlet {
 
         /* obtener las dependencias del servidor */
         Dependencia dependencia = new Dependencia();
-        
+
+        /* Sensores */
         ClientResponse responseJSONS = recurso.path("/sensores/dependencia/1").accept("application/json").get(ClientResponse.class);
         List<Sensor> sensores = responseJSONS.getEntity(List.class);
-        
-        float temperatura = 0;
-        for(int i=0; i<sensores.size(); i++){
+
+        Sensor temperatura = new Sensor();
+        for (int i = 0; i < sensores.size(); i++) {
             // Hay que hacer la conversion ya que no se puede utilizar directamente.
             Sensor s = mapper.convertValue(sensores.get(i), Sensor.class);
-            if(s.getTipo() == 1){
-                temperatura = s.getDato();
+            if (s.getTipo() == 1) {
+                temperatura = s;
             }
         }
-        
+
+        /* Actuadores */
         ClientResponse responseJSONA = recurso.path("/actuadores").accept("application/json").get(ClientResponse.class);
         List<Actuador> actuadores = responseJSONA.getEntity(List.class);
         
+        List<Actuador> actuadoresI = new ArrayList();
+        Actuador termostato = new Actuador();
+        for (int i = 0; i < actuadores.size(); i++) {
+            // Hay que hacer la conversion ya que no se puede utilizar directamente.
+            Actuador a = mapper.convertValue(actuadores.get(i), Actuador.class);
+            if (a.getTipo() == 1) {
+                actuadoresI.add(a);
+            } else if (a.getTipo() == 0) {
+                termostato = a;
+            }
+        }
+
+        request.setAttribute("termostato", termostato);
         request.setAttribute("temperatura", temperatura);
-        request.setAttribute("actuadores", actuadores);
-        
+        request.setAttribute("actuadores", actuadoresI);
+
         RequestDispatcher rd = request.getRequestDispatcher("/WEB-INF/clienteTactil.jsp");
+
         rd.forward(request, response);
 
     }
 
-    // <editor-fold defaultstate="collapsed" desc="HttpServlet methods. Click on the + sign on the left to edit the code.">
+// <editor-fold defaultstate="collapsed" desc="HttpServlet methods. Click on the + sign on the left to edit the code.">
     /**
      * Handles the HTTP <code>GET</code> method.
      *

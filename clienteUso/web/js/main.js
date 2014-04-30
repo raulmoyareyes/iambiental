@@ -34,9 +34,8 @@ $(function() {
     });
 
     startTime();
-    setInterval(function() {
-        startTime();
-    }, 500);
+    setInterval(function() {startTime();}, 500);
+    setInterval(function() {recargarDatos();}, 10000);
     
     /* Salta reloj cuando esta sin uso */
     var sinUso = setInterval(function(){$('.carousel').carousel(0);},15000);
@@ -53,9 +52,7 @@ function startTime() {
     var s = today.getSeconds();
     var rm = (m < 10) ? m = "0" + m : m;
     var s = (s < 10) ? s = "0" + s : s;
-//    var temp = "15";
     $('#reloj').html(h + ":" + m + ":" + s);
-//    $('#temperaturaDisplay').html(temp);
     $('#temperaturaDisplayControl').html(temp);
 }
 
@@ -65,6 +62,8 @@ function responsive() {
     $('#reloj').css('font-size', window.innerWidth * 0.15);
     $('#temperaturaControl').height(window.innerHeight - (window.innerHeight * 0.21));
     $('#lamparasControl').height(window.innerHeight - (window.innerHeight * 0.21));
-//    $('#lamparasControl').css('line-height', (window.innerHeight - (window.innerHeight * 0.21))/2);
-    
+}
+
+function recargarDatos(){
+    // hacer peticiones al controlador para coger datos.
 }

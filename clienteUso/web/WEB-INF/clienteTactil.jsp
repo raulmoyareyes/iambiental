@@ -30,41 +30,42 @@
                     <div class="item active color777">
 
                         <div id="reloj"></div>
-                        <div><span id="temperaturaDisplay">${temperatura}</span> ºC</div>
+                        <div><span id="temperaturaDisplay">${temperatura.dato}</span> ºC</div>
 
                     </div>
                     <div class="item">
 
                         <div id="temperaturaControl">
                             <p>TEMPERATURA ACTUAL</p>
-                            <div class="temperaturaDisplay"><span id="temperaturaDisplayControl">${temperatura}</span> ºC</div>
+                            <div class="temperaturaDisplay"><span id="temperaturaDisplayControl">${temperatura.dato}</span> ºC</div>
 
                             <p>TEMPERATURA DESEADA</p>
-                            <input id="spinner" type="text" value="21" name="spinner" disabled="true">
+                            <input id="spinner" type="text" value="${termostato.dato}" name="spinner" disabled="true">
                         </div>
 
                         <div id="lamparasControl">
-                            <p>LAMPARAS</p>
+                            <p>INTERRUPTORES</p>
                             <a class="glyphicon glyphicon-cog btn btn-default btn-lg" data-toggle="modal" data-target="#config"></a>
 
                             <div class="botones">
-                                <div>
-                                    <label>Bombilla</label>
-                                    <div class="toggle-button">
-                                        <div class="on">
-                                            ON
+                                <c:forEach var="a" items="${actuadores}" varStatus="estado">
+                                    <div>
+                                        <label>${a.descripcion}</label>
+                                        <div class="toggle-button">
+                                            <c:if test="${a.estado == 1}">
+                                                <div class="on">
+                                                    ON
+                                                </div>
+                                            </c:if>
+                                            <c:if test="${a.estado == 0}">
+                                                <div class="off">
+                                                    OFF
+                                                </div>
+                                            </c:if>
                                         </div>
                                     </div>
-                                </div>
+                                </c:forEach>
 
-                                <div>
-                                    <label>Bombilla 2</label>
-                                    <div class="toggle-button">
-                                        <div class="on">
-                                            ON
-                                        </div>
-                                    </div>
-                                </div>
                             </div>
                         </div>
 
@@ -100,8 +101,8 @@
                                     <li><a href="#">Salón</a></li>
                                     <li><a href="#">Cocina</a></li>
                                     <li><a href="#">Dormitorio</a></li>
-<!--                                    <li class="divider"></li>
-                                    <li><a href="#">Separated link</a></li>-->
+                                    <!--                                    <li class="divider"></li>
+                                                                        <li><a href="#">Separated link</a></li>-->
                                 </ul>
                             </div>
                             <input type="text" class="form-control" name="dependencia">
@@ -114,6 +115,6 @@
                 </div>
             </div>
         </div>
-        
+
     </body>
 </html>

@@ -19,7 +19,7 @@ public class Actuador implements Serializable {
     private String ip;
     private String puerto;
     private int estado;
-    private int tipo; // 1 si es interruptor, 0 si es de otra cosa. Esto hay que ver como hacerlo bien 
+    private int tipo; // 1 si es interruptor, 0 si es potenciometro. Esto hay que ver como hacerlo bien 
 
     public Actuador(){
         
