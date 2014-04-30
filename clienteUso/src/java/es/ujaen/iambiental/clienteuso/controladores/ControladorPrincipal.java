@@ -46,8 +46,10 @@ public class ControladorPrincipal extends HttpServlet {
         WebResource recurso = cliente.resource("http://localhost:8084/servidorWeb/recursos");
         ObjectMapper mapper = new ObjectMapper();
 
-        /* obtener las dependencias del servidor */
-        Dependencia dependencia = new Dependencia();
+        /* Dependencias */
+        ClientResponse responseJSOND = recurso.path("/dependencias").accept("application/json").get(ClientResponse.class);
+        List<Dependencia> dependencias = responseJSOND.getEntity(List.class);
+        request.setAttribute("dependencias", dependencias);
 
         /* Sensores */
         ClientResponse responseJSONS = recurso.path("/sensores/dependencia/1").accept("application/json").get(ClientResponse.class);
@@ -61,6 +63,7 @@ public class ControladorPrincipal extends HttpServlet {
                 temperatura = s;
             }
         }
+        request.setAttribute("temperatura", temperatura);
 
         /* Actuadores */
         ClientResponse responseJSONA = recurso.path("/actuadores").accept("application/json").get(ClientResponse.class);
@@ -77,9 +80,7 @@ public class ControladorPrincipal extends HttpServlet {
                 termostato = a;
             }
         }
-
         request.setAttribute("termostato", termostato);
-        request.setAttribute("temperatura", temperatura);
         request.setAttribute("actuadores", actuadoresI);
 
         RequestDispatcher rd = request.getRequestDispatcher("/WEB-INF/clienteTactil.jsp");
