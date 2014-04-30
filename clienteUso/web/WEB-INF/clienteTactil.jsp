@@ -98,11 +98,9 @@
                             <div class="input-group-btn">
                                 <button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown">Listado<span class="caret"></span></button>
                                 <ul class="dropdown-menu">
-                                    <li><a href="#">Salón</a></li>
-                                    <li><a href="#">Cocina</a></li>
-                                    <li><a href="#">Dormitorio</a></li>
-                                    <!--                                    <li class="divider"></li>
-                                                                        <li><a href="#">Separated link</a></li>-->
+                                    <c:forEach var="a" items="${dependencias}" varStatus="estado">
+                                        <li><a href="#">${a.nombre}</a></li>
+                                    </c:forEach>
                                 </ul>
                             </div>
                             <input type="text" class="form-control" name="dependencia">

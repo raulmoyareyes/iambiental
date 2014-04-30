@@ -53,7 +53,6 @@ function startTime() {
     var rm = (m < 10) ? m = "0" + m : m;
     var s = (s < 10) ? s = "0" + s : s;
     $('#reloj').html(h + ":" + m + ":" + s);
-    $('#temperaturaDisplayControl').html(temp);
 }
 
 function responsive() {
