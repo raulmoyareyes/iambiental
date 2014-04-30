@@ -35,7 +35,7 @@ public class TareaProgramada implements Serializable {
         this.reglasProgramadas = reglasProgramadas;
     }
 
-    public int getID(){
+    public int getId(){
         return id;
     }
     
@@ -49,7 +49,7 @@ public class TareaProgramada implements Serializable {
 
     
     public void addReglaProgramada(ReglaProgramada reglaProgramada) {
-        reglasProgramadas.put(reglaProgramada.getID(), reglaProgramada);
+        reglasProgramadas.put(reglaProgramada.getId(), reglaProgramada);
     }
 
     public String getDescripcion() {

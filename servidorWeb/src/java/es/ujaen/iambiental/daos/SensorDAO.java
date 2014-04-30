@@ -99,7 +99,7 @@ public class SensorDAO {
         List<Sensor> lista = em.createQuery("Select s from Sensor s").getResultList();
 
         for (Sensor sensor : lista) {
-            sensores.put(sensor.getID(), sensor);
+            sensores.put(sensor.getId(), sensor);
         }
         return sensores;
     }
@@ -117,7 +117,7 @@ public class SensorDAO {
         List<Sensor> lista = em.createQuery("Select s from Sensor s WHERE s.dependencia.id = ?1", Sensor.class).setParameter(1, dependencia).getResultList();
 
         for (Sensor sensor : lista) {
-            sensores.put(sensor.getID(), sensor);
+            sensores.put(sensor.getId(), sensor);
         }
         return sensores;
     }

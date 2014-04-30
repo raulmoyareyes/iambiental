@@ -105,7 +105,7 @@ public class ReglaSensorActuadorDAO {
         List<ReglaSensorActuador> lista = em.createQuery("Select r from ReglaSensorActuador r").getResultList();
 
         for (ReglaSensorActuador reglaSensorActuador : lista) {
-            reglasProgramadas.put(reglaSensorActuador.getID(), reglaSensorActuador);
+            reglasProgramadas.put(reglaSensorActuador.getId(), reglaSensorActuador);
         }
         return reglasProgramadas;
     }
@@ -123,7 +123,7 @@ public class ReglaSensorActuadorDAO {
         List<ReglaSensorActuador> lista = em.createQuery("Select r from ReglaSensorActuador r WHERE r.dependencia = ?1", ReglaSensorActuador.class).setParameter(1, dependencia).getResultList();
 
         for (ReglaSensorActuador reglaSensorActuador : lista) {
-            reglasProgramadas.put(reglaSensorActuador.getID(), reglaSensorActuador);
+            reglasProgramadas.put(reglaSensorActuador.getId(), reglaSensorActuador);
         }
         return reglasProgramadas;
     }

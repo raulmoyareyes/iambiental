@@ -23,25 +23,45 @@ $(function() {
         if ($(this).children().attr('class') === 'on') {
             $(this).children().attr('class', "off");
             $(this).children().html("OFF");
+            $("input[name='dato']").val($(this).parent().attr('id') + ":0");
+            var dato = $("input[name='dato']").val();
+            $.ajax({
+                type: "POST",
+                url: "http://localhost:8084/clienteUso/c/actuador?dato="+dato
+            });
         } else {
             $(this).children().attr('class', "on");
             $(this).children().html("ON");
+            $("input[name='dato']").val($(this).parent().attr('id') + ":1");
+            var dato = $("input[name='dato']").val();
+            $.ajax({
+                type: "POST",
+                url: "http://localhost:8084/clienteUso/c/actuador?dato="+dato
+            });
         }
     });
-    
-    $(".dropdown-menu li a").click(function(){
+
+    $(".dropdown-menu li a").click(function() {
         $("input[name='dependencia']").val($(this).html());
     });
 
     startTime();
-    setInterval(function() {startTime();}, 500);
-    setInterval(function() {recargarDatos();}, 10000);
-    
+    setInterval(function() {
+        startTime();
+    }, 500);
+    setInterval(function() {
+        recargarDatos();
+    }, 10000);
+
     /* Salta reloj cuando esta sin uso */
-    var sinUso = setInterval(function(){$('.carousel').carousel(0);},15000);
-    $(document).click(function(){
+    var sinUso = setInterval(function() {
+        $('.carousel').carousel(0);
+    }, 15000);
+    $(document).click(function() {
         clearInterval(sinUso);
-        sinUso = setInterval(function(){$('.carousel').carousel(0);},15000);
+        sinUso = setInterval(function() {
+            $('.carousel').carousel(0);
+        }, 15000);
     });
 });
 
@@ -63,6 +83,6 @@ function responsive() {
     $('#lamparasControl').height(window.innerHeight - (window.innerHeight * 0.21));
 }
 
-function recargarDatos(){
+function recargarDatos() {
     // hacer peticiones al controlador para coger datos.
 }

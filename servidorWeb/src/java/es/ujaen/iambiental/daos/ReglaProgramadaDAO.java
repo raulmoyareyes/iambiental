@@ -104,7 +104,7 @@ public class ReglaProgramadaDAO {
         List<ReglaProgramada> lista = em.createQuery("Select r from ReglaProgramada r").getResultList();
 
         for (ReglaProgramada reglaProgramada : lista) {
-            reglasProgramadas.put(reglaProgramada.getID(), reglaProgramada);
+            reglasProgramadas.put(reglaProgramada.getId(), reglaProgramada);
         }
         return reglasProgramadas;
     }
@@ -122,7 +122,7 @@ public class ReglaProgramadaDAO {
         List<ReglaProgramada> lista = em.createQuery("Select r from ReglaProgramada r WHERE r.dependencia = ?1", ReglaProgramada.class).setParameter(1, dependencia).getResultList();
 
         for (ReglaProgramada reglaProgramada : lista) {
-            reglasProgramadas.put(reglaProgramada.getID(), reglaProgramada);
+            reglasProgramadas.put(reglaProgramada.getId(), reglaProgramada);
         }
         return reglasProgramadas;
     }

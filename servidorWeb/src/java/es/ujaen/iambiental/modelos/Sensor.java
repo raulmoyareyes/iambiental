@@ -47,7 +47,7 @@ public class Sensor implements Serializable {
         this.estado = estado;
     }
 
-    public Integer getID() {
+    public Integer getId() {
         return id;
     }
 

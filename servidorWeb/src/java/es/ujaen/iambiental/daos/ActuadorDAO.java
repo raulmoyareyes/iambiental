@@ -99,7 +99,7 @@ public class ActuadorDAO {
         List<Actuador> lista = em.createQuery("Select a from Actuador a").getResultList();
 
         for (Actuador actuador : lista) {
-            actuadores.put(actuador.getID(), actuador);
+            actuadores.put(actuador.getId(), actuador);
         }
         return actuadores;
     }
@@ -117,7 +117,7 @@ public class ActuadorDAO {
         List<Actuador> lista = em.createQuery("Select a from Actuador a WHERE a.dependencia = ?1", Actuador.class).setParameter(1, dependencia).getResultList();
 
         for (Actuador actuador : lista) {
-            actuadores.put(actuador.getID(), actuador);
+            actuadores.put(actuador.getId(), actuador);
         }
         return actuadores;
     }

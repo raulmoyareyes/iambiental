@@ -35,7 +35,7 @@ public class Actuador implements Serializable {
         this.estado = estado;
     }    
     
-    public int getID(){
+    public int getId(){
         return id;
     }
     
