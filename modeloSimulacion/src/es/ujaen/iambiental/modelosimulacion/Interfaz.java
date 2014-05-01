@@ -5,17 +5,15 @@
  */
 package es.ujaen.iambiental.modelosimulacion;
 
-import com.sun.deploy.trace.Trace;
 import java.io.BufferedReader;
-import java.io.File;
 import java.io.FileReader;
-import java.io.IOException;
+import java.net.*;
+import java.sql.Timestamp;
+import java.util.Enumeration;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
-import static javax.swing.JOptionPane.showMessageDialog;
-import static javax.swing.JOptionPane.showMessageDialog;
-import static javax.swing.JOptionPane.showMessageDialog;
-import static javax.swing.JOptionPane.showMessageDialog;
 import static javax.swing.JOptionPane.showMessageDialog;
 
 /**
@@ -26,14 +24,54 @@ public class Interfaz extends javax.swing.JFrame {
 
     //Variables del sistema
     boolean enFuncionamiento;
-    ClienteUDP socket;
+    EmisorUDP socket;
+    ReceptorUDP receptorUDP;
+    GeneradorTemperatura gt;
 
     /**
      * Creates new form Main
      */
     public Interfaz() {
+        //Inicializar componentes
         initComponents();
+        //Marcar que no está en funcionamiento
         this.enFuncionamiento = false;
+
+        //Cargar las lecturas de temperatura
+        gt = new GeneradorTemperatura();
+
+        //Inicializar servidor UDP de test
+        String ipReceptorUDP = this.getLocalIp();
+        Integer puertoReceptorUDP = 60000;
+        receptorUDP = new ReceptorUDP(ipReceptorUDP, puertoReceptorUDP, this);
+        receptorUDP.start();
+    }
+
+    /**
+     * Establecer label de datos del servidor UDP
+     *
+     * @param label Etiqueta de datos del servidor (ip:puerto)
+     */
+    public void setLblDatosServidorUDP(String label) {
+        this.lblDatosServidorUDP.setText(label);
+    }
+
+    /**
+     * Añade una cadena al log del Servidor UDP
+     *
+     * @param mensaje Cadena a insertar en el log del Servidor UDP
+     */
+    public void addLogServidorUDP(String mensaje) {
+        this.txtServidorUDP.setText(this.txtServidorUDP.getText() + mensaje);
+    }
+
+    /**
+     * Añade una cadena al log
+     *
+     * @param mensaje Cadena a insertar en el log
+     */
+    public void addLog(String mensaje) {
+        this.txtLog.setText(this.txtLog.getText() + mensaje);
     }
 
     /**
@@ -48,8 +86,6 @@ public class Interfaz extends javax.swing.JFrame {
         btnIniciarSimulacion = new javax.swing.JButton();
         jLabel1 = new javax.swing.JLabel();
         lblFecha = new javax.swing.JLabel();
-        jLabel3 = new javax.swing.JLabel();
-        lblHora = new javax.swing.JLabel();
         jtpPrincipal = new javax.swing.JTabbedPane();
         jpConfiguracion = new javax.swing.JPanel();
         jLabel12 = new javax.swing.JLabel();
@@ -61,17 +97,31 @@ public class Interfaz extends javax.swing.JFrame {
         txtMensaje = new javax.swing.JTextField();
         btnEnviarMensaje = new javax.swing.JButton();
         jSeparator2 = new javax.swing.JSeparator();
-        jLabel15 = new javax.swing.JLabel();
-        txtFile = new javax.swing.JTextField();
-        btnCargarFichero = new javax.swing.JButton();
+        btnEnviarLecturas = new javax.swing.JButton();
+        jLabel16 = new javax.swing.JLabel();
+        jLabel17 = new javax.swing.JLabel();
+        cmbDiaInicio = new javax.swing.JComboBox();
+        cmbMesInicio = new javax.swing.JComboBox();
+        cmbAnyoInicio = new javax.swing.JComboBox();
+        jLabel2 = new javax.swing.JLabel();
+        cmbHoraInicio = new javax.swing.JComboBox();
+        cmbDiaFin = new javax.swing.JComboBox();
+        cmbMesFin = new javax.swing.JComboBox();
+        cmbAnyoFin = new javax.swing.JComboBox();
+        jLabel4 = new javax.swing.JLabel();
+        cmbHoraFin = new javax.swing.JComboBox();
+        jpServerUDP = new javax.swing.JPanel();
+        lblDatosServidorUDP = new javax.swing.JLabel();
+        jLabel5 = new javax.swing.JLabel();
+        jScrollPane1 = new javax.swing.JScrollPane();
+        txtServidorUDP = new javax.swing.JTextArea();
         jpLog = new javax.swing.JScrollPane();
         txtLog = new javax.swing.JTextArea();
-        jpFilepicker = new javax.swing.JPanel();
-        jFileChooser1 = new javax.swing.JFileChooser();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
         setTitle("iAmbiental - Modelo de Simulación");
-        setMinimumSize(new java.awt.Dimension(450, 300));
+        setMinimumSize(new java.awt.Dimension(450, 420));
+        setPreferredSize(new java.awt.Dimension(600, 420));
 
         btnIniciarSimulacion.setText("Iniciar");
         btnIniciarSimulacion.setFocusable(false);
@@ -83,22 +133,27 @@ public class Interfaz extends javax.swing.JFrame {
             }
         });
 
-        jLabel1.setText("Fecha");
+        jLabel1.setText("Fecha y hora:");
 
         lblFecha.setFont(new java.awt.Font("Verdana", 1, 12)); // NOI18N
-        lblFecha.setText("mié 23 de diciembre de 2014");
-
-        jLabel3.setText("Hora");
-
-        lblHora.setFont(new java.awt.Font("Verdana", 1, 12)); // NOI18N
-        lblHora.setText("00:00");
+        lblFecha.setText("--/--/---- --:--:--");
 
         jLabel12.setText("Dirección IP");
+
+        txtIp.setText("localhost");
+
+        txtPuerto.setText("60000");
+        txtPuerto.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                txtPuertoActionPerformed(evt);
+            }
+        });
 
         jLabel13.setText("Puerto");
 
         jLabel14.setText("Mensaje");
 
+        txtMensaje.setText("Mensaje de prueba");
         txtMensaje.setEnabled(false);
 
         btnEnviarMensaje.setText("Enviar");
@@ -109,17 +164,42 @@ public class Interfaz extends javax.swing.JFrame {
             }
         });
 
-        jLabel15.setText("Fichero");
-
-        txtFile.setEnabled(false);
-
-        btnCargarFichero.setText("Enviar lecturas");
-        btnCargarFichero.setEnabled(false);
-        btnCargarFichero.addActionListener(new java.awt.event.ActionListener() {
+        btnEnviarLecturas.setText("Enviar lecturas");
+        btnEnviarLecturas.setEnabled(false);
+        btnEnviarLecturas.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                btnCargarFicheroActionPerformed(evt);
+                btnEnviarLecturasActionPerformed(evt);
             }
         });
+
+        jLabel16.setText("Inicio");
+
+        jLabel17.setText("Fin");
+
+        cmbDiaInicio.setModel(new javax.swing.DefaultComboBoxModel(new String[] { "01", "02", "03", "04", "05", "06", "07", "08", "09", "10", "11", "12", "13", "14", "15", "16", "17", "18", "19", "20", "21", "22", "23", "24", "25", "26", "27", "28", "29", "30", "31" }));
+
+        cmbMesInicio.setModel(new javax.swing.DefaultComboBoxModel(new String[] { "01", "02", "03", "04", "05", "06", "07", "08", "09", "10", "11", "12" }));
+        cmbMesInicio.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                cmbMesInicioActionPerformed(evt);
+            }
+        });
+
+        cmbAnyoInicio.setModel(new javax.swing.DefaultComboBoxModel(new String[] { "2010", "2011", "2012", "2013", "2014" }));
+
+        jLabel2.setText("-");
+
+        cmbHoraInicio.setModel(new javax.swing.DefaultComboBoxModel(new String[] { "00:00", "00:30", "01:00", "01:30", "02:00", "02:30", "03:00", "03:30", "04:00", "04:30", "05:00", "05:30", "06:00", "06:30", "07:00", "07:30", "08:00", "08:30", "09:00", "09:30", "10:00", "10:30", "11:00", "11:30", "12:00", "12:30", "13:00", "13:30", "14:00", "14:30", "15:00", "15:30", "16:00", "16:30", "17:00", "17:30", "18:00", "18:30", "19:00", "19:30", "20:00", "20:30", "21:00", "21:30", "22:00", "22:30", "23:00", "23:30" }));
+
+        cmbDiaFin.setModel(new javax.swing.DefaultComboBoxModel(new String[] { "01", "02", "03", "04", "05", "06", "07", "08", "09", "10", "11", "12", "13", "14", "15", "16", "17", "18", "19", "20", "21", "22", "23", "24", "25", "26", "27", "28", "29", "30", "31" }));
+
+        cmbMesFin.setModel(new javax.swing.DefaultComboBoxModel(new String[] { "01", "02", "03", "04", "05", "06", "07", "08", "09", "10", "11", "12" }));
+
+        cmbAnyoFin.setModel(new javax.swing.DefaultComboBoxModel(new String[] { "2010", "2011", "2012", "2013", "2014" }));
+
+        jLabel4.setText("-");
+
+        cmbHoraFin.setModel(new javax.swing.DefaultComboBoxModel(new String[] { "00:00", "00:30", "01:00", "01:30", "02:00", "02:30", "03:00", "03:30", "04:00", "04:30", "05:00", "05:30", "06:00", "06:30", "07:00", "07:30", "08:00", "08:30", "09:00", "09:30", "10:00", "10:30", "11:00", "11:30", "12:00", "12:30", "13:00", "13:30", "14:00", "14:30", "15:00", "15:30", "16:00", "16:30", "17:00", "17:30", "18:00", "18:30", "19:00", "19:30", "20:00", "20:30", "21:00", "21:30", "22:00", "22:30", "23:00", "23:30" }));
 
         javax.swing.GroupLayout jpConfiguracionLayout = new javax.swing.GroupLayout(jpConfiguracion);
         jpConfiguracion.setLayout(jpConfiguracionLayout);
@@ -144,12 +224,36 @@ public class Interfaz extends javax.swing.JFrame {
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addComponent(btnEnviarMensaje))
                     .addComponent(jSeparator2)
+                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jpConfiguracionLayout.createSequentialGroup()
+                        .addGap(0, 0, Short.MAX_VALUE)
+                        .addComponent(btnEnviarLecturas))
                     .addGroup(jpConfiguracionLayout.createSequentialGroup()
-                        .addComponent(jLabel15, javax.swing.GroupLayout.PREFERRED_SIZE, 73, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(txtFile)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(btnCargarFichero)))
+                        .addGroup(jpConfiguracionLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addGroup(jpConfiguracionLayout.createSequentialGroup()
+                                .addComponent(jLabel17, javax.swing.GroupLayout.PREFERRED_SIZE, 73, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                .addComponent(cmbDiaFin, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                .addComponent(cmbMesFin, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                .addComponent(cmbAnyoFin, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                .addComponent(jLabel4)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                .addComponent(cmbHoraFin, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                            .addGroup(jpConfiguracionLayout.createSequentialGroup()
+                                .addComponent(jLabel16, javax.swing.GroupLayout.PREFERRED_SIZE, 73, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                .addComponent(cmbDiaInicio, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                .addComponent(cmbMesInicio, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                .addComponent(cmbAnyoInicio, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                .addComponent(jLabel2)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                .addComponent(cmbHoraInicio, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                        .addGap(0, 0, Short.MAX_VALUE)))
                 .addContainerGap())
         );
         jpConfiguracionLayout.setVerticalGroup(
@@ -174,13 +278,65 @@ public class Interfaz extends javax.swing.JFrame {
                 .addComponent(jSeparator2, javax.swing.GroupLayout.PREFERRED_SIZE, 10, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addGroup(jpConfiguracionLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(jLabel15)
-                    .addComponent(txtFile, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(btnCargarFichero))
-                .addContainerGap(242, Short.MAX_VALUE))
+                    .addComponent(jLabel16)
+                    .addComponent(cmbDiaInicio, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(cmbMesInicio, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(cmbAnyoInicio, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(jLabel2)
+                    .addComponent(cmbHoraInicio, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addGroup(jpConfiguracionLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(jLabel17)
+                    .addComponent(cmbDiaFin, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(cmbMesFin, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(cmbAnyoFin, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(jLabel4)
+                    .addComponent(cmbHoraFin, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(btnEnviarLecturas)
+                .addContainerGap(174, Short.MAX_VALUE))
         );
 
         jtpPrincipal.addTab("Configuración", jpConfiguracion);
+
+        lblDatosServidorUDP.setFont(new java.awt.Font("Verdana", 1, 12)); // NOI18N
+        lblDatosServidorUDP.setText("<No ha sido posible arrancar>");
+
+        jLabel5.setText("Servidor UDP funcionando en");
+
+        txtServidorUDP.setEditable(false);
+        txtServidorUDP.setColumns(20);
+        txtServidorUDP.setFont(new java.awt.Font("DejaVu Sans Mono", 0, 12)); // NOI18N
+        txtServidorUDP.setRows(5);
+        jScrollPane1.setViewportView(txtServidorUDP);
+
+        javax.swing.GroupLayout jpServerUDPLayout = new javax.swing.GroupLayout(jpServerUDP);
+        jpServerUDP.setLayout(jpServerUDPLayout);
+        jpServerUDPLayout.setHorizontalGroup(
+            jpServerUDPLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jpServerUDPLayout.createSequentialGroup()
+                .addContainerGap()
+                .addGroup(jpServerUDPLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                    .addComponent(jScrollPane1)
+                    .addGroup(jpServerUDPLayout.createSequentialGroup()
+                        .addComponent(jLabel5)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(lblDatosServidorUDP, javax.swing.GroupLayout.DEFAULT_SIZE, 389, Short.MAX_VALUE)))
+                .addContainerGap())
+        );
+        jpServerUDPLayout.setVerticalGroup(
+            jpServerUDPLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(jpServerUDPLayout.createSequentialGroup()
+                .addContainerGap()
+                .addGroup(jpServerUDPLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(jLabel5)
+                    .addComponent(lblDatosServidorUDP))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 370, Short.MAX_VALUE)
+                .addContainerGap())
+        );
+
+        jtpPrincipal.addTab("Receptor UDP de tests", jpServerUDP);
 
         txtLog.setEditable(false);
         txtLog.setColumns(20);
@@ -191,26 +347,6 @@ public class Interfaz extends javax.swing.JFrame {
 
         jtpPrincipal.addTab("Log", jpLog);
 
-        jFileChooser1.setEnabled(false);
-        jFileChooser1.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jFileChooser1ActionPerformed(evt);
-            }
-        });
-
-        javax.swing.GroupLayout jpFilepickerLayout = new javax.swing.GroupLayout(jpFilepicker);
-        jpFilepicker.setLayout(jpFilepickerLayout);
-        jpFilepickerLayout.setHorizontalGroup(
-            jpFilepickerLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(jFileChooser1, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, 602, Short.MAX_VALUE)
-        );
-        jpFilepickerLayout.setVerticalGroup(
-            jpFilepickerLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(jFileChooser1, javax.swing.GroupLayout.DEFAULT_SIZE, 416, Short.MAX_VALUE)
-        );
-
-        jtpPrincipal.addTab("Cargar Fichero", jpFilepicker);
-
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
@@ -220,12 +356,8 @@ public class Interfaz extends javax.swing.JFrame {
                 .addComponent(btnIniciarSimulacion)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                 .addComponent(jLabel1)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(lblFecha)
-                .addGap(18, 18, 18)
-                .addComponent(jLabel3)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                .addComponent(lblHora)
                 .addContainerGap())
             .addComponent(jtpPrincipal)
         );
@@ -235,9 +367,7 @@ public class Interfaz extends javax.swing.JFrame {
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
                     .addGroup(javax.swing.GroupLayout.Alignment.LEADING, layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                         .addComponent(jLabel1, javax.swing.GroupLayout.PREFERRED_SIZE, 28, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addComponent(lblFecha, javax.swing.GroupLayout.PREFERRED_SIZE, 28, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addComponent(lblHora, javax.swing.GroupLayout.PREFERRED_SIZE, 28, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addComponent(jLabel3, javax.swing.GroupLayout.PREFERRED_SIZE, 28, javax.swing.GroupLayout.PREFERRED_SIZE))
+                        .addComponent(lblFecha, javax.swing.GroupLayout.PREFERRED_SIZE, 28, javax.swing.GroupLayout.PREFERRED_SIZE))
                     .addComponent(btnIniciarSimulacion, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(jtpPrincipal))
@@ -253,7 +383,7 @@ public class Interfaz extends javax.swing.JFrame {
             if (this.comprobarIp(this.txtIp.getText()) && this.comprobarPuerto(this.txtPuerto.getText())) {
                 //Puerto a entero
                 int puerto = Integer.parseInt(this.txtPuerto.getText());
-                this.socket = new ClienteUDP(txtIp.getText(), puerto);
+                this.socket = new EmisorUDP(txtIp.getText(), puerto, this, gt);
                 if (this.socket.isOk()) {
                     //Ip y Puerto correctos
                     this.enFuncionamiento = true;
@@ -263,11 +393,9 @@ public class Interfaz extends javax.swing.JFrame {
                     this.txtPuerto.setEnabled(false);
                     this.txtMensaje.setEnabled(true);
                     this.btnEnviarMensaje.setEnabled(true);
-                    this.jFileChooser1.setEnabled(true);
-                    this.txtFile.setEnabled(true);
-                    this.btnCargarFichero.setEnabled(true);
-
-                    this.txtLog.setText(this.txtLog.getText() + "[INICIANDO SIM. ]\n");
+                    this.btnEnviarLecturas.setEnabled(true);
+                    
+                    this.addLog("[INICIANDO SIM. ]\n");
                 } else {
                     //Error al crear el socket
                     showMessageDialog(null, "Ha ocurrido un error al intentar crear el socket", "No se puede iniciar", 2);
@@ -284,15 +412,49 @@ public class Interfaz extends javax.swing.JFrame {
             this.btnIniciarSimulacion.setText("Iniciar");
             this.txtIp.setEnabled(true);
             this.txtPuerto.setEnabled(true);
-            this.txtLog.setText(this.txtLog.getText() + "[DETENIENDO SIM.]\n");
+            this.addLog("[DETENIENDO SIM.]\n");
             this.txtMensaje.setEnabled(false);
             this.btnEnviarMensaje.setEnabled(false);
-            this.jFileChooser1.setEnabled(false);
-            this.txtFile.setEnabled(false);
-            this.btnCargarFichero.setEnabled(false);
+            this.btnEnviarLecturas.setEnabled(false);
             this.socket = null;
         }
     }//GEN-LAST:event_btnIniciarSimulacionActionPerformed
+
+    /**
+     * Devuelve la IP local del equipo
+     * (http://stackoverflow.com/questions/20714276/how-to-get-only-public-ip-addresses-in-java)
+     *
+     * @return String con la IP del equipo o null en caso de error
+     */
+    private String getLocalIp() {
+        String res = null;
+        try {
+            String localhost = InetAddress.getLocalHost().getHostAddress();
+            Enumeration<NetworkInterface> e = NetworkInterface.getNetworkInterfaces();
+            while (e.hasMoreElements()) {
+                NetworkInterface ni = (NetworkInterface) e.nextElement();
+                if (ni.isLoopback()) {
+                    continue;
+                }
+                if (ni.isPointToPoint()) {
+                    continue;
+                }
+                Enumeration<InetAddress> addresses = ni.getInetAddresses();
+                while (addresses.hasMoreElements()) {
+                    InetAddress address = (InetAddress) addresses.nextElement();
+                    if (address instanceof Inet4Address) {
+                        String ip = address.getHostAddress();
+                        if (!ip.equals(localhost)) {
+                            res = ip;
+                        }
+                    }
+                }
+            }
+        } catch (Exception ex) {
+            Logger.getLogger(Interfaz.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        return res;
+    }
 
     private void btnEnviarMensajeActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnEnviarMensajeActionPerformed
         if ("".equals(this.txtMensaje.getText())) {
@@ -307,34 +469,47 @@ public class Interfaz extends javax.swing.JFrame {
         }
     }//GEN-LAST:event_btnEnviarMensajeActionPerformed
 
-    private void btnCargarFicheroActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnCargarFicheroActionPerformed
+    private void btnEnviarLecturasActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnEnviarLecturasActionPerformed
         // TODO add your handling code here:
-        try {
-            String sCadena;
-            BufferedReader bf = new BufferedReader(new FileReader(this.txtFile.getText()));
-            while ((sCadena = bf.readLine()) != null) {
-                System.out.println(sCadena);
-            }
-        } catch (Exception e) {
-            showMessageDialog(null, "Ha ocurrido un error en la lectura del fichero de datos", "Error", 2);
-        }
-    }//GEN-LAST:event_btnCargarFicheroActionPerformed
+        
+        //Desactivar botón
+        this.btnEnviarLecturas.setEnabled(false);
+        
+        Long gap = 600000l; //10 minutos en milisegundos
 
-    private void jFileChooser1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jFileChooser1ActionPerformed
-        // TODO add your handling code here:
-        int returnVal = jFileChooser1.showOpenDialog(this);
-        if (returnVal == jFileChooser1.APPROVE_OPTION) {
-            File file = jFileChooser1.getSelectedFile();
-            try {
-                // What to do with the file, e.g. display it in a TextArea
-                txtFile.setText(file.getPath());
-            } catch (Exception e) {
-                System.out.println("problem accessing file" + file.getAbsolutePath());
-            }
-        } else {
-            System.out.println("File access cancelled by user.");
+        Timestamp timestamp = Timestamp.valueOf(
+                cmbAnyoInicio.getSelectedItem().toString() + "-"
+                + cmbMesInicio.getSelectedItem().toString() + "-"
+                + cmbDiaInicio.getSelectedItem().toString() + " "
+                + cmbHoraInicio.getSelectedItem().toString() + ":00");
+        
+        Timestamp timestampFin = Timestamp.valueOf(
+                cmbAnyoFin.getSelectedItem().toString() + "-"
+                + cmbMesFin.getSelectedItem().toString() + "-"
+                + cmbDiaFin.getSelectedItem().toString() + " "
+                + cmbHoraFin.getSelectedItem().toString() + ":01"); //Tiene 1 ms más para contar también el instante final
+        
+        socket.setIntervalo(timestamp, timestampFin, gap);
+        
+        try{
+        socket.start();
+        }catch(Exception e){
+            showMessageDialog(null, "Ha ocurrido un error.\nIntenta detener y volver a iniciar el simulador", "Error", 2);
         }
-    }//GEN-LAST:event_jFileChooser1ActionPerformed
+        
+    }//GEN-LAST:event_btnEnviarLecturasActionPerformed
+    
+    public void setFechaHora(String fechaHora) {
+        this.lblFecha.setText(fechaHora);
+    }
+    
+    private void txtPuertoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_txtPuertoActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_txtPuertoActionPerformed
+
+    private void cmbMesInicioActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_cmbMesInicioActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_cmbMesInicioActionPerformed
 
     /**
      * @param args the command line arguments
@@ -366,7 +541,7 @@ public class Interfaz extends javax.swing.JFrame {
         /* Create and display the form */
         java.awt.EventQueue.invokeLater(new Runnable() {
             public void run() {
-
+                
                 new Interfaz().setVisible(true);
             }
         });
@@ -405,28 +580,39 @@ public class Interfaz extends javax.swing.JFrame {
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
-    private javax.swing.JButton btnCargarFichero;
+    private javax.swing.JButton btnEnviarLecturas;
     private javax.swing.JButton btnEnviarMensaje;
     private javax.swing.JButton btnIniciarSimulacion;
-    private javax.swing.JFileChooser jFileChooser1;
+    private javax.swing.JComboBox cmbAnyoFin;
+    private javax.swing.JComboBox cmbAnyoInicio;
+    private javax.swing.JComboBox cmbDiaFin;
+    private javax.swing.JComboBox cmbDiaInicio;
+    private javax.swing.JComboBox cmbHoraFin;
+    private javax.swing.JComboBox cmbHoraInicio;
+    private javax.swing.JComboBox cmbMesFin;
+    private javax.swing.JComboBox cmbMesInicio;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel12;
     private javax.swing.JLabel jLabel13;
     private javax.swing.JLabel jLabel14;
-    private javax.swing.JLabel jLabel15;
-    private javax.swing.JLabel jLabel3;
+    private javax.swing.JLabel jLabel16;
+    private javax.swing.JLabel jLabel17;
+    private javax.swing.JLabel jLabel2;
+    private javax.swing.JLabel jLabel4;
+    private javax.swing.JLabel jLabel5;
+    private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JSeparator jSeparator1;
     private javax.swing.JSeparator jSeparator2;
     private javax.swing.JPanel jpConfiguracion;
-    private javax.swing.JPanel jpFilepicker;
     private javax.swing.JScrollPane jpLog;
+    private javax.swing.JPanel jpServerUDP;
     private javax.swing.JTabbedPane jtpPrincipal;
+    private javax.swing.JLabel lblDatosServidorUDP;
     private javax.swing.JLabel lblFecha;
-    private javax.swing.JLabel lblHora;
-    private javax.swing.JTextField txtFile;
     private javax.swing.JTextField txtIp;
     private javax.swing.JTextArea txtLog;
     private javax.swing.JTextField txtMensaje;
     private javax.swing.JTextField txtPuerto;
+    private javax.swing.JTextArea txtServidorUDP;
     // End of variables declaration//GEN-END:variables
 }
