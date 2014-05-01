@@ -6,6 +6,7 @@ import es.ujaen.iambiental.excepciones.ReglaProgramadaErrorDatos;
 import es.ujaen.iambiental.excepciones.ReglaProgramadaErrorEliminar;
 import es.ujaen.iambiental.excepciones.ReglaProgramadaErrorPersistir;
 import es.ujaen.iambiental.excepciones.ReglaProgramadaNoEncontrada;
+import es.ujaen.iambiental.excepciones.TareaProgramadaErrorActualizar;
 import es.ujaen.iambiental.modelos.ReglaProgramada;
 import java.util.ArrayList;
 import javax.ws.rs.Consumes;
@@ -53,9 +54,8 @@ public class RecursoReglasProgramadas {
     }
 
     @PUT
-    @Path("/{idTareaProgramada}")
     @Consumes("application/json")
-    public Response crearReglaProgramada(ReglaProgramada reglaProgramada, @PathParam("idTareaProgramada") String idTareaProgramada) {
+    public Response crearReglaProgramada(ReglaProgramada reglaProgramada) {
         if (reglaProgramada == null) {
             throw new WebApplicationException(
                     Response.status(Response.Status.BAD_REQUEST).entity("Falta el objeto regla programada.").build()
@@ -63,7 +63,7 @@ public class RecursoReglasProgramadas {
         }
 
         try {
-            administrador.crearReglaProgramada(reglaProgramada, idTareaProgramada);
+            administrador.crearReglaProgramada(reglaProgramada);
         } catch (ReglaProgramadaErrorDatos | ReglaProgramadaErrorPersistir e) {
             throw new WebApplicationException(
                     Response.status(Response.Status.NOT_ACCEPTABLE).entity("Error al crear la regla programada.").build()

@@ -234,11 +234,10 @@ public class AdminBean {
      * Crear una regla programada y asociarla a una tarea programada.
      *
      * @param reglaProgramada
-     * @param idTareaProgramada
      * @throws es.ujaen.iambiental.excepciones.ReglaProgramadaErrorDatos
      * @throws es.ujaen.iambiental.excepciones.ReglaProgramadaErrorPersistir
      */
-    public void crearReglaProgramada(ReglaProgramada reglaProgramada, String idTareaProgramada) throws ReglaProgramadaErrorDatos, ReglaProgramadaErrorPersistir{
+    public void crearReglaProgramada(ReglaProgramada reglaProgramada) throws ReglaProgramadaErrorDatos, ReglaProgramadaErrorPersistir {
         try {
             reglaProgramadaDAO.insertar(reglaProgramada);
         } catch (ReglaProgramadaErrorPersistir e) {
