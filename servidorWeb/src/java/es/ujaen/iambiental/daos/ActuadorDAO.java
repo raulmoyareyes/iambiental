@@ -114,7 +114,7 @@ public class ActuadorDAO {
      */
     public Map<Integer, Actuador> consultarDependencia(int dependencia) {
         Map<Integer, Actuador> actuadores = new HashMap();
-        List<Actuador> lista = em.createQuery("Select a from Actuador a WHERE a.dependencia = ?1", Actuador.class).setParameter(1, dependencia).getResultList();
+        List<Actuador> lista = em.createQuery("Select a from Actuador a WHERE a.dependencia.id = ?1", Actuador.class).setParameter(1, dependencia).getResultList();
 
         for (Actuador actuador : lista) {
             actuadores.put(actuador.getId(), actuador);

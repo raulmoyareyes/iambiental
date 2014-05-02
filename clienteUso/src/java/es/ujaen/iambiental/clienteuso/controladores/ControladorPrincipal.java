@@ -9,7 +9,6 @@ import es.ujaen.iambiental.clienteuso.modelos.Dependencia;
 import es.ujaen.iambiental.clienteuso.modelos.Sensor;
 import java.io.IOException;
 import java.util.ArrayList;
-import java.util.LinkedHashMap;
 import java.util.List;
 import javax.servlet.RequestDispatcher;
 import javax.servlet.ServletException;
@@ -46,17 +45,20 @@ public class ControladorPrincipal extends HttpServlet {
         defaultClientConfig.getClasses().add(JacksonJsonProvider.class);
         Client cliente = Client.create(defaultClientConfig);
         WebResource recurso = cliente.resource("http://localhost:8084/servidorWeb/recursos");
-        ObjectMapper mapper = new ObjectMapper();
 
         switch (action) {
             case "": {
+                ObjectMapper mapper = new ObjectMapper();
+
                 /* Dependencias */
                 ClientResponse responseJSOND = recurso.path("/dependencias").accept("application/json").get(ClientResponse.class);
                 List<Dependencia> dependencias = responseJSOND.getEntity(List.class);
                 request.setAttribute("dependencias", dependencias);
+                
+                Dependencia dependencia = mapper.convertValue(dependencias.get(0), Dependencia.class);
 
-                /* Sensores */ // Seleccionar dependencia
-                ClientResponse responseJSONS = recurso.path("/sensores/dependencia/1").accept("application/json").get(ClientResponse.class);
+                /* Sensores */ // Seleccionar dependencia por defecto es 1
+                ClientResponse responseJSONS = recurso.path("/sensores/dependencia/" + dependencia.getId()).accept("application/json").get(ClientResponse.class);
                 List<Sensor> sensores = responseJSONS.getEntity(List.class);
 
                 Sensor temperatura = new Sensor();
@@ -70,7 +72,7 @@ public class ControladorPrincipal extends HttpServlet {
                 request.setAttribute("temperatura", temperatura);
 
                 /* Actuadores */
-                ClientResponse responseJSONA = recurso.path("/actuadores").accept("application/json").get(ClientResponse.class);
+                ClientResponse responseJSONA = recurso.path("/actuadores/dependencia/"+dependencia.getId()).accept("application/json").get(ClientResponse.class);
                 List<Actuador> actuadores = responseJSONA.getEntity(List.class);
 
                 List<Actuador> actuadoresI = new ArrayList();
@@ -88,28 +90,22 @@ public class ControladorPrincipal extends HttpServlet {
                 request.setAttribute("actuadores", actuadoresI);
 
                 RequestDispatcher rd = request.getRequestDispatcher("/WEB-INF/clienteTactil.jsp");
-
                 rd.forward(request, response);
                 break;
             }
 
-            case "/datos": {
-
-                break;
-            }
-
             case "/actuador": {
+                String id = request.getParameter("id");
+                String estado = request.getParameter("estado");
                 String dato = request.getParameter("dato");
-                String id = dato.split(":")[0];
-                String contenido = dato.split(":")[1];
 
                 ClientResponse responseJSONA = recurso.path("/actuadores/" + id).accept("application/json").get(ClientResponse.class);
                 Actuador actuador = responseJSONA.getEntity(Actuador.class);
 
                 if (actuador.getTipo() == 0) {
-                    actuador.setDato(Integer.parseInt(contenido));
+                    actuador.setDato(Float.parseFloat(dato));
                 } else if (actuador.getTipo() == 1) {
-                    actuador.setEstado(Integer.parseInt(contenido));
+                    actuador.setEstado(Integer.parseInt(estado));
                 }
 
                 recurso.path("/actuadores/" + id)

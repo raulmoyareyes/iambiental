@@ -11,7 +11,7 @@ body{
     text-align: center;
 }
 
-.bootstrap-touchspin-down, #spinner, .bootstrap-touchspin-up{
+.bootstrap-touchspin-down, .spinner, .bootstrap-touchspin-up{
     height: 3em;
 }
 
@@ -63,6 +63,7 @@ body{
     background: #eee;
     border-radius: 3px;
     padding: 0.1em;
+    cursor: pointer;
 }
 
 .toggle-button div {

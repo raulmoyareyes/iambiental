@@ -147,7 +147,7 @@ public class RecursoActuadores {
     @GET
     @Path("/dependencia/{idDependencia}")
     @Produces("application/json; charset=utf-8")
-    public ArrayList<Actuador> listarSensores(@PathParam("idDependencia") int idDependencia) {
+    public ArrayList<Actuador> listarActuadores(@PathParam("idDependencia") int idDependencia) {
         return new ArrayList(clienteUso.listarActuadores(idDependencia).values());
     }
 
