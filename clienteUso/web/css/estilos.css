@@ -63,6 +63,7 @@ body{
     background: #eee;
     border-radius: 3px;
     padding: 0.1em;
+    cursor: pointer;
 }
 
 .toggle-button div {

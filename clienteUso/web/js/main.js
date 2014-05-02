@@ -35,7 +35,7 @@ $(function() {
     });
 
     /* Toggle Button */
-    $('.toggle-button').click(function() {
+    $(document).on("click", '.toggle-button', function() {
         if ($(this).children().attr('class') === 'on') {
             $(this).children().attr('class', "off");
             $(this).children().html("OFF");
@@ -56,19 +56,23 @@ $(function() {
     });
 
     /* Seleccionar dependencia */
-    var dependencia = 1; //$(" ").val());
-    $(".dropdown-menu li a").click(function() {
+    var dependencia = 0;
+    $(document).on("click", ".dropdown-menu li a", function() {
         $("input[name='dependencia']").val($(this).html());
-        recargarDatos(dependencia);//$(" ").val());
+        dependencia = $(this).parent().attr("id");
+        recargarDatos(dependencia);
     });
 
+    /** Actualizar reloj */
     startTime();
     setInterval(function() {
         startTime();
     }, 500);
+
+    /** Actualizar datos */
     setInterval(function() {
         recargarDatos(dependencia);
-    }, 10000);
+    }, 5000);
 
     /* Salta reloj cuando esta sin uso */
     var sinUso = setInterval(function() {
@@ -102,11 +106,65 @@ function responsive() {
 
 function recargarDatos(dependencia) {
     // hacer peticiones al controlador para coger datos.
+    $.ajaxSetup({
+        async: false
+    });
 
-    $.getJSON("http://localhost:8084/servidorWeb/recursos/sensores/dependencia/" + dependencia, function(data) {
+    // Recarga de dependencias
+    $.getJSON("http://localhost:8084/servidorWeb/recursos/dependencias", function(data) {
+        var content = "";
+        var d = false;
         for (var i = 0, len = data.length; i < len; i++) {
-            console.log(data[i]);
+//            console.log(data[i]);
+            content += "<li id=" + data[i].id + "><a href='#'>" + data[i].nombre + "</a></li>";
+            if (data[i].id == dependencia) {// no poner ===
+                d = true;
+            }
         }
+        $("#dependencias").html(content);
+        if (!d) {
+            dependencia = data[0].id;
+            $("input[name='dependencia']").val(data[0].nombre);
+        }
+    });
+
+    // Recarga de sensores
+    $.getJSON("http://localhost:8084/servidorWeb/recursos/sensores/dependencia/" + dependencia, function(data) {
+        $("#temperaturaDisplayControl").html(0);
+        $("#temperaturaDisplay").html(0);
+        for (var i = 0, len = data.length; i < len; i++) {
+//            console.log(data[i]);
+            if (data[i].tipo === 1) {
+                $("#temperaturaDisplayControl").html(data[i].dato);
+                $("#temperaturaDisplay").html(data[i].dato);
+            }
+        }
+    });
+
+    // Recarga de actuadores
+    $.getJSON("http://localhost:8084/servidorWeb/recursos/actuadores/dependencia/" + dependencia, function(data) {
+        var interuptores = "";
+        $("input[name='spinner']").val(0);
+        for (var i = 0, len = data.length; i < len; i++) {
+//            console.log(data[i]);
+            if (data[i].tipo === 1) {
+                interuptores += "<div id='" + data[i].id + "'><label>" + data[i].descripcion + "</label><div class='toggle-button'>";
+                if (data[i].estado === 1) {
+                    interuptores += '<div class="on">ON</div>';
+                } else {
+                    interuptores += '<div class="off">OFF</div>';
+                }
+                interuptores += '</div></div>';
+            } else {
+                $("input[name='spinner']").val(data[i].dato);
+                $("input[name='spinner']").attr("id", data[i].id);
+            }
+        }
+        $(".botones").html(interuptores);
+    });
+    
+    $.ajaxSetup({
+        async: true
     });
 
 }

@@ -97,18 +97,18 @@
                         <div class="input-group">
                             <div class="input-group-btn">
                                 <button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown">Listado<span class="caret"></span></button>
-                                <ul class="dropdown-menu">
+                                <ul id="dependencias" class="dropdown-menu">
                                     <c:forEach var="a" items="${dependencias}" varStatus="estado">
                                         <li id="${a.id}"><a href="#">${a.nombre}</a></li>
                                     </c:forEach>
                                 </ul>
                             </div>
-                            <input type="text" class="form-control" name="dependencia">
+                            <input type="text" class="form-control" name="dependencia" value="${dependencias[0].nombre}">
                         </div>
                     </div>
                     <div class="modal-footer">
-                        <button type="button" class="btn btn-default" data-dismiss="modal">Cancelar</button>
-                        <button type="button" class="btn btn-primary">Guardar los cambios</button>
+                        <button type="button" class="btn btn-default" data-dismiss="modal">Cerrar</button>
+                        <!--<button type="button" class="btn btn-primary">Guardar los cambios</button>-->
                     </div>
                 </div>
             </div>
