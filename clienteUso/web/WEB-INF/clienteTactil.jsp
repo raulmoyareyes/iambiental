@@ -40,7 +40,7 @@
                             <div class="temperaturaDisplay"><span id="temperaturaDisplayControl">${temperatura.dato}</span> ºC</div>
 
                             <p>TEMPERATURA DESEADA</p>
-                            <input id="spinner" type="text" value="${termostato.dato}" name="spinner" disabled="true">
+                            <input id="${termostato.id}" class="spinner" type="text" value="${termostato.dato}" name="spinner" disabled="true">
                         </div>
 
                         <div id="lamparasControl">
@@ -99,7 +99,7 @@
                                 <button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown">Listado<span class="caret"></span></button>
                                 <ul class="dropdown-menu">
                                     <c:forEach var="a" items="${dependencias}" varStatus="estado">
-                                        <li><a href="#">${a.nombre}</a></li>
+                                        <li id="${a.id}"><a href="#">${a.nombre}</a></li>
                                     </c:forEach>
                                 </ul>
                             </div>
@@ -113,7 +113,5 @@
                 </div>
             </div>
         </div>
-
-        <input type="hidden" name="dato"></input>
     </body>
 </html>
