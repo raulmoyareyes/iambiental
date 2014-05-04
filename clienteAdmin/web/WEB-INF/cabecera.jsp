@@ -38,7 +38,7 @@
             <div class="collapse navbar-collapse">
                 <ul class="nav navbar-nav">
                     <!--<li ${(mainMenuOption == 'home')?'class="active"':''} ><a href="home">Home</a></li>-->
-                    <!--<li ${(mainMenuOption == 'dependencias')?'class="active"':''} ><a href="${appUrl}/dependencias">Dependencias</a></li>-->
+                    <li ${(mainMenuOption == 'dependencias')?'class="active"':''} ><a href="${appUrl}/dependencias">Dependencias</a></li>
                     <!--<li ${(mainMenuOption == 'dispositivos')?'class="active"':''} ><a href="${appUrl}/dispositivos">Dispositivos</a></li>-->
                     <li ${(mainMenuOption == 'sensores')?'class="active"':''} ><a href="${appUrl}/sensores">Sensores</a></li>
                     <li ${(mainMenuOption == 'actuadores')?'class="active"':''} ><a href="${appUrl}/actuadores">Actuadores</a></li>
