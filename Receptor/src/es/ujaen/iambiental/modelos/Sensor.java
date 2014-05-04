@@ -1,26 +1,33 @@
 package es.ujaen.iambiental.modelos;
 
-import java.sql.Timestamp;
-
 /**
  *
+ * @author Raúl Moya Reyes <www.raulmoya.es>
  * @author Vicente Plaza
  */
 public class Sensor {
     private int id;
     private String descripcion;
     private int dependencia; //No es necesario tener un objeto dependencia.
-    private Timestamp fecha;
+    private String fecha;
     private float dato;
     private String ip;
     private String puerto;
     private int estado;
+    private int tipo;
 
     public Sensor() {
 
     }
 
-    public Sensor(int id, float dato, String descripcion, int estado, Timestamp fecha, String ip, String puerto, int dependencia) {
+    public Sensor(int id, float dato, int estado, String fecha) {
+        this.id = id;
+        this.dato = dato;
+        this.estado = estado;
+        this.fecha = fecha;        
+    }
+
+    public Sensor(int id, float dato, String descripcion, int estado, String fecha, String ip, String puerto, int dependenciak, int tipo) {
         this.id = id;
         this.descripcion = descripcion;
         this.dependencia = dependencia;
@@ -29,8 +36,17 @@ public class Sensor {
         this.ip = ip;
         this.puerto = puerto;
         this.estado = estado;
+        this.tipo = tipo;
     }
 
+    public Integer getTipo() {
+        return tipo;
+    }
+    
+    public void setTipo(int tipo) {
+        this.tipo = tipo;
+    }
+    
     public Integer getID() {
         return id;
     }
