@@ -5,7 +5,7 @@ CREATE TABLE historicoactuadores (
 );
 
 CREATE OR REPLACE TRIGGER historico_actuadores
-    BEFORE UPDATE ON sensores
+    BEFORE UPDATE ON actuadores
 DECLARE
     id_a    actuadores.id%TYPE;
     dato_a  actuadores.dato%TYPE;
