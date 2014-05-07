@@ -240,11 +240,11 @@ public class AdminBean {
      * @throws es.ujaen.iambiental.excepciones.ActuadorNoEncontrado
      */
     public void crearReglaProgramada(ReglaProgramada reglaProgramada) throws ReglaProgramadaErrorDatos, ReglaProgramadaErrorPersistir, SensorNoEncontrado, ActuadorNoEncontrado {
-        Sensor s = sensorDAO.buscar(reglaProgramada.getSensor().getID());
+        Sensor s = sensorDAO.buscar(reglaProgramada.getSensor().getId());
         if(s==null){
             throw new SensorNoEncontrado();
         }
-        Actuador a = actuadorDAO.buscar(reglaProgramada.getActuador().getID());
+        Actuador a = actuadorDAO.buscar(reglaProgramada.getActuador().getId());
         if(a==null){
             throw new ActuadorNoEncontrado();
         }
