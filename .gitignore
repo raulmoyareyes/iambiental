@@ -9,3 +9,5 @@
 
 # Class Files #
 *.class
+/nbproject/private/
+/build/
