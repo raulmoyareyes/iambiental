@@ -5,7 +5,6 @@
  */
 package es.ujaen.iambiental.clienteadmin;
 
-import es.ujaen.iambiental.modelos.Dependencia_provisional;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
@@ -15,7 +14,6 @@ import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import javax.servlet.http.HttpSession;
 
 /**
  * 
@@ -56,65 +54,65 @@ public class dependencias extends HttpServlet {
         
 
         /* SÓLO PARA PRUEBAS */
-        Dependencia_provisional.reset(); //Resetear id de dependencia
-        List<Dependencia_provisional> dependencias;
-        dependencias = new ArrayList<>();
-        dependencias.add(new Dependencia_provisional("Salón", "Descripción del salón"));
-        dependencias.add(new Dependencia_provisional("Cocina", "Descripción de cocina"));
-        dependencias.add(new Dependencia_provisional("Baño", "Descripción de baño"));
-        dependencias.add(new Dependencia_provisional("Dormitorio principal", "Descripción de dormitorio principal"));
-        dependencias.add(new Dependencia_provisional("Dormitorio individual", "Descripción de dormitorio individual"));
-        dependencias.add(new Dependencia_provisional("Pasillo", "Descripción de pasillo"));
-        dependencias.add(new Dependencia_provisional("Piscina", "Descripción de piscina"));
+//        Dependencia_provisional.reset(); //Resetear id de dependencia
+//        List<Dependencia_provisional> dependencias;
+//        dependencias = new ArrayList<>();
+//        dependencias.add(new Dependencia_provisional("Salón", "Descripción del salón"));
+//        dependencias.add(new Dependencia_provisional("Cocina", "Descripción de cocina"));
+//        dependencias.add(new Dependencia_provisional("Baño", "Descripción de baño"));
+//        dependencias.add(new Dependencia_provisional("Dormitorio principal", "Descripción de dormitorio principal"));
+//        dependencias.add(new Dependencia_provisional("Dormitorio individual", "Descripción de dormitorio individual"));
+//        dependencias.add(new Dependencia_provisional("Pasillo", "Descripción de pasillo"));
+//        dependencias.add(new Dependencia_provisional("Piscina", "Descripción de piscina"));
         /* FIN DE PRUEBAS */
 
         //Cabecera
-        request.setAttribute("mainMenuOption", "dependencias");
-        rd = request.getRequestDispatcher("/WEB-INF/cabecera.jsp");
-        rd.include(request, response);
-
-        //Cuerpo
-        switch (action) {
-            case "/listado":
-            default: //Ninguna opción seleccionada
-                request.setAttribute("dependencias", dependencias);
-                rd = request.getRequestDispatcher("/WEB-INF/dependencias/index.jsp");
-                rd.include(request, response);
-                rd = request.getRequestDispatcher("/WEB-INF/dependencias/modalEliminar.jsp");
-                rd.include(request, response);
-                break;
-            case "/insertar": //Insertar dependencia
-                request.setAttribute("dependencias", dependencias);
-                rd = request.getRequestDispatcher("/WEB-INF/dependencias/insertar.jsp");
-                rd.include(request, response);
-                break;
-            case "/ver": //Ver dependencia
-                request.setAttribute("dependencias", dependencias);
-                request.setAttribute("dependencia", dependencias.get(Integer.parseInt(request.getParameter("id"))));
-                rd = request.getRequestDispatcher("/WEB-INF/dependencias/ver.jsp");
-                rd.include(request, response);
-                rd = request.getRequestDispatcher("/WEB-INF/dependencias/modalEliminar.jsp");
-                rd.include(request, response);
-                break;
-            case "/eliminar": //Dependencia eliminada
-                int idEliminar = Integer.parseInt(request.getParameter("id"));
-                request.setAttribute("eliminado", dependencias.get(idEliminar).getNombre());
-                dependencias.remove(idEliminar); //¿Comprobar si hay error?
-                request.setAttribute("dependencias", dependencias);
-                rd = request.getRequestDispatcher("/WEB-INF/dependencias/index.jsp");
-                rd.include(request, response);
-                rd = request.getRequestDispatcher("/WEB-INF/dependencias/modalEliminar.jsp");
-                rd.include(request, response);
-                break;
-            case "/editar": //Insertar dependencia
-                request.setAttribute("dependencias", dependencias);
-                request.setAttribute("dependencia", dependencias.get(Integer.parseInt(request.getParameter("id"))));
-                rd = request.getRequestDispatcher("/WEB-INF/dependencias/editar.jsp");
-                rd.include(request, response);
-                rd = request.getRequestDispatcher("/WEB-INF/dependencias/modalEliminar.jsp");
-                rd.include(request, response);
-                break;
-        }
+//        request.setAttribute("mainMenuOption", "dependencias");
+//        rd = request.getRequestDispatcher("/WEB-INF/cabecera.jsp");
+//        rd.include(request, response);
+//
+//        //Cuerpo
+//        switch (action) {
+//            case "/listado":
+//            default: //Ninguna opción seleccionada
+//                request.setAttribute("dependencias", dependencias);
+//                rd = request.getRequestDispatcher("/WEB-INF/dependencias/index.jsp");
+//                rd.include(request, response);
+//                rd = request.getRequestDispatcher("/WEB-INF/dependencias/modalEliminar.jsp");
+//                rd.include(request, response);
+//                break;
+//            case "/insertar": //Insertar dependencia
+//                request.setAttribute("dependencias", dependencias);
+//                rd = request.getRequestDispatcher("/WEB-INF/dependencias/insertar.jsp");
+//                rd.include(request, response);
+//                break;
+//            case "/ver": //Ver dependencia
+//                request.setAttribute("dependencias", dependencias);
+//                request.setAttribute("dependencia", dependencias.get(Integer.parseInt(request.getParameter("id"))));
+//                rd = request.getRequestDispatcher("/WEB-INF/dependencias/ver.jsp");
+//                rd.include(request, response);
+//                rd = request.getRequestDispatcher("/WEB-INF/dependencias/modalEliminar.jsp");
+//                rd.include(request, response);
+//                break;
+//            case "/eliminar": //Dependencia eliminada
+//                int idEliminar = Integer.parseInt(request.getParameter("id"));
+//                request.setAttribute("eliminado", dependencias.get(idEliminar).getNombre());
+//                dependencias.remove(idEliminar); //¿Comprobar si hay error?
+//                request.setAttribute("dependencias", dependencias);
+//                rd = request.getRequestDispatcher("/WEB-INF/dependencias/index.jsp");
+//                rd.include(request, response);
+//                rd = request.getRequestDispatcher("/WEB-INF/dependencias/modalEliminar.jsp");
+//                rd.include(request, response);
+//                break;
+//            case "/editar": //Insertar dependencia
+//                request.setAttribute("dependencias", dependencias);
+//                request.setAttribute("dependencia", dependencias.get(Integer.parseInt(request.getParameter("id"))));
+//                rd = request.getRequestDispatcher("/WEB-INF/dependencias/editar.jsp");
+//                rd.include(request, response);
+//                rd = request.getRequestDispatcher("/WEB-INF/dependencias/modalEliminar.jsp");
+//                rd.include(request, response);
+//                break;
+//        }
 
         //Footer
         rd = request.getRequestDispatcher("/WEB-INF/pie.jsp");

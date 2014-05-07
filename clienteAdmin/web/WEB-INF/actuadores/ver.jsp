@@ -19,7 +19,7 @@
                 <div class="form-group">
                     <label for="selectDependenciaActuador" class="col-sm-2 control-label">Dependencia</label>
                     <div class="col-sm-10">
-                        <p class="form-control-static">${actuador.dependencia}</p>
+                        <p class="form-control-static">${actuador.dependencia.nombre}</p>
                     </div>
                 </div>
 
