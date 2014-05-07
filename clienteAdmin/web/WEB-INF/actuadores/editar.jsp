@@ -21,7 +21,7 @@
                     <div class="col-sm-10">
                         <select class="form-control" name="dependenciaActuador" id="selectDependenciaActuador">
                             <c:forEach var="d" items="${dependencias}" varStatus="estado">
-                                <option value="${d.id}" ${(d.id==actuador.dependencia)?'selected="selected"':''}>${d.nombre}</option>
+                                <option value="${d.id}" ${(d.id==actuador.dependencia.id)?'selected="selected"':''}>${d.nombre}</option>
                             </c:forEach>
                         </select>
                     </div>
@@ -43,7 +43,7 @@
                 
                 <div class="form-group">
                     <div class="col-sm-offset-2 col-sm-10">
-                        <button type="submit" class="btn btn-success">Guardar</button>
+                        <button type="submit" class="btn btn-success" name="modificar">Guardar</button>
                         <a href="${appUrl}/actuadores" rol="button" class="btn btn-danger">Cancelar</a>
                     </div>
                 </div>
