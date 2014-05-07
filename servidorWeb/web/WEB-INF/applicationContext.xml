@@ -37,8 +37,8 @@
         <property name="database" value="MYSQL"/>
 
         <!--generar la DB-->
-<!--        <property name="generateDdl" value="true" />
-        <property name="showSql" value="true"/>-->
+        <property name="generateDdl" value="true" />
+        <property name="showSql" value="true"/>
     </bean>
     
     <bean id="emf" class="org.springframework.orm.jpa.LocalContainerEntityManagerFactoryBean">

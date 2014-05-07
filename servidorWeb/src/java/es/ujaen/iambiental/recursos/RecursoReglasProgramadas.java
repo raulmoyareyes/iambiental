@@ -1,11 +1,13 @@
 package es.ujaen.iambiental.recursos;
 
 import es.ujaen.iambiental.beans.AdminBean;
+import es.ujaen.iambiental.excepciones.ActuadorNoEncontrado;
 import es.ujaen.iambiental.excepciones.ReglaProgramadaErrorActualizar;
 import es.ujaen.iambiental.excepciones.ReglaProgramadaErrorDatos;
 import es.ujaen.iambiental.excepciones.ReglaProgramadaErrorEliminar;
 import es.ujaen.iambiental.excepciones.ReglaProgramadaErrorPersistir;
 import es.ujaen.iambiental.excepciones.ReglaProgramadaNoEncontrada;
+import es.ujaen.iambiental.excepciones.SensorNoEncontrado;
 import es.ujaen.iambiental.excepciones.TareaProgramadaErrorActualizar;
 import es.ujaen.iambiental.modelos.ReglaProgramada;
 import java.util.ArrayList;
@@ -64,7 +66,7 @@ public class RecursoReglasProgramadas {
 
         try {
             administrador.crearReglaProgramada(reglaProgramada);
-        } catch (ReglaProgramadaErrorDatos | ReglaProgramadaErrorPersistir e) {
+        } catch (ReglaProgramadaErrorDatos | ReglaProgramadaErrorPersistir | SensorNoEncontrado | ActuadorNoEncontrado e) {
             throw new WebApplicationException(
                     Response.status(Response.Status.NOT_ACCEPTABLE).entity("Error al crear la regla programada.").build()
             );
