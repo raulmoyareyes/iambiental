@@ -234,13 +234,23 @@ public class AdminBean {
      * Crear una regla programada y asociarla a una tarea programada.
      *
      * @param reglaProgramada
-     * @param idTareaProgramada
      * @throws es.ujaen.iambiental.excepciones.ReglaProgramadaErrorDatos
      * @throws es.ujaen.iambiental.excepciones.ReglaProgramadaErrorPersistir
+     * @throws es.ujaen.iambiental.excepciones.SensorNoEncontrado
+     * @throws es.ujaen.iambiental.excepciones.ActuadorNoEncontrado
      */
-    public void crearReglaProgramada(ReglaProgramada reglaProgramada, String idTareaProgramada) throws ReglaProgramadaErrorDatos, ReglaProgramadaErrorPersistir{
+    public void crearReglaProgramada(ReglaProgramada reglaProgramada) throws ReglaProgramadaErrorDatos, ReglaProgramadaErrorPersistir, SensorNoEncontrado, ActuadorNoEncontrado {
+        Sensor s = sensorDAO.buscar(reglaProgramada.getSensor().getID());
+        if(s==null){
+            throw new SensorNoEncontrado();
+        }
+        Actuador a = actuadorDAO.buscar(reglaProgramada.getActuador().getID());
+        if(a==null){
+            throw new ActuadorNoEncontrado();
+        }
+        ReglaProgramada r = new ReglaProgramada(reglaProgramada.getDescripcion(),reglaProgramada.getCondicion(),s,a);
         try {
-            reglaProgramadaDAO.insertar(reglaProgramada);
+            reglaProgramadaDAO.insertar(r);
         } catch (ReglaProgramadaErrorPersistir e) {
             throw new ReglaProgramadaErrorPersistir();
         }
