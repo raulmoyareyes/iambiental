@@ -16,23 +16,30 @@ import javax.persistence.TemporalType;
  * @author Gabriel
  * @author Raúl Moya Reyes <www.raulmoya.es>
  */
+@Entity
+@Table(name = "actuadores")
 public class Actuador implements Serializable {
     
+    @Id
+    @GeneratedValue(strategy = GenerationType.AUTO)
     private int id;
     private String descripcion;
+    @OneToOne
     private Dependencia dependencia;
+    @Temporal(TemporalType.TIMESTAMP)
     private Date fecha;
     private float dato;
     private String ip;
     private String puerto;
     private int estado;
-    private int tipo; // 1 si es interruptor, 0 si es de otra cosa. Esto hay que ver como hacerlo bien 
+    private int tipo; // 1 si es interruptor, 0 si es de otra cosa. Esto hay que ver como hacerlo bien
+    private int dispositivo_id;
 
     public Actuador(){
         
-    }
+    }    
 
-    public Actuador(String descripcion, Dependencia dependencia, Date fecha, float dato, String ip, String puerto, int estado) {
+    public Actuador(String descripcion, Dependencia dependencia, Date fecha, float dato, String ip, String puerto, int estado, int tipo, int dispositivo_id) {
         this.descripcion = descripcion;
         this.dependencia = dependencia;
         this.fecha = fecha;
@@ -40,7 +47,9 @@ public class Actuador implements Serializable {
         this.ip = ip;
         this.puerto = puerto;
         this.estado = estado;
-    }    
+        this.tipo = tipo;
+        this.dispositivo_id = dispositivo_id;
+    }
     
     public int getId(){
         return id;
@@ -108,6 +117,14 @@ public class Actuador implements Serializable {
 
     public void setEstado(int estado) {
         this.estado = estado;
+    }
+
+    public int getDispositivo_id() {
+        return dispositivo_id;
+    }
+
+    public void setDispositivo_id(int dispositivo_id) {
+        this.dispositivo_id = dispositivo_id;
     }
     
 }
