@@ -20,6 +20,12 @@ public class Dependencia implements Serializable {
         this.nombre = nombre;
         this.descripcion = descripcion;
     }
+    
+    public Dependencia(int id, String nombre, String descripcion) {
+        this.id = id;
+        this.nombre = nombre;
+        this.descripcion = descripcion;
+    }
 
     public int getId() {
         return id;

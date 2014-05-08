@@ -1,9 +1,13 @@
 package es.ujaen.iambiental.daos;
 
 import es.ujaen.iambiental.excepciones.ActuadorErrorActualizar;
+import es.ujaen.iambiental.excepciones.ActuadorErrorCambiarDependencia;
 import es.ujaen.iambiental.excepciones.ActuadorErrorEliminar;
 import es.ujaen.iambiental.excepciones.ActuadorErrorPersistir;
+import es.ujaen.iambiental.excepciones.SensorErrorCambiarDependencia;
 import es.ujaen.iambiental.modelos.Actuador;
+import es.ujaen.iambiental.modelos.Dependencia;
+import es.ujaen.iambiental.modelos.Sensor;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -123,4 +127,22 @@ public class ActuadorDAO {
     }
     
     //Capullo necesito el histórico de los actuadores YAAAA!!!!!
+    
+    /**
+     * Cambia la dependencia a null porque esta dependencia va a ser eliminada
+     *
+     * @param de
+     * @param d
+     * @throws es.ujaen.iambiental.excepciones.ActuadorErrorCambiarDependencia
+     */
+    @Transactional(propagation = Propagation.REQUIRED, readOnly = false,
+            rollbackFor = es.ujaen.iambiental.excepciones.ActuadorErrorActualizar.class)
+    public void cambiarDependencia(Dependencia de, Dependencia d) throws ActuadorErrorCambiarDependencia {
+        List<Actuador> lista = em.createQuery("Select a from Actuador a Where a.dependencia = ?1").setParameter(1, d).getResultList();
+        for (Actuador actuador : lista) {
+            actuador.setDependencia(de);
+            em.merge(actuador);
+            em.flush();
+        }
+    }
 }

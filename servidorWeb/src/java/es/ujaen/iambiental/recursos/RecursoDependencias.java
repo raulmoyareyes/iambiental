@@ -1,11 +1,13 @@
 package es.ujaen.iambiental.recursos;
 
 import es.ujaen.iambiental.beans.AdminBean;
+import es.ujaen.iambiental.excepciones.ActuadorErrorCambiarDependencia;
 import es.ujaen.iambiental.excepciones.DependenciaErrorActualizar;
 import es.ujaen.iambiental.excepciones.DependenciaErrorDatos;
 import es.ujaen.iambiental.excepciones.DependenciaErrorEliminar;
 import es.ujaen.iambiental.excepciones.DependenciaErrorPersistir;
 import es.ujaen.iambiental.excepciones.DependenciaNoEncontrada;
+import es.ujaen.iambiental.excepciones.SensorErrorCambiarDependencia;
 import es.ujaen.iambiental.modelos.Dependencia;
 import java.util.ArrayList;
 import java.util.List;
@@ -75,7 +77,7 @@ public class RecursoDependencias {
     @DELETE
     @Path("/{idDependencia}")
     //@Consumes("application/json")
-    public Response eliminarDependencia(@PathParam("idDependencia") Integer idDependencia) {
+    public Response eliminarDependencia(@PathParam("idDependencia") Integer idDependencia) throws SensorErrorCambiarDependencia, ActuadorErrorCambiarDependencia {
         Dependencia dependencia = administrador.obtenerDependencia(idDependencia);
         if (dependencia == null) {
             throw new WebApplicationException(

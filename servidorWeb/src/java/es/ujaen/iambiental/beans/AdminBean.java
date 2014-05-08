@@ -13,6 +13,7 @@ import es.ujaen.iambiental.daos.ReglaSensorActuadorDAO;
 import es.ujaen.iambiental.daos.SensorDAO;
 import es.ujaen.iambiental.daos.TareaProgramadaDAO;
 import es.ujaen.iambiental.excepciones.ActuadorErrorActualizar;
+import es.ujaen.iambiental.excepciones.ActuadorErrorCambiarDependencia;
 import es.ujaen.iambiental.excepciones.ActuadorErrorDatos;
 import es.ujaen.iambiental.excepciones.ActuadorErrorEliminar;
 import es.ujaen.iambiental.excepciones.ActuadorErrorPersistir;
@@ -33,6 +34,7 @@ import es.ujaen.iambiental.excepciones.ReglaSensorActuadorErrorEliminar;
 import es.ujaen.iambiental.excepciones.ReglaSensorActuadorErrorPersistir;
 import es.ujaen.iambiental.excepciones.ReglaSensorActuadorNoEncontrada;
 import es.ujaen.iambiental.excepciones.SensorErrorActualizar;
+import es.ujaen.iambiental.excepciones.SensorErrorCambiarDependencia;
 import es.ujaen.iambiental.excepciones.SensorErrorDatos;
 import es.ujaen.iambiental.excepciones.SensorErrorEliminar;
 import es.ujaen.iambiental.excepciones.SensorErrorPersistir;
@@ -374,12 +376,17 @@ public class AdminBean {
      * @param idDependencia
      * @throws es.ujaen.iambiental.excepciones.DependenciaErrorEliminar
      * @throws es.ujaen.iambiental.excepciones.DependenciaNoEncontrada
+     * @throws es.ujaen.iambiental.excepciones.SensorErrorCambiarDependencia
+     * @throws es.ujaen.iambiental.excepciones.ActuadorErrorCambiarDependencia
      */
-    public void eliminarDependencia(Integer idDependencia) throws DependenciaErrorEliminar, DependenciaNoEncontrada{
+    public void eliminarDependencia(Integer idDependencia) throws DependenciaErrorEliminar, DependenciaNoEncontrada, SensorErrorCambiarDependencia, ActuadorErrorCambiarDependencia{
         Dependencia d = dependenciaDAO.buscar(idDependencia);
         if (d == null) {
             throw new DependenciaNoEncontrada();
         }
+        
+        sensorDAO.cambiarDependencia(null,d);
+        actuadorDAO.cambiarDependencia(null,d);
         dependenciaDAO.eliminar(d);
     }
     

@@ -1,14 +1,17 @@
 package es.ujaen.iambiental.daos;
 
 import es.ujaen.iambiental.excepciones.SensorErrorActualizar;
+import es.ujaen.iambiental.excepciones.SensorErrorCambiarDependencia;
 import es.ujaen.iambiental.excepciones.SensorErrorEliminar;
 import es.ujaen.iambiental.excepciones.SensorErrorPersistir;
+import es.ujaen.iambiental.modelos.Dependencia;
 import es.ujaen.iambiental.modelos.Sensor;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
+import org.springframework.cache.annotation.CacheEvict;
 import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
@@ -123,4 +126,22 @@ public class SensorDAO {
     }
     
     //Capullo necesito el histórico de los sensores YAAAA!!!!!
+    
+    /**
+     * Cambia la dependencia a null porque esta dependencia va a ser eliminada
+     *
+     * @param de
+     * @param d
+     * @throws es.ujaen.iambiental.excepciones.SensorErrorCambiarDependencia
+     */
+    @Transactional(propagation = Propagation.REQUIRED, readOnly = false,
+            rollbackFor = es.ujaen.iambiental.excepciones.SensorErrorActualizar.class)
+    public void cambiarDependencia(Dependencia de, Dependencia d) throws SensorErrorCambiarDependencia {
+        List<Sensor> lista = em.createQuery("Select s from Sensor s Where s.dependencia = ?1").setParameter(1, d).getResultList();
+        for (Sensor sensor : lista) {
+            sensor.setDependencia(de);
+            em.merge(sensor);
+            em.flush();
+        }
+    }
 }

@@ -12,20 +12,20 @@
                 <div class="form-group">
                     <label for="inputNombreDependencia" class="col-sm-2 control-label">Ubicación</label>
                     <div class="col-sm-10">
-                        <input type="text" name="inputNombreDependencia" class="form-control" id="inputNombreDependencia" placeholder="Nombre de la dependencia"/>
+                        <input type="text" name="nombre" class="form-control" id="inputNombreDependencia" placeholder="Nombre de la dependencia"/>
                     </div>
                 </div>
 
                 <div class="form-group">
                     <label for="textareaDescripcionDependencia" class="col-sm-2 control-label">Descripción</label>
                     <div class="col-sm-10">
-                        <input type="text" name="textareaDescripcionDependencia" class="form-control" id="textareaDescripcionDependencia" placeholder="Descripción de la dependencia"/>
+                        <input type="text" name="descripcion" class="form-control" id="textareaDescripcionDependencia" placeholder="Descripción de la dependencia"/>
                     </div>
                 </div>
 
                 <div class="form-group">
                     <div class="col-sm-offset-2 col-sm-10">
-                        <button type="submit" class="btn btn-success">Guardar</button>
+                        <button type="submit" name ="crear" class="btn btn-success">Guardar</button>
                         <a href="${appUrl}/dependencias" rol="button" class="btn btn-danger">Cancelar</a>
                     </div>
                 </div>

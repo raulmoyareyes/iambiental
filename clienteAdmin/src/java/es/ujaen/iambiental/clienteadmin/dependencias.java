@@ -5,8 +5,13 @@
  */
 package es.ujaen.iambiental.clienteadmin;
 
+import com.sun.jersey.api.client.Client;
+import com.sun.jersey.api.client.ClientResponse;
+import com.sun.jersey.api.client.WebResource;
+import com.sun.jersey.api.client.config.DefaultClientConfig;
+import es.ujaen.iambiental.modelos.Actuador;
+import es.ujaen.iambiental.modelos.Dependencia;
 import java.io.IOException;
-import java.util.ArrayList;
 import java.util.List;
 import javax.servlet.RequestDispatcher;
 import javax.servlet.ServletException;
@@ -14,6 +19,8 @@ import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import org.codehaus.jackson.jaxrs.JacksonJsonProvider;
+import org.codehaus.jackson.map.ObjectMapper;
 
 /**
  * 
@@ -45,74 +52,110 @@ public class dependencias extends HttpServlet {
         //Pathinfo
         String action = (request.getPathInfo() != null ? request.getPathInfo() : "");
         
-        //Cliente para JSON
-//        DefaultClientConfig defaultClientConfig = new DefaultClientConfig();
-//        defaultClientConfig.getClasses().add(JacksonJsonProvider.class);
-//        Client cliente = Client.create(defaultClientConfig);
-//        WebResource recurso = null;
-//        WebResource recurso = cliente.resource("http://localhost:8080/Hoteles-DAE-REST/recursos");
+        // Mapeador
+        ObjectMapper mapper = new ObjectMapper();
         
-
-        /* SÓLO PARA PRUEBAS */
-//        Dependencia_provisional.reset(); //Resetear id de dependencia
-//        List<Dependencia_provisional> dependencias;
-//        dependencias = new ArrayList<>();
-//        dependencias.add(new Dependencia_provisional("Salón", "Descripción del salón"));
-//        dependencias.add(new Dependencia_provisional("Cocina", "Descripción de cocina"));
-//        dependencias.add(new Dependencia_provisional("Baño", "Descripción de baño"));
-//        dependencias.add(new Dependencia_provisional("Dormitorio principal", "Descripción de dormitorio principal"));
-//        dependencias.add(new Dependencia_provisional("Dormitorio individual", "Descripción de dormitorio individual"));
-//        dependencias.add(new Dependencia_provisional("Pasillo", "Descripción de pasillo"));
-//        dependencias.add(new Dependencia_provisional("Piscina", "Descripción de piscina"));
-        /* FIN DE PRUEBAS */
+        //Cliente para JSON
+        DefaultClientConfig defaultClientConfig = new DefaultClientConfig();
+        defaultClientConfig.getClasses().add(JacksonJsonProvider.class);
+        Client cliente = Client.create(defaultClientConfig);
+        WebResource recurso = cliente.resource("http://localhost:8084/servidorWeb/recursos");
+        
+        // Dependencias
+        ClientResponse responseJSOND = recurso.path("/dependencias").accept("application/json").get(ClientResponse.class);
+        List<Dependencia> dependencias = responseJSOND.getEntity(List.class);
 
         //Cabecera
-//        request.setAttribute("mainMenuOption", "dependencias");
-//        rd = request.getRequestDispatcher("/WEB-INF/cabecera.jsp");
-//        rd.include(request, response);
-//
-//        //Cuerpo
-//        switch (action) {
-//            case "/listado":
-//            default: //Ninguna opción seleccionada
-//                request.setAttribute("dependencias", dependencias);
-//                rd = request.getRequestDispatcher("/WEB-INF/dependencias/index.jsp");
-//                rd.include(request, response);
-//                rd = request.getRequestDispatcher("/WEB-INF/dependencias/modalEliminar.jsp");
-//                rd.include(request, response);
-//                break;
-//            case "/insertar": //Insertar dependencia
-//                request.setAttribute("dependencias", dependencias);
-//                rd = request.getRequestDispatcher("/WEB-INF/dependencias/insertar.jsp");
-//                rd.include(request, response);
-//                break;
-//            case "/ver": //Ver dependencia
-//                request.setAttribute("dependencias", dependencias);
-//                request.setAttribute("dependencia", dependencias.get(Integer.parseInt(request.getParameter("id"))));
-//                rd = request.getRequestDispatcher("/WEB-INF/dependencias/ver.jsp");
-//                rd.include(request, response);
-//                rd = request.getRequestDispatcher("/WEB-INF/dependencias/modalEliminar.jsp");
-//                rd.include(request, response);
-//                break;
-//            case "/eliminar": //Dependencia eliminada
-//                int idEliminar = Integer.parseInt(request.getParameter("id"));
-//                request.setAttribute("eliminado", dependencias.get(idEliminar).getNombre());
-//                dependencias.remove(idEliminar); //¿Comprobar si hay error?
-//                request.setAttribute("dependencias", dependencias);
-//                rd = request.getRequestDispatcher("/WEB-INF/dependencias/index.jsp");
-//                rd.include(request, response);
-//                rd = request.getRequestDispatcher("/WEB-INF/dependencias/modalEliminar.jsp");
-//                rd.include(request, response);
-//                break;
-//            case "/editar": //Insertar dependencia
-//                request.setAttribute("dependencias", dependencias);
-//                request.setAttribute("dependencia", dependencias.get(Integer.parseInt(request.getParameter("id"))));
-//                rd = request.getRequestDispatcher("/WEB-INF/dependencias/editar.jsp");
-//                rd.include(request, response);
-//                rd = request.getRequestDispatcher("/WEB-INF/dependencias/modalEliminar.jsp");
-//                rd.include(request, response);
-//                break;
-//        }
+        request.setAttribute("mainMenuOption", "dependencias");
+        rd = request.getRequestDispatcher("/WEB-INF/cabecera.jsp");
+        rd.include(request, response);
+
+        //Cuerpo
+        switch (action) {
+            case "/listado":
+            default: //Ninguna opción seleccionada
+                request.setAttribute("dependencias", dependencias);
+                rd = request.getRequestDispatcher("/WEB-INF/dependencias/index.jsp");
+                rd.include(request, response);
+                rd = request.getRequestDispatcher("/WEB-INF/dependencias/modalEliminar.jsp");
+                rd.include(request, response);
+                break;
+            case "/insertar": //Insertar dependencia
+                if(request.getParameter("crear") != null){
+                    // Recoger la dependencia
+                    String nombre = request.getParameter("nombre");
+                    String descripcion = request.getParameter("descripcion");
+                    
+                    recurso.path("/dependencias")
+                                .type("application/json")
+                                .put(ClientResponse.class, new Dependencia(nombre, descripcion));
+                    
+                    response.sendRedirect("/clienteAdmin/dependencias");
+                }else{
+                    request.setAttribute("dependencias", dependencias);
+                    rd = request.getRequestDispatcher("/WEB-INF/dependencias/insertar.jsp");
+                    rd.include(request, response);
+                }
+                break;
+            case "/ver": //Ver dependencia
+                request.setAttribute("dependencias", dependencias);
+                int id = Integer.parseInt(request.getParameter("id"));
+                Dependencia d = new Dependencia();
+                for (int i = 0; i < dependencias.size(); i++) {
+                        Dependencia aux = mapper.convertValue(dependencias.get(i), Dependencia.class);
+                        if (aux.getId() == id) {
+                            d = aux;
+                        }
+                    }
+                request.setAttribute("dependencia", d);
+                rd = request.getRequestDispatcher("/WEB-INF/dependencias/ver.jsp");
+                rd.include(request, response);
+                rd = request.getRequestDispatcher("/WEB-INF/dependencias/modalEliminar.jsp");
+                rd.include(request, response);
+                break;
+            case "/eliminar": //Dependencia eliminada
+                int idEliminar = Integer.parseInt(request.getParameter("id"));
+                d = new Dependencia();
+                for (int i = 0; i < dependencias.size(); i++) {
+                    Dependencia aux = mapper.convertValue(dependencias.get(i), Dependencia.class);
+                    if (aux.getId() == idEliminar) {
+                        d = aux;
+                    }
+                }
+                request.setAttribute("eliminado", d.getNombre());
+                recurso.path("/dependencias/" + idEliminar).delete();
+                request.setAttribute("dependencias", dependencias);
+                response.sendRedirect("/clienteAdmin/dependencias");
+                break;
+            case "/editar": //Insertar dependencia
+                if (request.getParameter("modificar") != null) {
+                    id = Integer.parseInt(request.getParameter("modificar"));
+                    String nombre = request.getParameter("nombre");
+                    String descripcion = request.getParameter("descripcion");
+
+                    recurso.path("/dependencias/" + id)
+                            .type("application/json")
+                            .post(ClientResponse.class, new Dependencia(id, nombre, descripcion));
+
+                    response.sendRedirect("/clienteAdmin/dependencias");
+                } else {
+                    request.setAttribute("dependencias", dependencias);
+                    d = new Dependencia();
+                    id = Integer.parseInt(request.getParameter("id"));
+                    for (int i = 0; i < dependencias.size(); i++) {
+                        Dependencia aux = mapper.convertValue(dependencias.get(i), Dependencia.class);
+                        if (aux.getId() == id) {
+                            d = aux;
+                        }
+                    }
+                    request.setAttribute("dependencia", d);
+                    rd = request.getRequestDispatcher("/WEB-INF/dependencias/editar.jsp");
+                    rd.include(request, response);
+                    rd = request.getRequestDispatcher("/WEB-INF/dependencias/modalEliminar.jsp");
+                    rd.include(request, response);
+                }
+                break;
+        }
 
         //Footer
         rd = request.getRequestDispatcher("/WEB-INF/pie.jsp");
