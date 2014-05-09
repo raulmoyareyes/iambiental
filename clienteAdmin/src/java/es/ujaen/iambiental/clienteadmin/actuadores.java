@@ -95,42 +95,59 @@ public class actuadores extends HttpServlet {
                 break;
             case "/ver": //Ver dependencia
                 request.setAttribute("actuadores", actuadores);
-                request.setAttribute("actuador", mapper.convertValue(actuadores.get(Integer.parseInt(request.getParameter("id"))), Actuador.class));
+                int id = Integer.parseInt(request.getParameter("id"));
+                Actuador a = new Actuador();
+                for (int i = 0; i < actuadores.size(); i++) { // no cambiar al for-loop
+                    Actuador aux = mapper.convertValue(actuadores.get(i), Actuador.class);
+                    if (aux.getId() == id) {
+                        a = aux;
+                    }
+                }
+                request.setAttribute("actuador", a);
                 rd = request.getRequestDispatcher("/WEB-INF/actuadores/ver.jsp");
                 rd.include(request, response);
                 rd = request.getRequestDispatcher("/WEB-INF/actuadores/modalEliminar.jsp");
                 rd.include(request, response);
                 break;
             case "/eliminar": //Dependencia eliminada
-                int idEliminar = Integer.parseInt(request.getParameter("id"));
-                Actuador a = new Actuador();
-                for (int i = 0; i < actuadores.size(); i++) {
+                id = Integer.parseInt(request.getParameter("id"));
+                a = new Actuador();
+                for (int i = 0; i < actuadores.size(); i++) { // no cambiar al for-loop
                     Actuador aux = mapper.convertValue(actuadores.get(i), Actuador.class);
-                    if (aux.getId() == idEliminar) {
+                    if (aux.getId() == id) {
                         a = aux;
                     }
                 }
                 request.setAttribute("eliminado", a.getDescripcion());
-                recurso.path("/actuadores/" + idEliminar).delete();
+                recurso.path("/actuadores/" + id).delete();
                 request.setAttribute("actuadores", actuadores);
                 response.sendRedirect("/clienteAdmin/actuadores");
                 break;
 
             case "/editar": //Insertar dependencia
                 if (request.getParameter("modificar") != null) {
-//                    String nombre = request.getParameter("nombre");
-//                    String direccion = request.getParameter("direccion");
-//                    String dni = request.getParameter("dni");
-//
-//                    recurso.path("/actuadores/" + id)
-//                            .type("application/json")
-//                            .post(ClientResponse.class, new Actuador());
-//
-//                    response.sendRedirect("/clienteAdmin/actuadores");
+                    id = Integer.parseInt(request.getParameter("modificar"));
+                    String ipActuador = request.getParameter("ipActuador");
+                    String puertoActuador = request.getParameter("puertoActuador");
+                    String descripcion = request.getParameter("descripcionActuador");
+
+                    recurso.path("/actuadores/" + id)
+                            .type("application/json")
+                            .post(ClientResponse.class, new Actuador());// meter el objeto
+
+                    response.sendRedirect("/clienteAdmin/actuadores");
                 } else {
                     request.setAttribute("actuadores", actuadores);
                     request.setAttribute("dependencias", dependencias);
-                    request.setAttribute("actuador", mapper.convertValue(actuadores.get(Integer.parseInt(request.getParameter("id"))), Actuador.class));
+                    id = Integer.parseInt(request.getParameter("id"));
+                    a = new Actuador();
+                    for (int i = 0; i < actuadores.size(); i++) { // no cambiar al for-loop
+                        Actuador aux = mapper.convertValue(actuadores.get(i), Actuador.class);
+                        if (aux.getId() == id) {
+                            a = aux;
+                        }
+                    }
+                    request.setAttribute("actuador", a);
                     rd = request.getRequestDispatcher("/WEB-INF/actuadores/editar.jsp");
                     rd.include(request, response);
                     rd = request.getRequestDispatcher("/WEB-INF/actuadores/modalEliminar.jsp");

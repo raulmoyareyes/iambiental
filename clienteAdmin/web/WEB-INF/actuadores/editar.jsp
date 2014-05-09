@@ -43,7 +43,7 @@
                 
                 <div class="form-group">
                     <div class="col-sm-offset-2 col-sm-10">
-                        <button type="submit" class="btn btn-success" name="modificar">Guardar</button>
+                        <button type="submit" class="btn btn-success" name="modificar" value="${actuador.id}">Guardar</button>
                         <a href="${appUrl}/actuadores" rol="button" class="btn btn-danger">Cancelar</a>
                     </div>
                 </div>
