@@ -22,11 +22,13 @@ public class Actuador {
         
     }
 
-    public Actuador(int dispositivo_id, float dato, int estado, String fecha) {
+    public Actuador(int dispositivo_id, float dato, int estado, String fecha, String ip, String puerto) {
         this.dispositivo_id = dispositivo_id;
         this.dato = dato;
         this.estado = estado;
-        this.fecha = fecha;        
+        this.fecha = fecha;  
+        this.ip = ip;
+        this.puerto = puerto;
     }
 
     public Actuador(int id, float dato, String descripcion, int estado, String fecha, String ip, String puerto, int dependencia, int tipo, int dispositivo_id) {

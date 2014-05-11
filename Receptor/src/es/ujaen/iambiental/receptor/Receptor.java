@@ -33,6 +33,15 @@ import java.util.logging.Logger;
  * @author Vicente
  */
 public class Receptor {
+    
+    /**
+     * Función hash MD5 de 16 caracteres
+     * @param id
+     * @param dato
+     * @param estado
+     * @param fecha
+     * @return hash en String
+     */
     private static String hashMD5(int id, float dato, int estado, int fecha) {
         String hash = "";
         
@@ -55,6 +64,45 @@ public class Receptor {
         return hash;
     }
     
+    /**
+     * Función hash MD5 de 16 caracteres
+     * @param id
+     * @param dato
+     * @param estado
+     * @param fecha
+     * @param ip
+     * @param puerto
+     * @return hast en String
+     */
+    private static String hashMD5(int id, float dato, int estado, int fecha, String ip, String puerto) {
+        String hash = "";
+        
+        try {
+            String text = "a" + ";" 
+                    + String.valueOf(id) + ";" 
+                    + String.valueOf(dato) + ";" 
+                    + String.valueOf(estado) + ";" 
+                    + String.valueOf(fecha) + ";" 
+                    + ip + ";" 
+                    + puerto + ";";
+            MessageDigest msg = MessageDigest.getInstance("MD5");
+            msg.update(text.getBytes(), 0, text.length());
+            String digest1 = new BigInteger(1, msg.digest()).toString(16);
+            digest1 = digest1.substring(0, 16);
+            
+            hash = digest1;
+        } catch (NoSuchAlgorithmException ex) {
+            Logger.getLogger(Receptor.class.getName()).log(Level.SEVERE, ex.getMessage(), ex);
+        }
+        
+        return hash;
+    }
+    
+    /**
+     * Envia un paquete a Emisor con lo necesario para reenviar al Arduino objetivo
+     * @param paquete
+     * @throws Exception 
+     */
     private static void envioActuador(String paquete) throws Exception {
         DatagramSocket socketActuador = new DatagramSocket(8901);
         InetAddress direccionIP = InetAddress.getByName("http://kefren.ujaen.es:6919");
@@ -131,15 +179,7 @@ public class Receptor {
                         // Una vez obtenido, si .next() que apunta al siguiente dato de la tupla
                         // está vacío, o sea, no se ha recibido nada, se ignora este mensaje
                         if (rs.next()) {
-                            // Obtenemos el checksum en el servidor
-                            // id, dato, estado, fecha
-                            String text = "s" + ";" 
-                                    + String.valueOf(id) + ";" 
-                                    + String.valueOf(dato) + ";" 
-                                    + String.valueOf(estado) + ";" 
-                                    + String.valueOf(fecha) + ";";
                             int fechaEnSecs = Integer.parseInt(splitChain[4]);
-                            
                             // Hallamos el checksum mediante la función
                             checksum = hashMD5(id, dato, estado, fechaEnSecs);
                             
@@ -179,6 +219,10 @@ public class Receptor {
                         PreparedStatement stmn = cnx.prepareStatement(qry);
                         stmn.setInt(1, id);
                         ResultSet rs = stmn.executeQuery();
+                        
+                        // Obtenemos IP y puerto del arduino objetivo
+                        String ip = rs.getString("ip");
+                        String puerto = rs.getString("puerto");
 
                         // Una vez obtenido, si .next() que apunta al siguiente dato de la tupla
                         // está vacío, o sea, no se ha recibido nada, se ignora este mensaje
@@ -189,11 +233,13 @@ public class Receptor {
                                     + String.valueOf(id) + ";" 
                                     + String.valueOf(dato) + ";" 
                                     + String.valueOf(estado) + ";" 
-                                    + String.valueOf(fecha) + ";";
+                                    + String.valueOf(fecha) + ";"
+                                    + ip + ";" 
+                                    + puerto + ";";
                             int fechaEnSecs = Integer.parseInt(splitChain[4]);
                             
                             // Hallamos el checksum mediante la función
-                            checksum = hashMD5(id, dato, estado, fechaEnSecs);
+                            checksum = hashMD5(id, dato, estado, fechaEnSecs, ip, puerto);
                             
                             // Actualización en BD
                             if (checksum.equals(splitChain[5])) {

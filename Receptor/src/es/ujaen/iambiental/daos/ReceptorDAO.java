@@ -187,8 +187,10 @@ public class ReceptorDAO {
             float dato = Float.parseFloat(rs.getString("dato"));
             int estado = Integer.parseInt(rs.getString("estado"));
             String fecha = rs.getString("fecha");
+            String ip = rs.getString("ip");
+            String puerto = rs.getString("puerto");
 
-            a = new Actuador(id, dato, estado, fecha);
+            a = new Actuador(id, dato, estado, fecha, ip, puerto);
         } catch (Exception ex) {
             Logger.getLogger(ReceptorDAO.class.getName()).log(Level.SEVERE, ex.getMessage(), ex);
         }
