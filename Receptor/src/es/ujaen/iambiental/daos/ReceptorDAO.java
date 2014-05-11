@@ -9,15 +9,12 @@ package es.ujaen.iambiental.daos;
 import es.ujaen.iambiental.modelos.Actuador;
 import es.ujaen.iambiental.modelos.Sensor;
 import java.sql.Connection;
+import java.sql.DriverManager;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
-import java.sql.Timestamp;
 import java.util.logging.Level;
 import java.util.logging.Logger;
-import javax.naming.Context;
-import javax.naming.InitialContext;
-import javax.sql.DataSource;
 
 /**
  *
@@ -29,8 +26,7 @@ import javax.sql.DataSource;
  */
 public class ReceptorDAO {
     private static Connection cnx;
-    private static String coonPoolName = ":mysql://localhost:3306/iambiental";
-    
+
     /**
      * Abre la conexion con la BD
      * @return Devuelve la conexion
@@ -38,15 +34,12 @@ public class ReceptorDAO {
     public static Connection openConexion() {
         cnx = null;
         try {
-
-            Context context = new InitialContext();
-            DataSource ds = (DataSource) context.lookup("jdbc" + coonPoolName);
-            cnx = ds.getConnection();
+            cnx = DriverManager.getConnection("jdbc:mysql://localhost:3306/iAmbiental?"
+            + "user=root&password=123456");
 
         } catch (Exception ex) {
             Logger.getLogger(ReceptorDAO.class.getName()).log(Level.SEVERE, ex.getMessage(), ex);
 }
-
         return cnx;
     }
     
@@ -65,24 +58,22 @@ public class ReceptorDAO {
      * Con este método insertaremos los datos recibidos por el sensor en la BD
      * @return Devuelve 'true' o 'false' dependiendo del éxito de la operación.
      */
-    public static boolean insertaDatosSensor(int id, float dato, String descripcion,
-            int estado, Timestamp fecha, String ip, String puerto, int dependencia_id) {
+    public static boolean actualizaDatosSensor(int id, float dato, int estado, String fecha) {
         boolean salida = false;
         if (openConexion() != null) {
             try {
-                // id, dato, descripcion, estado, fecha, ip, puerto, dependencia_id
-                String qry = "INSERT INTO sensores(id, dato, descripcion, estado, fecha, ip, puerto, dependencia_id) VALUES(?, ?, ?, ?, ?, ?, ?, ?)";
+                // id, dato, descripcion, estado, fecha, ip, puerto, dependencia_id, tipo
+                String qry = "UPDATE sensores"
+                           + "set dato=?,estado=?,fecha=?"
+                           + "WHERE dispositivo_id=?;";
                 PreparedStatement stmn = cnx.prepareStatement(qry);
 
-                // Atributos de sensor y el time_stamp en milisegundos
-                stmn.setInt(1, id);
-                stmn.setFloat(2, dato);
-                stmn.setString(3, descripcion);
-                stmn.setInt(4, estado);
-                stmn.setTimestamp(5, fecha);
-                stmn.setString(6, ip);
-                stmn.setString(7, puerto);
-                stmn.setInt(8, dependencia_id);
+                // Atributos de sensor y la fecha
+                stmn.setFloat(1, dato);
+                stmn.setInt(2, estado);
+                stmn.setString(3, fecha);
+                stmn.setInt(4, id);
+                
 
                 if (stmn.executeUpdate() > 0) {
                     salida = true;
@@ -107,16 +98,12 @@ public class ReceptorDAO {
         Sensor s = new Sensor();
         
         try {
-            int id = Integer.parseInt(rs.getString("id"));
+            int id = Integer.parseInt(rs.getString("dispositivo_id"));
             float dato = Float.parseFloat(rs.getString("dato"));
-            String descripcion = rs.getString("descripcion");
             int estado = Integer.parseInt(rs.getString("estado"));
-            Timestamp time_stamp = Timestamp.valueOf(rs.getString("fecha"));
-            String ip = rs.getString("ip");
-            String puerto = rs.getString("puerto");
-            int dependencia_id = Integer.parseInt(rs.getString("dependencia_id"));
+            String fecha = rs.getString("fecha");
 
-            s = new Sensor(id, dato, descripcion, estado, time_stamp, ip, puerto, dependencia_id);
+            s = new Sensor(id, dato, estado, fecha);
         } catch (Exception ex) {
             Logger.getLogger(ReceptorDAO.class.getName()).log(Level.SEVERE, ex.getMessage(), ex);
         }
@@ -132,7 +119,7 @@ public class ReceptorDAO {
         Sensor s = null;
         if (openConexion() != null) {
             try {
-                String qry = "SELECT * FROM sensores WHERE id=?";
+                String qry = "SELECT * FROM sensores WHERE dispositivo_id=?";
                 PreparedStatement stmn = cnx.prepareStatement(qry);
                 stmn.setInt(1, id_sensor);
                 ResultSet rs = stmn.executeQuery();
@@ -150,26 +137,28 @@ public class ReceptorDAO {
     
     /**
      * Con este método insertaremos los datos recibidos por el actuador en la BD
+     * @param id
+     * @param dato
+     * @param estado
+     * @param fecha
      * @return Devuelve 'true' o 'false' dependiendo del éxito de la operación.
      */
-    public static boolean insertaDatosActuador(int id, float dato,  int dependencia, String descripcion,
-            int estado, Timestamp fecha, String ip, String puerto) {
+    public static boolean actualizaDatosActuador(int id, float dato, int estado, String fecha) {
         boolean salida = false;
         if (openConexion() != null) {
             try {
-                // id, dato, descripcion, estado, fecha, ip, puerto, dependencia_id
-                String qry = "INSERT INTO actuadores(id, dato, descripcion, estado, fecha, ip, puerto, dependencia) VALUES(?, ?, ?, ?, ?, ?, ?, ?)";
+                // id, dato, descripcion, estado, fecha, ip, puerto, dependencia_id, tipo
+                String qry = "UPDATE actuadores"
+                           + "set dato=?,estado=?,fecha=?"
+                           + "WHERE dispositivo_id=?;";
                 PreparedStatement stmn = cnx.prepareStatement(qry);
 
-                // Atributos de actuador y el time_stamp en milisegundos
-                stmn.setInt(1, id);
-                stmn.setFloat(2, dato);
-                stmn.setInt(3, dependencia);
-                stmn.setString(4, descripcion);
-                stmn.setInt(5, estado);
-                stmn.setTimestamp(6, fecha);
-                stmn.setString(7, ip);
-                stmn.setString(8, puerto);
+                // Atributos de actuador y la fecha
+                stmn.setFloat(1, dato);
+                stmn.setInt(2, estado);
+                stmn.setString(3, fecha);
+                stmn.setInt(4, id);
+                
 
                 if (stmn.executeUpdate() > 0) {
                     salida = true;
@@ -194,16 +183,12 @@ public class ReceptorDAO {
         Actuador a = new Actuador();
         
         try {
-            int id = Integer.parseInt(rs.getString("id"));
+            int id = Integer.parseInt(rs.getString("dispositivo_id"));
             float dato = Float.parseFloat(rs.getString("dato"));
-            String descripcion = rs.getString("descripcion");
             int estado = Integer.parseInt(rs.getString("estado"));
-            Timestamp time_stamp = Timestamp.valueOf(rs.getString("fecha"));
-            String ip = rs.getString("ip");
-            String puerto = rs.getString("puerto");
-            int dependencia_id = Integer.parseInt(rs.getString("dependencia"));
+            String fecha = rs.getString("fecha");
 
-            a = new Actuador(id, dato, descripcion, estado, time_stamp, ip, puerto, dependencia_id);
+            a = new Actuador(id, dato, estado, fecha);
         } catch (Exception ex) {
             Logger.getLogger(ReceptorDAO.class.getName()).log(Level.SEVERE, ex.getMessage(), ex);
         }
@@ -219,7 +204,7 @@ public class ReceptorDAO {
         Actuador a = null;
         if (openConexion() != null) {
             try {
-                String qry = "SELECT * FROM actuadores WHERE id=?";
+                String qry = "SELECT * FROM actuadores WHERE dispositivo_id=?";
                 PreparedStatement stmn = cnx.prepareStatement(qry);
                 stmn.setInt(1, id_actuador);
                 ResultSet rs = stmn.executeQuery();

@@ -6,167 +6,226 @@
 
 package es.ujaen.iambiental.receptor;
 
+import static es.ujaen.iambiental.daos.ReceptorDAO.actualizaDatosActuador;
+import static es.ujaen.iambiental.daos.ReceptorDAO.actualizaDatosSensor;
 import static es.ujaen.iambiental.daos.ReceptorDAO.closeConexion;
-import static es.ujaen.iambiental.daos.ReceptorDAO.insertaDatosActuador;
-import static es.ujaen.iambiental.daos.ReceptorDAO.insertaDatosSensor;
 import static es.ujaen.iambiental.daos.ReceptorDAO.lecturaActuadorBD;
 import static es.ujaen.iambiental.daos.ReceptorDAO.openConexion;
 import static es.ujaen.iambiental.daos.ReceptorDAO.lecturaSensorBD;
 import es.ujaen.iambiental.modelos.Actuador;
 import es.ujaen.iambiental.modelos.Sensor;
+import java.math.BigInteger;
 import java.net.DatagramPacket;
 import java.net.DatagramSocket;
+import java.net.InetAddress;
+import java.security.MessageDigest;
+import java.security.NoSuchAlgorithmException;
 import java.sql.Connection;
-import java.sql.Timestamp;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
+import java.text.SimpleDateFormat;
 import java.util.Date;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 /**
  *
- * @author Vicente_2
+ * @author Vicente
  */
 public class Receptor {
+    private static String hashMD5(int id, float dato, int estado, int fecha) {
+        String hash = "";
+        
+        try {
+            String text = "a" + ";" 
+                    + String.valueOf(id) + ";" 
+                    + String.valueOf(dato) + ";" 
+                    + String.valueOf(estado) + ";" 
+                    + String.valueOf(fecha) + ";";
+            MessageDigest msg = MessageDigest.getInstance("MD5");
+            msg.update(text.getBytes(), 0, text.length());
+            String digest1 = new BigInteger(1, msg.digest()).toString(16);
+            digest1 = digest1.substring(0, 16);
+            
+            hash = digest1;
+        } catch (NoSuchAlgorithmException ex) {
+            Logger.getLogger(Receptor.class.getName()).log(Level.SEVERE, ex.getMessage(), ex);
+        }
+        
+        return hash;
+    }
+    
+    private static void envioActuador(String paquete) throws Exception {
+        DatagramSocket socketActuador = new DatagramSocket(8901);
+        InetAddress direccionIP = InetAddress.getByName("http://kefren.ujaen.es:6919");
+        
+        byte[] datosEnvio= new byte[1024];
+        
+        datosEnvio = paquete.getBytes();
+        DatagramPacket paqueteEnvio = new DatagramPacket(datosEnvio, datosEnvio.length, direccionIP, 8902);
+        socketActuador.send(paqueteEnvio);
+    }
+    
     public static void main(String[] args) throws Exception {
         // Crea socket datagrama en el puerto 9876
         DatagramSocket socketServidor = 
                 new DatagramSocket(8902);
         byte[] datosRecepcion = new byte[1024];
     
-        String[] splitChain = null;
-        String mensaje = "null";
-        Integer checksum = null;
-        Date fecha = new Date();
+        String[] splitChain;
+        String mensaje;
+        String checksum;
+        
 
         // Atributos principales
-        String tipo;
         int id;
         float dato;
-        String descripcion;
         int estado;
-        Timestamp time_stamp = null;
-        String ip;
-        String puerto;
-        int dependencia_id;
+        Date fecha = new Date();
         
         while (true) {
-            DatagramPacket paqueteRecepcion =
-                    new DatagramPacket(datosRecepcion, datosRecepcion.length);
-            
-            // Espera a recibir algo
-            socketServidor.receive(paqueteRecepcion);
-            
-            mensaje = new String(paqueteRecepcion.getData());
-            
-            if (mensaje == null) {
-                System.out.println("Mensaje vacío");
-            } else {
-                System.out.println("Conexión confirmada con el mensaje de prueba: " + mensaje);
-                
-                // Esperamos el mensaje con la lectura del sensor
+            try {
+                DatagramPacket paqueteRecepcion =
+                        new DatagramPacket(datosRecepcion, datosRecepcion.length);
+
+                // Espera a recibir algo
                 socketServidor.receive(paqueteRecepcion);
+
                 mensaje = new String(paqueteRecepcion.getData());
-                Boolean inserta = false;
-            
-                // Parte la cadena devuelta por Arduino que contiene varios campos
-                // separador por ";"
-                splitChain = mensaje.split(";");
 
-                // Si recibimos un paquete Sensor o Actuador se trata de manera diferente
-                if (splitChain[0].compareTo("s") == 0) {     
-                    // Asignamos los datos extraidos a sus respectivas variables
-                    tipo = splitChain[0];
-                    id = Integer.parseInt(splitChain[1]);
-                    dato = Float.parseFloat(splitChain[2]);
-                    descripcion = splitChain[3];
-                    estado = Integer.parseInt(splitChain[4]);
-                    // Pasamos de segundos a milisegundos ya que llega asi desde Arduino
-                    fecha.setTime((long)Integer.parseInt(splitChain[5])*1000);
-                    // Convertimos a tipo Timestamp para pasarlo a la funcion de insercion en BD
-                    time_stamp = Timestamp.valueOf(String.valueOf(fecha.getTime()));
-                    ip = splitChain[6];
-                    puerto = splitChain[7];
-                    dependencia_id = Integer.parseInt(splitChain[8]);
-                    
-                    // Obtenemos el checksum en el servidor
-                    // id, dato, descripcion, estado, fecha, ip, puerto, dependencia_id
-                    checksum = (Integer.parseInt(splitChain[0]) 
-                            + Integer.parseInt(splitChain[1]) 
-                            + Integer.parseInt(splitChain[2])
-                            + Integer.parseInt(splitChain[3])
-                            + Integer.parseInt(splitChain[4])
-                            + Integer.parseInt(splitChain[5])
-                            + Integer.parseInt(splitChain[6])
-                            + Integer.parseInt(splitChain[7])
-                            + Integer.parseInt(splitChain[8])
-                            );
-                    
-                    // Insercion en BD
-                    if (checksum == Integer.valueOf(splitChain[9])) {
-                        inserta = insertaDatosSensor(id, dato, descripcion, estado, time_stamp,
-                                                   ip, puerto, dependencia_id);
-                    } else {
-                        System.out.println("Error en el checksum");
-                    }
-                    
-                    // Comprobación de los datos insertados en BD
-                    Connection cnx = openConexion();
-                    Sensor s_aux = lecturaSensorBD(Integer.parseInt(splitChain[1])); 
-                    
-                    if (inserta && (s_aux.getID() == id)) {
-                        System.out.println("Inserción realizada con éxito");
-                    } else {
-                        // SE INFORMA DEL ERROR Y NO SE GUARDA EN BD
-                        System.out.println("Inserción no coincidente");
+                /*if (mensaje.equals("")) {
+                    System.out.println("Mensaje vacío");
+                } else {
+                    System.out.println("Conexión confirmada con el mensaje de prueba: " + mensaje);
+                */
+
+                    // Esperamos el mensaje con la lectura del sensor
+                    socketServidor.receive(paqueteRecepcion);
+                    mensaje = new String(paqueteRecepcion.getData());
+                    Boolean actualiza = false;
+
+                    // Parte la cadena devuelta por Arduino que contiene varios campos
+                    // separador por ";"
+                    splitChain = mensaje.split(";");
+
+                    // Si recibimos un paquete Sensor o Actuador se trata de manera diferente
+                    if (splitChain[0].compareTo("s") == 0) {     
+                        // Asignamos los datos extraidos a sus respectivas variables
+                        id = Integer.parseInt(splitChain[1]);
+                        dato = Float.parseFloat(splitChain[2]);
+                        estado = Integer.parseInt(splitChain[3]);
+                        // Pasamos de segundos a milisegundos ya que llega asi desde Arduino
+                        fecha.setTime((long)Integer.parseInt(splitChain[4])*1000);
+                        // Convertimos a tipo Timestamp para pasarlo a la funcion de insercion en BD
+                        SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy HH:mm:ss.SS");
+                        String fechaSensor = sdf.format(fecha);
+
+
+                        // Comprobamos si existe en BD
+                        Connection cnx = openConexion();
+                        String qry = "SELECT * FROM sensores WHERE dispositivo_id=?";
+                        PreparedStatement stmn = cnx.prepareStatement(qry);
+                        stmn.setInt(1, id);
+                        ResultSet rs = stmn.executeQuery();
+
+                        // Una vez obtenido, si .next() que apunta al siguiente dato de la tupla
+                        // está vacío, o sea, no se ha recibido nada, se ignora este mensaje
+                        if (rs.next()) {
+                            // Obtenemos el checksum en el servidor
+                            // id, dato, estado, fecha
+                            String text = "s" + ";" 
+                                    + String.valueOf(id) + ";" 
+                                    + String.valueOf(dato) + ";" 
+                                    + String.valueOf(estado) + ";" 
+                                    + String.valueOf(fecha) + ";";
+                            int fechaEnSecs = Integer.parseInt(splitChain[4]);
+                            
+                            // Hallamos el checksum mediante la función
+                            checksum = hashMD5(id, dato, estado, fechaEnSecs);
+                            
+                            // Actualización en BD
+                            if (checksum.equals(splitChain[5])) {
+                                actualiza = actualizaDatosSensor(id, dato, estado, fechaSensor);
+                            } else {
+                                System.out.println("Error en el checksum");
+                            }
+
+                            // Comprobación de los datos insertados en BD
+                            Sensor s_aux = lecturaSensorBD(Integer.parseInt(splitChain[1])); 
+
+                            if (actualiza && (s_aux.getDispositivoId() == id)) {
+                                System.out.println("Actualización realizada con éxito");
+                            } else {
+                                // SE INFORMA DEL ERROR Y NO SE GUARDA EN BD
+                                System.out.println("Actualización no coincidente");
+                            }
+                        } else {
+                            System.out.println("Sensor no existente en BD");
+                        }
+                    } else { // Sino pues Actuador
+                        // Asignamos los datos extraidos a sus respectivas variables
+                        id = Integer.parseInt(splitChain[1]);
+                        dato = Float.parseFloat(splitChain[2]);
+                        estado = Integer.parseInt(splitChain[3]);
+                        // Pasamos de segundos a milisegundos ya que llega asi desde Arduino
+                        fecha.setTime((long)Integer.parseInt(splitChain[4])*1000);
+                        // Convertimos a tipo Timestamp para pasarlo a la funcion de insercion en BD
+                        SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy HH:mm:ss.SS");
+                        String fechaActuador = sdf.format(fecha);
+
+                        // Comprobamos si existe en BD
+                        Connection cnx = openConexion();
+                        String qry = "SELECT * FROM actuadores WHERE dispositivo_id=?";
+                        PreparedStatement stmn = cnx.prepareStatement(qry);
+                        stmn.setInt(1, id);
+                        ResultSet rs = stmn.executeQuery();
+
+                        // Una vez obtenido, si .next() que apunta al siguiente dato de la tupla
+                        // está vacío, o sea, no se ha recibido nada, se ignora este mensaje
+                        if (rs.next()) {
+                            // Obtenemos el checksum en el servidor
+                            // id, dato, estado, fecha
+                            String text = "a" + ";" 
+                                    + String.valueOf(id) + ";" 
+                                    + String.valueOf(dato) + ";" 
+                                    + String.valueOf(estado) + ";" 
+                                    + String.valueOf(fecha) + ";";
+                            int fechaEnSecs = Integer.parseInt(splitChain[4]);
+                            
+                            // Hallamos el checksum mediante la función
+                            checksum = hashMD5(id, dato, estado, fechaEnSecs);
+                            
+                            // Actualización en BD
+                            if (checksum.equals(splitChain[5])) {
+                                // Acabamos de construir el paquete con el checksum 
+                                // y lo enviamos al Emisor para que se encargue
+                                // de enviarlo al Arduino
+                                text = text + checksum;
+                                envioActuador(text);
+                                
+                                actualiza = actualizaDatosActuador(id, dato, estado, fechaActuador);
+                            } else {
+                                System.out.println("Error en el checksum");
+                            }
+
+                            // Comprobación de los datos insertados en BD
+                            Actuador a_aux = lecturaActuadorBD(Integer.parseInt(splitChain[1])); 
+
+                            if (actualiza && (a_aux.getDispositivoId() == id)) {
+                                System.out.println("Actualización realizada con éxito");
+                            } else {
+                                // SE INFORMA DEL ERROR Y NO SE GUARDA EN BD
+                                System.out.println("Actualización no coincidente");
+                            }
+                        } else {
+                            System.out.println("Actuador no existente en BD");
+                        }
                     }
 
-                } else { // Sino pues Actuador
-                    // Asignamos los datos extraidos a sus respectivas variables
-                    tipo = splitChain[0];
-                    id = Integer.parseInt(splitChain[1]);
-                    dato = Float.parseFloat(splitChain[2]);
-                    dependencia_id = Integer.parseInt(splitChain[8]);
-                    descripcion = splitChain[3];
-                    estado = Integer.parseInt(splitChain[4]);
-                    // Pasamos de segundos a milisegundos ya que llega asi desde Arduino
-                    fecha.setTime((long)Integer.parseInt(splitChain[5])*1000);
-                    // Convertimos a tipo Timestamp para pasarlo a la funcion de insercion en BD
-                    time_stamp = Timestamp.valueOf(String.valueOf(fecha.getTime()));
-                    ip = splitChain[6];
-                    puerto = splitChain[7];
-                    
-                    // Obtenemos el checksum en el servidor
-                    // id, dato, dependencia, descripcion, estado, fecha, ip, puerto
-                    checksum = (Integer.parseInt(splitChain[0]) 
-                            + Integer.parseInt(splitChain[1]) 
-                            + Integer.parseInt(splitChain[2])
-                            + Integer.parseInt(splitChain[3])
-                            + Integer.parseInt(splitChain[4])
-                            + Integer.parseInt(splitChain[5])
-                            + Integer.parseInt(splitChain[6])
-                            + Integer.parseInt(splitChain[7])
-                            + Integer.parseInt(splitChain[8])
-                            );
-
-                    // Insercion en BD
-                    if (checksum == Integer.valueOf(splitChain[9])) {
-                        inserta = insertaDatosActuador(id, dato, dependencia_id, descripcion, estado, 
-                                                time_stamp, ip, puerto);
-                    } else {
-                        System.out.println("Error en el checksum");
-                    }
-                    
-                    // Comprobación de los datos insertados en BD
-                    Connection cnx = openConexion();
-                    Actuador a_aux = lecturaActuadorBD(Integer.parseInt(splitChain[1])); 
-                    
-                    if (inserta && (a_aux.getID() == id)) {
-                        System.out.println("Inserción realizada con éxito");
-                    } else {
-                        // SE INFORMA DEL ERROR Y NO SE GUARDA EN BD
-                        System.out.println("Inserción no coincidente");
-                    }
-                }
-                
-                closeConexion();
+                    closeConexion();
+                /*}*/
+            } catch (Exception ex) {
+                Logger.getLogger(Receptor.class.getName()).log(Level.SEVERE, ex.getMessage(), ex);
             }
         }
     }

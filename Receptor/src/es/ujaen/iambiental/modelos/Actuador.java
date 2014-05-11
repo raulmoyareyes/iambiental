@@ -1,28 +1,35 @@
 package es.ujaen.iambiental.modelos;
 
-import java.sql.Timestamp;
-import java.util.Date;
-
 /**
  *
  * @author Gabriel
  * @author Raúl Moya Reyes <www.raulmoya.es>
+ * @author Vicente
  */
 public class Actuador {
     private int id;
     private String descripcion;
     private int dependencia;
-    private Date fecha;
+    private String fecha;
     private float dato;
     private String ip;
     private String puerto;
     private int estado;
+    private int tipo;
+    private int dispositivo_id;
 
     public Actuador(){
         
     }
 
-    public Actuador(int id, float dato, String descripcion, int estado, Timestamp fecha, String ip, String puerto, int dependencia) {
+    public Actuador(int dispositivo_id, float dato, int estado, String fecha) {
+        this.dispositivo_id = dispositivo_id;
+        this.dato = dato;
+        this.estado = estado;
+        this.fecha = fecha;        
+    }
+
+    public Actuador(int id, float dato, String descripcion, int estado, String fecha, String ip, String puerto, int dependencia, int tipo, int dispositivo_id) {
         this.id = id;
         this.descripcion = descripcion;
         this.dependencia = dependencia;
@@ -31,10 +38,24 @@ public class Actuador {
         this.ip = ip;
         this.puerto = puerto;
         this.estado = estado;
+        this.tipo = tipo;
+        this.dispositivo_id = dispositivo_id;
     }    
+    
+    public int getTipo() {
+        return tipo;
+    }
+    
+    public void setTipo(int tipo) {
+        this.tipo = tipo;
+    }
     
     public int getID(){
         return id;
+    }
+    
+    public int getDispositivoId(){
+        return dispositivo_id;
     }
     
     public int getDependencia() {
