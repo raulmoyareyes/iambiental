@@ -15,8 +15,6 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.logging.Level;
 import java.util.logging.Logger;
-import javax.naming.Context;
-import javax.naming.InitialContext;
 
 /**
  *
@@ -65,9 +63,9 @@ public class ReceptorDAO {
         if (openConexion() != null) {
             try {
                 // id, dato, descripcion, estado, fecha, ip, puerto, dependencia_id, tipo
-                String qry = "UPDATE sensores "
+                String qry = "UPDATE sensores"
                            + "set dato=?,estado=?,fecha=?"
-                           + "WHERE id=?;";
+                           + "WHERE dispositivo_id=?;";
                 PreparedStatement stmn = cnx.prepareStatement(qry);
 
                 // Atributos de sensor y la fecha
@@ -100,7 +98,7 @@ public class ReceptorDAO {
         Sensor s = new Sensor();
         
         try {
-            int id = Integer.parseInt(rs.getString("id"));
+            int id = Integer.parseInt(rs.getString("dispositivo_id"));
             float dato = Float.parseFloat(rs.getString("dato"));
             int estado = Integer.parseInt(rs.getString("estado"));
             String fecha = rs.getString("fecha");
@@ -121,7 +119,7 @@ public class ReceptorDAO {
         Sensor s = null;
         if (openConexion() != null) {
             try {
-                String qry = "SELECT * FROM sensores WHERE id=?";
+                String qry = "SELECT * FROM sensores WHERE dispositivo_id=?";
                 PreparedStatement stmn = cnx.prepareStatement(qry);
                 stmn.setInt(1, id_sensor);
                 ResultSet rs = stmn.executeQuery();
@@ -139,6 +137,10 @@ public class ReceptorDAO {
     
     /**
      * Con este método insertaremos los datos recibidos por el actuador en la BD
+     * @param id
+     * @param dato
+     * @param estado
+     * @param fecha
      * @return Devuelve 'true' o 'false' dependiendo del éxito de la operación.
      */
     public static boolean actualizaDatosActuador(int id, float dato, int estado, String fecha) {
@@ -146,9 +148,9 @@ public class ReceptorDAO {
         if (openConexion() != null) {
             try {
                 // id, dato, descripcion, estado, fecha, ip, puerto, dependencia_id, tipo
-                String qry = "UPDATE actuadores "
+                String qry = "UPDATE actuadores"
                            + "set dato=?,estado=?,fecha=?"
-                           + "WHERE id=?;";
+                           + "WHERE dispositivo_id=?;";
                 PreparedStatement stmn = cnx.prepareStatement(qry);
 
                 // Atributos de actuador y la fecha
@@ -181,7 +183,7 @@ public class ReceptorDAO {
         Actuador a = new Actuador();
         
         try {
-            int id = Integer.parseInt(rs.getString("id"));
+            int id = Integer.parseInt(rs.getString("dispositivo_id"));
             float dato = Float.parseFloat(rs.getString("dato"));
             int estado = Integer.parseInt(rs.getString("estado"));
             String fecha = rs.getString("fecha");
@@ -202,7 +204,7 @@ public class ReceptorDAO {
         Actuador a = null;
         if (openConexion() != null) {
             try {
-                String qry = "SELECT * FROM actuadores WHERE id=?";
+                String qry = "SELECT * FROM actuadores WHERE dispositivo_id=?";
                 PreparedStatement stmn = cnx.prepareStatement(qry);
                 stmn.setInt(1, id_actuador);
                 ResultSet rs = stmn.executeQuery();

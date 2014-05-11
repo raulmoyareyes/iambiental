@@ -15,19 +15,20 @@ public class Sensor {
     private String puerto;
     private int estado;
     private int tipo;
+    private int dispositivo_id;
 
     public Sensor() {
 
     }
 
-    public Sensor(int id, float dato, int estado, String fecha) {
-        this.id = id;
+    public Sensor(int dispositivo_id, float dato, int estado, String fecha) {
+        this.dispositivo_id = dispositivo_id;
         this.dato = dato;
         this.estado = estado;
         this.fecha = fecha;        
     }
 
-    public Sensor(int id, float dato, String descripcion, int estado, String fecha, String ip, String puerto, int dependenciak, int tipo) {
+    public Sensor(int id, float dato, String descripcion, int estado, String fecha, String ip, String puerto, int dependenciak, int tipo, int dispositivo_id) {
         this.id = id;
         this.descripcion = descripcion;
         this.dependencia = dependencia;
@@ -37,6 +38,7 @@ public class Sensor {
         this.puerto = puerto;
         this.estado = estado;
         this.tipo = tipo;
+        this.dispositivo_id = dispositivo_id;
     }
 
     public Integer getTipo() {
@@ -49,6 +51,10 @@ public class Sensor {
     
     public Integer getID() {
         return id;
+    }
+    
+    public int getDispositivoId(){
+        return dispositivo_id;
     }
 
     public int getDependencia() {
