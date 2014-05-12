@@ -12,14 +12,14 @@
                 <div class="form-group">
                     <label for="inputDescripcionSensor" class="col-sm-2 control-label">Descripción</label>
                     <div class="col-sm-10">
-                        <input type="text" name="descripcionSensor" class="form-control" id="inputDescripcionSensor" placeholder="Descripción del actuador" value="${sensor.descripcion}"/>
+                        <input type="text" name="descripcion" class="form-control" id="inputDescripcionSensor" placeholder="Descripción del actuador" value="${sensor.descripcion}"/>
                     </div>
                 </div>
 
                 <div class="form-group">
                     <label for="selectDependenciaSensor" class="col-sm-2 control-label">Dependencia</label>
                     <div class="col-sm-10">
-                        <select class="form-control" name="dependenciaSensor" id="selectDependenciaSensor">
+                        <select class="form-control" name="dependencia" id="selectDependenciaSensor">
                             <c:forEach var="d" items="${dependencias}" varStatus="estado">
                                 <option value="${d.id}" ${(d.id==sensor.dependencia)?'selected="selected"':''}>${d.nombre}</option>
                             </c:forEach>
@@ -30,20 +30,20 @@
                 <div class="form-group">
                     <label for="inputIpSensor" class="col-sm-2 control-label">Dirección IP</label>
                     <div class="col-sm-10">
-                        <input type="text" name="ipSensor" class="form-control" id="inputIpSensor" placeholder="Dirección IP (xxx.xxx.xxx.xxx)" value="${sensor.ip}"/>
+                        <input type="text" name="ip" class="form-control" id="inputIpSensor" placeholder="Dirección IP (xxx.xxx.xxx.xxx)" value="${sensor.ip}"/>
                     </div>
                 </div>
 
                 <div class="form-group">
                     <label for="inputPuertoSensor" class="col-sm-2 control-label">Puerto</label>
                     <div class="col-sm-10">
-                        <input type="text" name="puertoSensor" class="form-control" id="inputPuertoSensor" placeholder="Puerto (0-65534)" value="${sensor.puerto}"/>
+                        <input type="text" name="puerto" class="form-control" id="inputPuertoSensor" placeholder="Puerto (0-65534)" value="${sensor.puerto}"/>
                     </div>
                 </div>
                 
                 <div class="form-group">
                     <div class="col-sm-offset-2 col-sm-10">
-                        <button type="submit" class="btn btn-success">Guardar</button>
+                        <button type="submit" name="modificar" class="btn btn-success">Guardar</button>
                         <a href="${appUrl}/sensores" rol="button" class="btn btn-danger">Cancelar</a>
                     </div>
                 </div>

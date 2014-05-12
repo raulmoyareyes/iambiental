@@ -32,13 +32,22 @@ public class Sensor implements Serializable {
     private String puerto;
     private int estado; //para que era??
     private int tipo; // 1 si es temperatura, 0 si es de otra cosa. Esto hay que ver como hacerlo bien
-    private int dispositivo_id;
+    @OneToOne
+    private Dispositivo dispositivo;
+
+    public Dispositivo getDispositivo() {
+        return dispositivo;
+    }
+
+    public void setDispositivo(Dispositivo dispositivo) {
+        this.dispositivo = dispositivo;
+    }
 
     public Sensor() {
         dependencia = new Dependencia();
     }
 
-    public Sensor(String descripcion, Dependencia dependencia, Date fecha, float dato, String ip, String puerto, int estado, int tipo, int dispositivo_id) {
+    public Sensor(String descripcion, Dependencia dependencia, Date fecha, float dato, String ip, String puerto, int estado, int tipo, Dispositivo dispositivo) {
         this.descripcion = descripcion;
         this.dependencia = dependencia;
         this.fecha = fecha;
@@ -47,7 +56,17 @@ public class Sensor implements Serializable {
         this.puerto = puerto;
         this.estado = estado;
         this.tipo = tipo;
-        this.dispositivo_id = dispositivo_id;
+        this.dispositivo = dispositivo;
+    }
+    
+    public Sensor(String descripcion, Dependencia dependencia, String ip, String puerto, int tipo, Dispositivo dispositivo){
+        this.descripcion = descripcion;
+        this.dependencia = dependencia;
+        this.ip = ip;
+        this.puerto = puerto;
+        this.estado = 0;
+        this.tipo = tipo;
+        this.dispositivo = dispositivo;
     }
 
     public Integer getId() {
@@ -118,8 +137,5 @@ public class Sensor implements Serializable {
         this.tipo = tipo;
     }
 
-    public void setDispositivo_id(int dispositivo_id) {
-        this.dispositivo_id = dispositivo_id;
-    }
     
 }

@@ -5,21 +5,27 @@
  */
 package es.ujaen.iambiental.clienteadmin;
 
+import com.sun.jersey.api.client.Client;
+import com.sun.jersey.api.client.ClientResponse;
+import com.sun.jersey.api.client.WebResource;
+import com.sun.jersey.api.client.config.DefaultClientConfig;
+import es.ujaen.iambiental.modelos.Dispositivo;
 import java.io.IOException;
-import java.io.PrintWriter;
+import java.util.List;
 import javax.servlet.RequestDispatcher;
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import javax.servlet.http.HttpSession;
+import org.codehaus.jackson.jaxrs.JacksonJsonProvider;
+import org.codehaus.jackson.map.ObjectMapper;
 
 /**
- *
- * @author agustin
+ * 
+ * @author Gabri
  */
-@WebServlet(name = "dispositivos", urlPatterns = {"/dispositivos"})
+@WebServlet(name = "dispositivos", urlPatterns = {"/dispositivos/*"})
 public class dispositivos extends HttpServlet {
 
     /**
@@ -37,19 +43,122 @@ public class dispositivos extends HttpServlet {
         
         RequestDispatcher rd;
         
+        //Variables de las url del servidor
         String srvUrl = request.getContextPath() + request.getServletPath();
         request.setAttribute("srvUrl", srvUrl);
         request.setAttribute("appUrl", request.getContextPath());
+        
+        //Pathinfo
+        String action = (request.getPathInfo() != null ? request.getPathInfo() : "");
+        
+        // Mapeador
+        ObjectMapper mapper = new ObjectMapper();
+        
+        //Cliente para JSON
+        DefaultClientConfig defaultClientConfig = new DefaultClientConfig();
+        defaultClientConfig.getClasses().add(JacksonJsonProvider.class);
+        Client cliente = Client.create(defaultClientConfig);
+        WebResource recurso = cliente.resource("http://localhost:8084/servidorWeb/recursos");
+        
+        // Dispositivos
+        ClientResponse responseJSOND = recurso.path("/dispositivos").accept("application/json").get(ClientResponse.class);
+        List<Dispositivo> dispositivos = responseJSOND.getEntity(List.class);
 
         //Cabecera
         request.setAttribute("mainMenuOption", "dispositivos");
         rd = request.getRequestDispatcher("/WEB-INF/cabecera.jsp");
         rd.include(request, response);
-        
+
         //Cuerpo
-        rd = request.getRequestDispatcher("/WEB-INF/dispositivos/index.jsp");
-        rd.include(request, response);
-        
+        switch (action) {
+            case "/listado":
+            default: //Ninguna opción seleccionada
+                request.setAttribute("dispositivos", dispositivos);
+                rd = request.getRequestDispatcher("/WEB-INF/dispositivos/index.jsp");
+                rd.include(request, response);
+                rd = request.getRequestDispatcher("/WEB-INF/dispositivos/modalEliminar.jsp");
+                rd.include(request, response);
+                break;
+            case "/insertar": //Insertar dispositivo
+                if(request.getParameter("crear") != null){
+                    String descripcion = request.getParameter("descripcion");
+                    String ip = request.getParameter("ip");
+                    String puerto = request.getParameter("puerto");
+                    recurso.path("/dispositivos")
+                                .type("application/json")
+                                .put(ClientResponse.class, new Dispositivo(descripcion, ip, puerto));
+                    
+                    response.sendRedirect("/clienteAdmin/dispositivos");
+                }else{
+                    request.setAttribute("dispositivos", dispositivos);
+                    rd = request.getRequestDispatcher("/WEB-INF/dispositivos/insertar.jsp");
+                    rd.include(request, response);
+                }
+                break;
+            case "/ver": //Ver dispositivo
+                request.setAttribute("dispositivos", dispositivos);
+                int id = Integer.parseInt(request.getParameter("id"));
+                Dispositivo d = new Dispositivo();
+                for (int i = 0; i < dispositivos.size(); i++) {
+                        Dispositivo aux = mapper.convertValue(dispositivos.get(i), Dispositivo.class);
+                        if (aux.getId() == id) {
+                            d = aux;
+                        }
+                    }
+                request.setAttribute("dispositivo", d);
+                rd = request.getRequestDispatcher("/WEB-INF/dispositivos/ver.jsp");
+                rd.include(request, response);
+                rd = request.getRequestDispatcher("/WEB-INF/dispositivos/modalEliminar.jsp");
+                rd.include(request, response);
+                break;
+            case "/eliminar": //Dispositivo eliminada
+                int idEliminar = Integer.parseInt(request.getParameter("id"));
+                System.out.println("id: "+idEliminar);
+                d = new Dispositivo();
+                for (int i = 0; i < dispositivos.size(); i++) {
+                    Dispositivo aux = mapper.convertValue(dispositivos.get(i), Dispositivo.class);
+                    if (aux.getId() == idEliminar) {
+                        d = aux;
+                    }
+                }
+                request.setAttribute("eliminado", d.getDescripcion());
+                recurso.path("/dispositivos/" + idEliminar).delete();
+                request.setAttribute("dispositivos", dispositivos);
+                response.sendRedirect("/clienteAdmin/dispositivos");
+                break;
+            case "/editar": //Editar dispositivo
+                if (request.getParameter("modificar") != null) {
+                    id = Integer.parseInt(request.getParameter("modificar"));
+                    String descripcion = request.getParameter("descripcion");
+                    String ip = request.getParameter("ip");
+                    String puerto = request.getParameter("puerto");
+                    
+                    System.out.println("id: "+id);
+
+                    recurso.path("/dispositivos/" + id)
+                            .type("application/json")
+                            .post(ClientResponse.class, new Dispositivo(id, descripcion, ip, puerto));
+
+                    response.sendRedirect("/clienteAdmin/dispositivos");
+                } else {
+                    request.setAttribute("dispositivos", dispositivos);
+                    d = new Dispositivo();
+                    id = Integer.parseInt(request.getParameter("id"));
+                    for (int i = 0; i < dispositivos.size(); i++) {
+                        Dispositivo aux = mapper.convertValue(dispositivos.get(i), Dispositivo.class);
+                        if (aux.getId() == id) {
+                            d = aux;
+                        }
+                    }
+                    request.setAttribute("dispositivo", d);
+                    rd = request.getRequestDispatcher("/WEB-INF/dispositivos/editar.jsp");
+                    rd.include(request, response);
+                    rd = request.getRequestDispatcher("/WEB-INF/dispositivos/modalEliminar.jsp");
+                    rd.include(request, response);
+                }
+                break;
+        }
+
         //Footer
         rd = request.getRequestDispatcher("/WEB-INF/pie.jsp");
         rd.include(request, response);

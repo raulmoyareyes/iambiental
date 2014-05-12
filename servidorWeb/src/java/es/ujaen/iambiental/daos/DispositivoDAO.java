@@ -1,10 +1,9 @@
 package es.ujaen.iambiental.daos;
 
-import es.ujaen.iambiental.excepciones.SensorErrorActualizar;
+import es.ujaen.iambiental.excepciones.DispositivoErrorActualizar;
+import es.ujaen.iambiental.excepciones.DispositivoErrorEliminar;
+import es.ujaen.iambiental.excepciones.DispositivoErrorPersistir;
 import es.ujaen.iambiental.excepciones.SensorErrorCambiarDependencia;
-import es.ujaen.iambiental.excepciones.SensorErrorCambiarDispositivo;
-import es.ujaen.iambiental.excepciones.SensorErrorEliminar;
-import es.ujaen.iambiental.excepciones.SensorErrorPersistir;
 import es.ujaen.iambiental.modelos.Dependencia;
 import es.ujaen.iambiental.modelos.Dispositivo;
 import es.ujaen.iambiental.modelos.Sensor;
@@ -23,89 +22,89 @@ import org.springframework.transaction.annotation.Transactional;
  */
 @Repository
 @Transactional(propagation = Propagation.SUPPORTS, readOnly = true)
-public class SensorDAO {
+public class DispositivoDAO {
 
     @PersistenceContext
     private EntityManager em;
 
-    public SensorDAO() {
+    public DispositivoDAO() {
 
     }
 
     /**
-     * Busca un sensor en la BD.
+     * Busca un dispositivo en la BD.
      *
      * @param id
-     * @return Sensor con el id indicado, null si no existe.
+     * @return Dispositivo con el id indicado, null si no existe.
      */
-    public Sensor buscar(int id) {
-        return em.find(Sensor.class, id);
+    public Dispositivo buscar(int id) {
+        return em.find(Dispositivo.class, id);
     }
 
     /**
-     * Inserta un sensor en la BD.
+     * Inserta un dispositivo en la BD.
      *
-     * @param sensor
-     * @throws SensorErrorPersistir
+     * @param dispositivo
+     * @throws DispositivoErrorPersistir
      */
     @Transactional(propagation = Propagation.REQUIRED, readOnly = false,
-            rollbackFor = es.ujaen.iambiental.excepciones.SensorErrorPersistir.class)
-    public void insertar(Sensor sensor) throws SensorErrorPersistir {
+            rollbackFor = es.ujaen.iambiental.excepciones.DispositivoErrorPersistir.class)
+    public void insertar(Dispositivo dispositivo) throws DispositivoErrorPersistir {
         try {
-            em.persist(sensor);
+            em.persist(dispositivo);
             em.flush();
         } catch (Exception e) {
-            throw new SensorErrorPersistir();
+            throw new DispositivoErrorPersistir();
         }
     }
 
     /**
-     * Actualiza un sensor en la BD.
+     * Actualiza un dispositivo en la BD.
      *
-     * @param sensor
-     * @throws SensorErrorActualizar
+     * @param dispositivo
+     * @throws DispositivoErrorActualizar
      */
     @Transactional(propagation = Propagation.REQUIRED, readOnly = false,
-            rollbackFor = es.ujaen.iambiental.excepciones.SensorErrorActualizar.class)
-    public void actualizar(Sensor sensor) throws SensorErrorActualizar {
+            rollbackFor = es.ujaen.iambiental.excepciones.DispositivoErrorActualizar.class)
+    public void actualizar(Dispositivo dispositivo) throws DispositivoErrorActualizar {
         try {
-            em.merge(sensor);
+            em.merge(dispositivo);
             em.flush();
         } catch (Exception e) {
-            throw new SensorErrorActualizar();
+            throw new DispositivoErrorActualizar();
         }
     }
 
     /**
-     * Elimina un sensor de la BD.
+     * Elimina un dispositivo de la BD.
      *
-     * @param sensor
-     * @throws SensorErrorEliminar
+     * @param dispositivo
+     * @throws DispositivoErrorEliminar
      */
     @Transactional(propagation = Propagation.REQUIRED, readOnly = false,
-            rollbackFor = es.ujaen.iambiental.excepciones.SensorErrorEliminar.class)
-    public void eliminar(Sensor sensor) throws SensorErrorEliminar {
+            rollbackFor = es.ujaen.iambiental.excepciones.DispositivoErrorEliminar.class)
+    public void eliminar(Dispositivo dispositivo) throws DispositivoErrorEliminar {
         try {
-            em.remove(em.contains(sensor) ? sensor : em.merge(sensor));
+            em.remove(em.contains(dispositivo) ? dispositivo : em.merge(dispositivo));
             em.flush();
         } catch (Exception e) {
-            throw new SensorErrorEliminar();
+            throw new DispositivoErrorEliminar();
         }
     }
 
     /**
-     * Devuelve un mapa con el listado de todos los sensores.
+     * Devuelve un mapa con el listado de todos los dispositivos.
      *
-     * @return Mapa de sensores si existen sensores, mapa vacío si no existen.
+     * @return Mapa de dispositivoa si existen dispositivos, mapa vacío si no existen.
      */
-    public Map<Integer, Sensor> listar() {
-        Map<Integer, Sensor> sensores = new HashMap();
-        List<Sensor> lista = em.createQuery("Select s from Sensor s").getResultList();
+    public Map<Integer, Dispositivo> listar() {
+        Map<Integer, Dispositivo> dispositivos = new HashMap();
+        List<Dispositivo> lista = em.createQuery("Select d from Dispositivo d").getResultList();
 
-        for (Sensor sensor : lista) {
-            sensores.put(sensor.getId(), sensor);
+        for (Dispositivo dispositivo : lista) {
+            dispositivos.put(dispositivo.getId(), dispositivo);
         }
-        return sensores;
+        return dispositivos;
     }
 
     /**
@@ -141,24 +140,6 @@ public class SensorDAO {
         List<Sensor> lista = em.createQuery("Select s from Sensor s Where s.dependencia = ?1").setParameter(1, d).getResultList();
         for (Sensor sensor : lista) {
             sensor.setDependencia(de);
-            em.merge(sensor);
-            em.flush();
-        }
-    }
-    
-    /**
-     * Cambia el dispositivo a null porque este dispositivo va a ser eliminado
-     *
-     * @param dis
-     * @param d
-     * @throws es.ujaen.iambiental.excepciones.SensorErrorCambiarDispositivo
-     */
-    @Transactional(propagation = Propagation.REQUIRED, readOnly = false,
-            rollbackFor = es.ujaen.iambiental.excepciones.SensorErrorActualizar.class)
-    public void cambiarDispositivo(Dispositivo dis, Dispositivo d) throws SensorErrorCambiarDispositivo {
-        List<Sensor> lista = em.createQuery("Select s from Sensor s Where s.dispositivo = ?1").setParameter(1, d).getResultList();
-        for (Sensor sensor : lista) {
-            sensor.setDispositivo(dis);
             em.merge(sensor);
             em.flush();
         }
