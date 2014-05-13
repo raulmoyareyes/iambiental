@@ -32,22 +32,13 @@ public class Sensor implements Serializable {
     private String puerto;
     private int estado; //para que era??
     private int tipo; // 1 si es temperatura, 0 si es de otra cosa. Esto hay que ver como hacerlo bien
-    @OneToOne
-    private Dispositivo dispositivo;
-
-    public Dispositivo getDispositivo() {
-        return dispositivo;
-    }
-
-    public void setDispositivo(Dispositivo dispositivo) {
-        this.dispositivo = dispositivo;
-    }
+    private int idFisico;
 
     public Sensor() {
         dependencia = new Dependencia();
     }
 
-    public Sensor(String descripcion, Dependencia dependencia, Date fecha, float dato, String ip, String puerto, int estado, int tipo, Dispositivo dispositivo) {
+    public Sensor(String descripcion, Dependencia dependencia, Date fecha, float dato, String ip, String puerto, int estado, int tipo, int idFisico) {
         this.descripcion = descripcion;
         this.dependencia = dependencia;
         this.fecha = fecha;
@@ -56,17 +47,17 @@ public class Sensor implements Serializable {
         this.puerto = puerto;
         this.estado = estado;
         this.tipo = tipo;
-        this.dispositivo = dispositivo;
+        this.idFisico = idFisico;
     }
     
-    public Sensor(String descripcion, Dependencia dependencia, String ip, String puerto, int tipo, Dispositivo dispositivo){
+    public Sensor(String descripcion, Dependencia dependencia, String ip, String puerto, int tipo, int idFisico){
         this.descripcion = descripcion;
         this.dependencia = dependencia;
         this.ip = ip;
         this.puerto = puerto;
         this.estado = 0;
         this.tipo = tipo;
-        this.dispositivo = dispositivo;
+        this.idFisico = idFisico;
     }
 
     public Integer getId() {
@@ -137,5 +128,12 @@ public class Sensor implements Serializable {
         this.tipo = tipo;
     }
 
+    public int getIdFisico() {
+        return idFisico;
+    }
+
+    public void setIdFisico(int idFisico) {
+        this.idFisico = idFisico;
+    }
     
 }

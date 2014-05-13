@@ -2,30 +2,16 @@ package es.ujaen.iambiental.modelos;
 
 import java.io.Serializable;
 import java.util.Date;
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
-import javax.persistence.OneToOne;
-import javax.persistence.Table;
-import javax.persistence.Temporal;
-import javax.persistence.TemporalType;
 
 /**
  *
  * @author Raúl Moya Reyes <www.raulmoya.es>
  */
-@Entity
-@Table(name = "sensores")
 public class Sensor implements Serializable {
 
-    @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
     private int id;
     private String descripcion;
-    @OneToOne
     private Dependencia dependencia;
-    @Temporal(TemporalType.TIMESTAMP)
     private Date fecha;
     private float dato;
     private String ip;
