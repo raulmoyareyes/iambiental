@@ -2,11 +2,9 @@ package es.ujaen.iambiental.daos;
 
 import es.ujaen.iambiental.excepciones.SensorErrorActualizar;
 import es.ujaen.iambiental.excepciones.SensorErrorCambiarDependencia;
-import es.ujaen.iambiental.excepciones.SensorErrorCambiarDispositivo;
 import es.ujaen.iambiental.excepciones.SensorErrorEliminar;
 import es.ujaen.iambiental.excepciones.SensorErrorPersistir;
 import es.ujaen.iambiental.modelos.Dependencia;
-import es.ujaen.iambiental.modelos.Dispositivo;
 import es.ujaen.iambiental.modelos.Sensor;
 import java.util.HashMap;
 import java.util.List;
@@ -141,24 +139,6 @@ public class SensorDAO {
         List<Sensor> lista = em.createQuery("Select s from Sensor s Where s.dependencia = ?1").setParameter(1, d).getResultList();
         for (Sensor sensor : lista) {
             sensor.setDependencia(de);
-            em.merge(sensor);
-            em.flush();
-        }
-    }
-    
-    /**
-     * Cambia el dispositivo a null porque este dispositivo va a ser eliminado
-     *
-     * @param dis
-     * @param d
-     * @throws es.ujaen.iambiental.excepciones.SensorErrorCambiarDispositivo
-     */
-    @Transactional(propagation = Propagation.REQUIRED, readOnly = false,
-            rollbackFor = es.ujaen.iambiental.excepciones.SensorErrorActualizar.class)
-    public void cambiarDispositivo(Dispositivo dis, Dispositivo d) throws SensorErrorCambiarDispositivo {
-        List<Sensor> lista = em.createQuery("Select s from Sensor s Where s.dispositivo = ?1").setParameter(1, d).getResultList();
-        for (Sensor sensor : lista) {
-            sensor.setDispositivo(dis);
             em.merge(sensor);
             em.flush();
         }

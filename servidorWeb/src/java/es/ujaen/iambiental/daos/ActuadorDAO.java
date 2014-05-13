@@ -2,12 +2,10 @@ package es.ujaen.iambiental.daos;
 
 import es.ujaen.iambiental.excepciones.ActuadorErrorActualizar;
 import es.ujaen.iambiental.excepciones.ActuadorErrorCambiarDependencia;
-import es.ujaen.iambiental.excepciones.ActuadorErrorCambiarDispositivo;
 import es.ujaen.iambiental.excepciones.ActuadorErrorEliminar;
 import es.ujaen.iambiental.excepciones.ActuadorErrorPersistir;
 import es.ujaen.iambiental.modelos.Actuador;
 import es.ujaen.iambiental.modelos.Dependencia;
-import es.ujaen.iambiental.modelos.Dispositivo;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -141,24 +139,6 @@ public class ActuadorDAO {
         List<Actuador> lista = em.createQuery("Select a from Actuador a Where a.dependencia = ?1").setParameter(1, d).getResultList();
         for (Actuador actuador : lista) {
             actuador.setDependencia(de);
-            em.merge(actuador);
-            em.flush();
-        }
-    }
-    
-    /**
-     * Cambia el dispositivo a null porque este dispositivo va a ser eliminado
-     *
-     * @param dis
-     * @param d
-     * @throws es.ujaen.iambiental.excepciones.ActuadorErrorCambiarDispositivo
-     */
-    @Transactional(propagation = Propagation.REQUIRED, readOnly = false,
-            rollbackFor = es.ujaen.iambiental.excepciones.ActuadorErrorActualizar.class)
-    public void cambiarDispositivo(Dispositivo dis, Dispositivo d) throws ActuadorErrorCambiarDispositivo {
-        List<Actuador> lista = em.createQuery("Select a from Actuador a Where a.dispositivo = ?1").setParameter(1, d).getResultList();
-        for (Actuador actuador : lista) {
-            actuador.setDispositivo(dis);
             em.merge(actuador);
             em.flush();
         }

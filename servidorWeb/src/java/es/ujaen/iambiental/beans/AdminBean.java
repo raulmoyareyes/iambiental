@@ -8,14 +8,12 @@ package es.ujaen.iambiental.beans;
 
 import es.ujaen.iambiental.daos.ActuadorDAO;
 import es.ujaen.iambiental.daos.DependenciaDAO;
-import es.ujaen.iambiental.daos.DispositivoDAO;
 import es.ujaen.iambiental.daos.ReglaProgramadaDAO;
 import es.ujaen.iambiental.daos.ReglaSensorActuadorDAO;
 import es.ujaen.iambiental.daos.SensorDAO;
 import es.ujaen.iambiental.daos.TareaProgramadaDAO;
 import es.ujaen.iambiental.excepciones.ActuadorErrorActualizar;
 import es.ujaen.iambiental.excepciones.ActuadorErrorCambiarDependencia;
-import es.ujaen.iambiental.excepciones.ActuadorErrorCambiarDispositivo;
 import es.ujaen.iambiental.excepciones.ActuadorErrorDatos;
 import es.ujaen.iambiental.excepciones.ActuadorErrorEliminar;
 import es.ujaen.iambiental.excepciones.ActuadorErrorPersistir;
@@ -54,7 +52,6 @@ import es.ujaen.iambiental.excepciones.TareaProgramadaErrorPersistir;
 import es.ujaen.iambiental.excepciones.TareaProgramadaNoEncontrada;
 import es.ujaen.iambiental.modelos.Actuador;
 import es.ujaen.iambiental.modelos.Dependencia;
-import es.ujaen.iambiental.modelos.Dispositivo;
 import es.ujaen.iambiental.modelos.ReglaProgramada;
 import es.ujaen.iambiental.modelos.ReglaSensorActuador;
 import es.ujaen.iambiental.modelos.Sensor;
@@ -88,9 +85,6 @@ public class AdminBean {
     
     @Resource
     DependenciaDAO dependenciaDAO;
-    
-    @Resource
-    DispositivoDAO dispositivoDAO;
 
     /**
      * Crear un sensor.
@@ -193,63 +187,7 @@ public class AdminBean {
     public void modificarActuador(Actuador actuador) throws ActuadorErrorActualizar {
         actuadorDAO.actualizar(actuador);
     }
-    
-    /**
-     * Crear un dispositivo.
-     *
-     * @param dispositivo
-     * @throws es.ujaen.iambiental.excepciones.DispositivoErrorDatos
-     * @throws es.ujaen.iambiental.excepciones.DispositivoErrorPersistir
-     */
-    public void crearDispositivo(Dispositivo dispositivo) throws DispositivoErrorDatos, DispositivoErrorPersistir{
-        
-        try {
-            dispositivoDAO.insertar(dispositivo);
-        } catch (DispositivoErrorPersistir e) {
-            throw new DispositivoErrorPersistir();
-        }
 
-    }
-    
-    /**
-     * Devuelve el dispositivo con el id indicado
-     *
-     * @param idDispositivo
-     * @return Devuelve el sensor, null si no es encontrado.
-     */
-    public Dispositivo obtenerDispositivo(Integer idDispositivo) {
-        return dispositivoDAO.buscar(idDispositivo);
-    }
-    
-    /**
-     * Elimina un dispositivo del sistema.
-     *
-     * @param idDispositivo
-     * @throws es.ujaen.iambiental.excepciones.DispositivoErrorEliminar
-     * @throws es.ujaen.iambiental.excepciones.DispositivoNoEncontrado
-     * @throws es.ujaen.iambiental.excepciones.SensorErrorCambiarDispositivo
-     * @throws es.ujaen.iambiental.excepciones.ActuadorErrorCambiarDispositivo
-     */
-    public void eliminarDispositivo(Integer idDispositivo) throws DispositivoErrorEliminar, DispositivoNoEncontrado, SensorErrorCambiarDispositivo, ActuadorErrorCambiarDispositivo{
-        Dispositivo d = dispositivoDAO.buscar(idDispositivo);
-        if (d == null) {
-            throw new DispositivoNoEncontrado();
-        }
-        sensorDAO.cambiarDispositivo(null,d);
-        actuadorDAO.cambiarDispositivo(null,d);
-        dispositivoDAO.eliminar(d);
-    }
-    
-    /**
-     * Modifica un dispositivo del sistema.
-     *
-     * @param dispositivo
-     * @throws es.ujaen.iambiental.excepciones.DispositivoErrorActualizar
-     */
-    public void modificarDispositivo(Dispositivo dispositivo) throws DispositivoErrorActualizar{
-        dispositivoDAO.actualizar(dispositivo);
-    }
-    
     /**
      * Crear una tarea programada.
      *
@@ -484,15 +422,6 @@ public class AdminBean {
      */
     public Map<Integer, Actuador> listarActuadores() {
         return actuadorDAO.listar();
-    }
-    
-    /**
-     * Devuelve un mapa con la lista de dispositivos.
-     *
-     * @return Devuelve un mapa con la lista de dispositivos
-     */
-    public Map<Integer, Dispositivo> listarDispositivos() {
-        return dispositivoDAO.listar();
     }
     
     /**
