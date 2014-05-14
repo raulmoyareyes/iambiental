@@ -1,0 +1,230 @@
+// Libreras
+#include <stdlib.h>
+#include <String.h>
+#include <WString.h>
+#include <SPI.h>
+#include <Ethernet.h>
+#include <EthernetUdp.h>
+#include <MD5.h>
+
+// Aumentar el tamaño del paquete UDP
+#define UDP_TX_PACKET_MAX_SIZE 128 //Por defecto, 24 bytes
+
+// Datos de este arduino
+byte mac[] = {  
+  0xDE, 0xAD, 0xBE, 0xEF, 0xFE, 0xED }; // MAC
+IPAddress ipLocal(192, 168, 9, 250);   // IP
+unsigned int puertoLocal = 8888;        // Puerto
+int dependenciaLocal = 88;              // Dependencia
+int tipoLocal = 99;                     // Tipo
+
+// Datos Receptor
+IPAddress ipReceptor(192, 168, 9, 177);    // IP
+unsigned int puertoReceptor = 8902;       // Puerto
+
+// Instancia UDP
+EthernetUDP Udp;
+char packetBuffer[UDP_TX_PACKET_MAX_SIZE];
+
+// Variable de tiempo
+unsigned long time; // Cuidado con hacer operaciones con otros tipos que no sean long
+
+// SENSORES
+
+//Sensor10
+unsigned long frecuenciaS10 = 1000 * 1;  // Frecuencia de la lectura del sensor
+unsigned long ultimaVezS10 = 0;          // Instante de la ultima lectura de S10
+String  idS10 = "10010";                 // Codigo unico de este sensor
+
+//Sensor15
+unsigned long frecuenciaS15 = 1000 * 3;  // Frecuencia de la lectura del sensor
+unsigned long ultimaVezS15 = 0;          // Instante de la ultima lectura de S10
+String idS15 = "10015";                  // Codigo unico de este sensor
+
+
+// ACTUADORES
+
+// Actuador20 (LED)
+int pinActuador20 = A0;
+int idActuador20 = 20;
+
+
+
+// Otras variables
+
+String dato;
+String estado;
+
+
+
+void setup(void) {
+  // Inicializar Ethernet y UDP
+  Ethernet.begin(mac,ipLocal);
+  Udp.begin(puertoLocal);
+
+  // Inicializar el monitor
+  Serial.begin(9600);
+  
+  // Inicializacin de Actuadores
+  pinMode(pinActuador20, OUTPUT); 
+  digitalWrite(pinActuador20, LOW); //Valor por defecto de la Luz
+}
+
+void loop(void) {
+  // Tiempo actual
+  time = millis();
+  
+  
+  //*
+  // Recepcion de paquete
+  int packetSize = Udp.parsePacket();
+  if(packetSize){
+    
+    // Evaluar el paquete y actuar sobre el actuador que se refiera
+    Udp.read(packetBuffer,UDP_TX_PACKET_MAX_SIZE);
+
+    Serial.print(time);
+    Serial.print(" ");
+    Serial.println(packetBuffer);
+
+    // PARTIR STRING POR ";"
+    char* cadena = packetBuffer;
+    
+    String tipoDispositivo = strtok_r(cadena,";", &cadena);
+    
+    char* idDispositivoS = strtok_r(cadena,";", &cadena);
+    int idDispositivo = atoi(idDispositivoS);
+    char* datoS = strtok_r(cadena,";", &cadena);
+    float dato = atof(datoS);
+    char* estadoS = strtok_r(cadena,";", &cadena);
+    int estado = atoi(estadoS);
+    char* fecha = strtok_r(cadena,";", &cadena);
+    int hash = atoi(strtok_r(cadena,";", &cadena));
+    
+    // Comprobar checksum
+    int hashCalculado = calcularHash(tipoDispositivo, idDispositivoS, datoS, estadoS, fecha);
+    
+    
+    if(hash == hashCalculado){
+      // Checksum OK
+      Serial.println("Checksum OK");
+      
+      if(tipoDispositivo=="a"){
+        switch(idDispositivo){
+          case 20: //Actuador20
+            //Iluminacion todo-nada
+            if(dato>0){
+              Serial.println("Encenciendo Luz20");
+              digitalWrite(pinActuador20, HIGH);
+            }else{
+              Serial.println("Apagando Luz20");
+              digitalWrite(pinActuador20, LOW);
+            }
+            break;
+          //No contemplo default, porque no es un Actuador registrado 
+        }
+      }
+      
+      
+    }else{
+      // ERROR en Checksum
+      Serial.print("Error en el checksum. Tengo ");
+      Serial.println(hashCalculado);
+    }
+    
+    /* Mostrar datos
+    Serial.println("Tipo dispositivo: \"" + tipoDispositivo + "\"");
+    Serial.print("Id dispositivo  : \""); Serial.print(idDispositivo); Serial.println("\"");
+    Serial.print("Dato            : \""); Serial.print(dato); Serial.println("\"");
+    Serial.print("Estado          : \""); Serial.print(estado); Serial.println("\"");
+    Serial.print("Fecha           : \""); Serial.print(fecha); Serial.println("\"");
+    Serial.print("IP              : \""); Serial.print(ip); Serial.println("\"");
+    Serial.print("Puerto          : \""); Serial.print(puerto); Serial.println("\"");
+    Serial.print("Dependencia     : \""); Serial.print(dependencia); Serial.println("\"");
+    Serial.print("Tipo            : \""); Serial.print(tipo); Serial.println("\"");
+    Serial.print("Checksum        : \""); Serial.print(checksum); Serial.println("\"");
+    //*/
+        
+    // Fin de comprobacion de checksum
+
+    // Limpiar el buffer para la siguiente recepcion
+    for(int i=0;i<UDP_TX_PACKET_MAX_SIZE;i++) packetBuffer[i] = 0;
+  }
+  // Fin de recepcion de paquete
+  
+  
+  // SENSORES (El desbordamiento del tiempo funciona bien tambien)
+
+  // Lectura de Sensor10
+  if(time - ultimaVezS10 >= frecuenciaS10){
+    Serial.print(time);
+    Serial.println(" - Sensor 10, al ataquer!");
+    
+    dato = "25.6";
+    estado = "0";
+    
+    //mandarPaqueteUDP(idS10, dato, estado);
+    
+    ultimaVezS10 = time;
+  }
+
+  // Lectura de Sensor15
+  if(time - ultimaVezS15 >= frecuenciaS15){
+    Serial.print(time);
+    Serial.println(" - Sensor 15, al ataquer!");
+    
+    dato = "0";
+    estado = "1";
+    
+    //mandarPaqueteUDP(idS15, dato, estado);
+    
+    ultimaVezS15 = time;
+  }
+
+
+
+
+
+  //Leer de uno o varios sensores
+
+  //OBJETIVOS IMPLCITOS
+  /*
+  
+   Conectar con el servidor
+   Enviar paquetes
+   Recibir conexiones del servidor
+   Recibir paquetes
+   
+   
+   */
+   delay(1); //Para evitar que el Arduino se queme
+}
+
+void mandarPaqueteUDP(String idFisico, String dato, String estado){
+  
+    //Esto est pendiente  
+    String fecha = "123456";
+  
+  
+  
+    int hash = calcularHash("s", idFisico, dato, estado, fecha);  
+    
+    // Mandar lectura
+    String paqueteRespuesta = "s;"
+      + idFisico + ";"
+      + dato + ";"
+      + estado + ";"
+      + fecha + ";"
+      + hash;
+  
+    Udp.beginPacket(ipReceptor, puertoReceptor);
+    Udp.write(paqueteRespuesta.c_str());
+    Udp.endPacket();
+    
+    Serial.print("Enviando... ");
+   Serial.println(paqueteRespuesta);
+}
+
+int calcularHash(String tipoDispositivo, String idFisico, String dato, String estado, String fecha){
+  return (tipoDispositivo.toInt() + idFisico.toInt() + dato.toInt() + estado.toInt() + fecha.toInt());
+} 
