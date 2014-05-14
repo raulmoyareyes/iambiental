@@ -21,7 +21,7 @@ import java.util.logging.Logger;
  */
 public class Emisor {
     /**
-     * Envia un paquete a Emisor con lo necesario para reenviar al Arduino objetivo
+     * Envia un paquete al Arduino con lo necesario para hacer su acción
      * @param paquete
      * @throws Exception 
      */
