@@ -99,10 +99,10 @@ void loop(void) {
     char* estadoS = strtok_r(cadena,";", &cadena);
     int estado = atoi(estadoS);
     char* fecha = strtok_r(cadena,";", &cadena);
-    int hash = atoi(strtok_r(cadena,";", &cadena));
+    long hash = atol(strtok_r(cadena,";", &cadena));
     
     // Comprobar checksum
-    int hashCalculado = calcularHash(tipoDispositivo, idDispositivoS, datoS, estadoS, fecha);
+    long hashCalculado = calcularHash(tipoDispositivo, idDispositivoS, datoS, estadoS, fecha);
     
     
     if(hash == hashCalculado){
@@ -207,7 +207,7 @@ void mandarPaqueteUDP(String idFisico, String dato, String estado){
   
   
   
-    int hash = calcularHash("s", idFisico, dato, estado, fecha);  
+    long hash = calcularHash("s", idFisico, dato, estado, fecha);  
     
     // Mandar lectura
     String paqueteRespuesta = "s;"
@@ -225,6 +225,45 @@ void mandarPaqueteUDP(String idFisico, String dato, String estado){
    Serial.println(paqueteRespuesta);
 }
 
-int calcularHash(String tipoDispositivo, String idFisico, String dato, String estado, String fecha){
-  return (tipoDispositivo.toInt() + idFisico.toInt() + dato.toInt() + estado.toInt() + fecha.toInt());
+long calcularHash(String tipoDispositivo, String idFisico, String dato, String estado, String fecha){
+  
+  Serial.print(tipoDispositivo);
+  Serial.print(" es un ");
+  Serial.println(tipoDispositivo.toInt());
+  
+  
+  Serial.print(idFisico);
+  Serial.print(" es un ");
+  Serial.println(idFisico.toInt());
+  
+  
+  Serial.print(dato);
+  Serial.print(" es un ");
+  Serial.println(dato.toInt());
+  
+  
+  Serial.print(estado);
+  Serial.print(" es un ");
+  Serial.println(estado.toInt());
+  
+  
+  
+  Serial.print(fecha);
+  Serial.print(" es un ");
+  Serial.println(fecha.toInt());
+  
+  int a = tipoDispositivo.toInt();
+  int b = idFisico.toInt();
+  int c = dato.toInt();
+  int d = estado.toInt();
+  long e = fecha.toInt();
+  
+  //int suma = (tipoDispositivo.toInt() + idFisico.toInt() + dato.toInt() + estado.toInt() + fecha.toInt());
+  long suma = a + b + c + d + e;
+  
+  if (suma<0){
+    return -suma;
+  }else{
+    return suma;
+  }
 } 
