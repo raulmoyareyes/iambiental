@@ -115,7 +115,7 @@ public class Receptor {
     }
     
     public static void main(String[] args) throws Exception {
-        // Crea socket datagrama en el puerto 9876
+        // Crea socket datagrama en el puerto 8902
         DatagramSocket socketServidor = 
                 new DatagramSocket(8902);
         byte[] datosRecepcion = new byte[1024];
