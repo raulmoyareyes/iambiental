@@ -6,12 +6,9 @@ package es.ujaen.iambiental.emisor;
  * and open the template in the editor.
  */
 
-import java.math.BigInteger;
 import java.net.DatagramPacket;
 import java.net.DatagramSocket;
 import java.net.InetAddress;
-import java.security.MessageDigest;
-import java.security.NoSuchAlgorithmException;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
@@ -26,48 +23,15 @@ public class Emisor {
      * @throws Exception 
      */
     private static void envioActuador(String paquete, String ip, String puerto) throws Exception {
-        DatagramSocket socketActuador = new DatagramSocket(Integer.parseInt(puerto));
+        DatagramSocket socketActuador = new DatagramSocket();
         InetAddress direccionIP = InetAddress.getByName(ip);
         
         byte[] datosEnvio= new byte[1024];
         
         datosEnvio = paquete.getBytes();
-        DatagramPacket paqueteEnvio = new DatagramPacket(datosEnvio, datosEnvio.length, direccionIP, 8902);
+        DatagramPacket paqueteEnvio = 
+                new DatagramPacket(datosEnvio, datosEnvio.length, direccionIP, Integer.parseInt(puerto));
         socketActuador.send(paqueteEnvio);
-    }
-    
-    /**
-     * Función hash MD5 de 16 caracteres
-     * @param id
-     * @param dato
-     * @param estado
-     * @param fecha
-     * @param ip
-     * @param puerto
-     * @return hast en String
-     */
-    private static String hashMD5(int id, float dato, int estado, int fecha, String ip, String puerto) {
-        String hash = "";
-        
-        try {
-            String text = "a" + ";" 
-                    + String.valueOf(id) + ";" 
-                    + String.valueOf(dato) + ";" 
-                    + String.valueOf(estado) + ";" 
-                    + String.valueOf(fecha) + ";" 
-                    + ip + ";" 
-                    + puerto + ";";
-            MessageDigest msg = MessageDigest.getInstance("MD5");
-            msg.update(text.getBytes(), 0, text.length());
-            String digest1 = new BigInteger(1, msg.digest()).toString(16);
-            digest1 = digest1.substring(0, 16);
-            
-            hash = digest1;
-        } catch (NoSuchAlgorithmException ex) {
-            Logger.getLogger(Emisor.class.getName()).log(Level.SEVERE, ex.getMessage(), ex);
-        }
-        
-        return hash;
     }
     
     public static void main(String[] args) throws Exception {
@@ -84,8 +48,7 @@ public class Emisor {
         int fecha;
         String ip;
         String puerto;
-        String checksum;
-        
+        int checksum;
         
         while (true) {
             try {
@@ -94,9 +57,7 @@ public class Emisor {
 
                 // Espera a recibir algo
                 socketServidor.receive(paqueteRecepcion);
-
-                // Esperamos el mensaje con la lectura del sensor
-                socketServidor.receive(paqueteRecepcion);
+                System.out.println("Mensaje entrante en Emisor");
                 mensaje = new String(paqueteRecepcion.getData());
 
                 // Parte la cadena devuelta por Arduino que contiene varios campos
@@ -114,25 +75,20 @@ public class Emisor {
                     fecha = Integer.parseInt(splitChain[4]);
                     ip = splitChain[5];
                     puerto = splitChain[6];
-
-                    // Obtenemos el checksum en el servidor
-                    // id, dato, estado, fecha
-                    String text = "a" + ";" 
+                    
+                    // Hallamos el checksum mediante la función
+                    checksum = 0 + id + (int)dato + estado + Integer.parseInt(splitChain[4]);
+                    if (checksum<0) checksum *= -1;
+                    if (checksum == Integer.parseInt(splitChain[7].trim())) {
+                        // Acabamos de construir el paquete con el checksum 
+                        // y lo enviamos al Emisor para que se encargue
+                        // de enviarlo al Arduino
+                        String text = "a" + ";" 
                             + String.valueOf(id) + ";" 
                             + String.valueOf(dato) + ";" 
                             + String.valueOf(estado) + ";" 
                             + String.valueOf(fecha) + ";"
-                            + ip + ";" 
-                            + puerto + ";";
-
-                    // Hallamos el checksum mediante la función
-                    checksum = hashMD5(id, dato, estado, fecha, ip, puerto);
-
-                    if (checksum.equals(splitChain[7])) {
-                        // Acabamos de construir el paquete con el checksum 
-                        // y lo enviamos al Emisor para que se encargue
-                        // de enviarlo al Arduino
-                        text = text + checksum;
+                            + checksum;
                         envioActuador(text, ip, puerto);
                     } else {
                         System.out.println("Error en el checksum");
