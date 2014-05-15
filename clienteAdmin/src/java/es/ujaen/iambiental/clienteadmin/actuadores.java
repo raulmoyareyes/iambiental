@@ -81,7 +81,26 @@ public class actuadores extends HttpServlet {
                 rd.include(request, response);
                 break;
             case "/insertar": //Insertar dependencia
-                if (false) {
+                if (request.getParameter("crear") != null) {
+                    int idFisico = Integer.parseInt(request.getParameter("idFisico"));
+                    String descripcion = request.getParameter("descripcion");
+                    int idD = Integer.parseInt(request.getParameter("dependencia"));
+                    Dependencia d = null;
+                    for (int i = 0; i < dependencias.size() && d == null; i++) {
+                        Dependencia aux = mapper.convertValue(dependencias.get(i), Dependencia.class);
+                        if (aux.getId() == idD) {
+                            d = aux;
+                        }
+                    }
+                    String ip = request.getParameter("ip");
+                    String puerto = request.getParameter("puerto");
+                    int tipo = Integer.parseInt(request.getParameter("tipo"));
+
+                    recurso.path("/actuadores")
+                            .type("application/json")
+                            .put(ClientResponse.class, new Actuador(descripcion, d, ip, puerto, tipo, idFisico));
+
+                    response.sendRedirect("/clienteAdmin/actuadores");
 
                 } else {
                     request.setAttribute("actuadores", actuadores);
