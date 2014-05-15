@@ -1,38 +1,31 @@
 package es.ujaen.iambiental.modelos;
 
+import java.io.Serializable;
+import java.util.Date;
+
 /**
  *
  * @author Gabriel
  * @author Raúl Moya Reyes <www.raulmoya.es>
- * @author Vicente
  */
-public class Actuador {
+public class Actuador implements Serializable {
+
     private int id;
     private String descripcion;
-    private int dependencia;
-    private String fecha;
+    private Dependencia dependencia;
+    private Date fecha;
     private float dato;
     private String ip;
     private String puerto;
     private int estado;
-    private int tipo;
-    private int dispositivo_id;
+    private int tipo; // 1 si es interruptor, 0 si es de otra cosa. Esto hay que ver como hacerlo bien
+    private int idFisico;
 
-    public Actuador(){
-        
+    public Actuador() {
+
     }
 
-    public Actuador(int dispositivo_id, float dato, int estado, String fecha, String ip, String puerto) {
-        this.dispositivo_id = dispositivo_id;
-        this.dato = dato;
-        this.estado = estado;
-        this.fecha = fecha;  
-        this.ip = ip;
-        this.puerto = puerto;
-    }
-
-    public Actuador(int id, float dato, String descripcion, int estado, String fecha, String ip, String puerto, int dependencia, int tipo, int dispositivo_id) {
-        this.id = id;
+    public Actuador(String descripcion, Dependencia dependencia, Date fecha, float dato, String ip, String puerto, int estado, int tipo, int idFisico) {
         this.descripcion = descripcion;
         this.dependencia = dependencia;
         this.fecha = fecha;
@@ -41,30 +34,44 @@ public class Actuador {
         this.puerto = puerto;
         this.estado = estado;
         this.tipo = tipo;
-        this.dispositivo_id = dispositivo_id;
-    }    
-    
-    public int getTipo() {
-        return tipo;
+        this.idFisico = idFisico;
     }
-    
-    public void setTipo(int tipo) {
+
+    public Actuador(String descripcion, Dependencia dependencia, String ip, String puerto, int tipo, int idFisico) {
+        this.descripcion = descripcion;
+        this.dependencia = dependencia;
+        this.ip = ip;
+        this.puerto = puerto;
+        this.estado = 0;
         this.tipo = tipo;
+        this.idFisico = idFisico;
     }
-    
-    public int getID(){
+
+    public int getId() {
         return id;
     }
-    
-    public int getDispositivoId(){
-        return dispositivo_id;
-    }
-    
-    public int getDependencia() {
+
+    public Dependencia getDependencia() {
         return dependencia;
     }
 
-    public void setDependencia(int dependencia) {
+    public Date getFecha() {
+        return fecha;
+    }
+
+    public void setFecha(Date fecha) {
+        this.fecha = fecha;
+    }
+
+    public int getTipo() {
+        return tipo;
+    }
+
+    public void setTipo(int tipo) {
+        this.tipo = tipo;
+    }
+
+    public void setDependencia(Dependencia dependencia) {
         this.dependencia = dependencia;
     }
 
@@ -107,5 +114,17 @@ public class Actuador {
     public void setEstado(int estado) {
         this.estado = estado;
     }
-    
+
+    public int getIdFisico() {
+        return idFisico;
+    }
+
+    public void setIdFisico(int idFisico) {
+        this.idFisico = idFisico;
+    }
+
+    public void setDispositivo(int idFisico) {
+        this.idFisico = idFisico;
+    }
+
 }

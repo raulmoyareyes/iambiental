@@ -1,35 +1,30 @@
 package es.ujaen.iambiental.modelos;
 
+import java.io.Serializable;
+import java.util.Date;
+
 /**
  *
  * @author Raúl Moya Reyes <www.raulmoya.es>
- * @author Vicente Plaza
  */
-public class Sensor {
+public class Sensor implements Serializable {
+
     private int id;
     private String descripcion;
-    private int dependencia; //No es necesario tener un objeto dependencia.
-    private String fecha;
+    private Dependencia dependencia;
+    private Date fecha;
     private float dato;
     private String ip;
     private String puerto;
     private int estado;
-    private int tipo;
-    private int dispositivo_id;
+    private int tipo; // 1 si es temperatura, 0 si es de otra cosa. Esto hay que ver como hacerlo bien
+    private int idFisico;
 
     public Sensor() {
-
+        dependencia = new Dependencia();
     }
 
-    public Sensor(int dispositivo_id, float dato, int estado, String fecha) {
-        this.dispositivo_id = dispositivo_id;
-        this.dato = dato;
-        this.estado = estado;
-        this.fecha = fecha;        
-    }
-
-    public Sensor(int id, float dato, String descripcion, int estado, String fecha, String ip, String puerto, int dependenciak, int tipo, int dispositivo_id) {
-        this.id = id;
+    public Sensor(String descripcion, Dependencia dependencia, Date fecha, float dato, String ip, String puerto, int estado, int tipo, int idFisico) {
         this.descripcion = descripcion;
         this.dependencia = dependencia;
         this.fecha = fecha;
@@ -38,30 +33,28 @@ public class Sensor {
         this.puerto = puerto;
         this.estado = estado;
         this.tipo = tipo;
-        this.dispositivo_id = dispositivo_id;
+        this.idFisico = idFisico;
+    }
+    
+    public Sensor(String descripcion, Dependencia dependencia, String ip, String puerto, int tipo, int idFisico){
+        this.descripcion = descripcion;
+        this.dependencia = dependencia;
+        this.ip = ip;
+        this.puerto = puerto;
+        this.estado = 0;
+        this.tipo = tipo;
+        this.idFisico = idFisico;
     }
 
-    public Integer getTipo() {
-        return tipo;
-    }
-    
-    public void setTipo(int tipo) {
-        this.tipo = tipo;
-    }
-    
-    public Integer getID() {
+    public Integer getId() {
         return id;
     }
-    
-    public int getDispositivoId(){
-        return dispositivo_id;
-    }
 
-    public int getDependencia() {
+    public Dependencia getDependencia() {
         return dependencia;
     }
 
-    public void setDependencia(int dependencia) {
+    public void setDependencia(Dependencia dependencia) {
         this.dependencia = dependencia;
     }
 
@@ -103,6 +96,30 @@ public class Sensor {
 
     public void setEstado(int estado) {
         this.estado = estado;
+    }
+
+    public Date getFecha() {
+        return fecha;
+    }
+
+    public void setFecha(Date fecha) {
+        this.fecha = fecha;
+    }
+
+    public int getTipo() {
+        return tipo;
+    }
+
+    public void setTipo(int tipo) {
+        this.tipo = tipo;
+    }
+
+    public int getIdFisico() {
+        return idFisico;
+    }
+
+    public void setIdFisico(int idFisico) {
+        this.idFisico = idFisico;
     }
     
 }

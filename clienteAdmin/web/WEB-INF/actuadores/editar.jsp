@@ -52,8 +52,8 @@
                     <label for="selectTipoSensor" class="col-sm-2 control-label">Tipo</label>
                     <div class="col-sm-10">
                         <select class="form-control" name="tipo" id="selectTipoSensor">
-                            <option value="0" ${(sensor.tipo==0)?'selected="selected"':''}>Otro</option>
-                            <option value="1" ${(sensor.tipo==1)?'selected="selected"':''}>Interruptor</option>
+                            <option value="0" ${(actuador.tipo==0)?'selected="selected"':''}>Otro</option>
+                            <option value="1" ${(actuador.tipo==1)?'selected="selected"':''}>Interruptor</option>
                         </select>
                     </div>
                 </div>

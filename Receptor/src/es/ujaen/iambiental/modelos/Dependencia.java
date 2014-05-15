@@ -1,4 +1,4 @@
-package es.ujaen.iambiental.clienteuso.modelos;
+package es.ujaen.iambiental.modelos;
 
 import java.io.Serializable;
 

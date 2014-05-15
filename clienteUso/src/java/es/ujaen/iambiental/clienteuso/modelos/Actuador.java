@@ -3,14 +3,13 @@ package es.ujaen.iambiental.clienteuso.modelos;
 import java.io.Serializable;
 import java.util.Date;
 
-
 /**
  *
  * @author Gabriel
  * @author Raúl Moya Reyes <www.raulmoya.es>
  */
 public class Actuador implements Serializable {
-    
+
     private int id;
     private String descripcion;
     private Dependencia dependencia;
@@ -19,13 +18,14 @@ public class Actuador implements Serializable {
     private String ip;
     private String puerto;
     private int estado;
-    private int tipo; // 1 si es interruptor, 0 si es potenciometro. Esto hay que ver como hacerlo bien 
+    private int tipo; // 1 si es interruptor, 0 si es de otra cosa. Esto hay que ver como hacerlo bien
+    private int idFisico;
 
-    public Actuador(){
-        
+    public Actuador() {
+
     }
 
-    public Actuador(String descripcion, Dependencia dependencia, Date fecha, float dato, String ip, String puerto, int estado) {
+    public Actuador(String descripcion, Dependencia dependencia, Date fecha, float dato, String ip, String puerto, int estado, int tipo, int idFisico) {
         this.descripcion = descripcion;
         this.dependencia = dependencia;
         this.fecha = fecha;
@@ -33,12 +33,24 @@ public class Actuador implements Serializable {
         this.ip = ip;
         this.puerto = puerto;
         this.estado = estado;
-    }    
-    
-    public int getId(){
+        this.tipo = tipo;
+        this.idFisico = idFisico;
+    }
+
+    public Actuador(String descripcion, Dependencia dependencia, String ip, String puerto, int tipo, int idFisico) {
+        this.descripcion = descripcion;
+        this.dependencia = dependencia;
+        this.ip = ip;
+        this.puerto = puerto;
+        this.estado = 0;
+        this.tipo = tipo;
+        this.idFisico = idFisico;
+    }
+
+    public int getId() {
         return id;
     }
-    
+
     public Dependencia getDependencia() {
         return dependencia;
     }
@@ -102,5 +114,17 @@ public class Actuador implements Serializable {
     public void setEstado(int estado) {
         this.estado = estado;
     }
-    
+
+    public int getIdFisico() {
+        return idFisico;
+    }
+
+    public void setIdFisico(int idFisico) {
+        this.idFisico = idFisico;
+    }
+
+    public void setDispositivo(int idFisico) {
+        this.idFisico = idFisico;
+    }
+
 }

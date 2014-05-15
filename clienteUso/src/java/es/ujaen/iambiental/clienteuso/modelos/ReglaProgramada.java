@@ -27,7 +27,7 @@ public class ReglaProgramada implements Serializable {
         this.actuador = actuador;
     }
 
-    public int getID() {
+    public int getId() {
         return id;
     }
 
