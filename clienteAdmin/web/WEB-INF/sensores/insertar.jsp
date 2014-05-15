@@ -10,6 +10,13 @@
             <form class="form-horizontal" role="form">
 
                 <div class="form-group">
+                    <label for="inputIdFisicoSensor" class="col-sm-2 control-label">Id físico</label>
+                    <div class="col-sm-10">
+                        <input type="text" name="idFisico" class="form-control" id="inputIdFisicoSensor" placeholder="Id físico del actuador"/>
+                    </div>
+                </div>
+                    
+                <div class="form-group">
                     <label for="inputDescripcionSensor" class="col-sm-2 control-label">Descripción</label>
                     <div class="col-sm-10">
                         <input type="text" name="descripcion" class="form-control" id="inputDescripcionSensor" placeholder="Descripción del actuador"/>
@@ -45,8 +52,8 @@
                     <label for="selectTipoSensor" class="col-sm-2 control-label">Tipo</label>
                     <div class="col-sm-10">
                         <select class="form-control" name="tipo" id="selectTipoSensor">
-                            <option value="0">Analógico</option>
-                            <option value="1">Digital</option>
+                            <option value="0">Otro</option>
+                            <option value="1">Temperatura</option>
                         </select>
                     </div>
                 </div>

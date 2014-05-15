@@ -9,13 +9,9 @@ import com.sun.jersey.api.client.Client;
 import com.sun.jersey.api.client.ClientResponse;
 import com.sun.jersey.api.client.WebResource;
 import com.sun.jersey.api.client.config.DefaultClientConfig;
-import es.ujaen.iambiental.modelos.Actuador;
 import es.ujaen.iambiental.modelos.Dependencia;
-import es.ujaen.iambiental.modelos.Dispositivo;
 import es.ujaen.iambiental.modelos.Sensor;
 import java.io.IOException;
-import java.io.PrintWriter;
-import java.util.ArrayList;
 import java.util.List;
 import javax.servlet.RequestDispatcher;
 import javax.servlet.ServletException;
@@ -55,7 +51,7 @@ public class sensores extends HttpServlet {
 
         //Pathinfo
         String action = (request.getPathInfo() != null ? request.getPathInfo() : "");
-        
+
         // Mapeador
         ObjectMapper mapper = new ObjectMapper();
 
@@ -64,18 +60,14 @@ public class sensores extends HttpServlet {
         defaultClientConfig.getClasses().add(JacksonJsonProvider.class);
         Client cliente = Client.create(defaultClientConfig);
         WebResource recurso = cliente.resource("http://localhost:8084/servidorWeb/recursos");
-                
+
         // Dependencias
         ClientResponse responseJSOND = recurso.path("/dependencias").accept("application/json").get(ClientResponse.class);
         List<Dependencia> dependencias = responseJSOND.getEntity(List.class);
-        
+
         // Sensores
         ClientResponse responseJSONS = recurso.path("/sensores").accept("application/json").get(ClientResponse.class);
         List<Sensor> sensores = responseJSONS.getEntity(List.class);
-        
-        // Dispositivos
-        ClientResponse responseJSONDIS = recurso.path("/dispositivos").accept("application/json").get(ClientResponse.class);
-        List<Dispositivo> dispositivos = responseJSONS.getEntity(List.class);
 
         //Cabecera
         request.setAttribute("mainMenuOption", "sensores");
@@ -85,46 +77,32 @@ public class sensores extends HttpServlet {
         //Cuerpo
         switch (action) {
             case "/listado":
-            default: //Ninguna opción seleccionada
-                request.setAttribute("sensores", sensores);
-                rd = request.getRequestDispatcher("/WEB-INF/sensores/index.jsp");
-                rd.include(request, response);
-                rd = request.getRequestDispatcher("/WEB-INF/sensores/modalEliminar.jsp");
-                rd.include(request, response);
-                break;
+
             case "/insertar": //Insertar sensor
-                if(request.getParameter("crear") != null){
+                if (request.getParameter("crear") != null) {
+                    int idFisico = Integer.parseInt(request.getParameter("idFisico"));
                     String descripcion = request.getParameter("descripcion");
-                    int id = Integer.parseInt(request.getParameter("dependencia.id"));
-                    Dependencia d = new Dependencia();
-                    for (int i = 0; i < dependencias.size(); i++) {
+                    int idD = Integer.parseInt(request.getParameter("dependencia"));
+                    Dependencia d = null;
+                    for (int i = 0; i < dependencias.size() && d == null; i++) {
                         Dependencia aux = mapper.convertValue(dependencias.get(i), Dependencia.class);
-                        if (aux.getId() == id) {
+                        if (aux.getId() == idD) {
                             d = aux;
-                        }
-                    }
-                    id = Integer.parseInt(request.getParameter("dispositivo.id"));
-                    Dispositivo dis = new Dispositivo();
-                    for (int i = 0; i < dispositivos.size(); i++) {
-                        Dispositivo aux = mapper.convertValue(dispositivos.get(i), Dispositivo.class);
-                        if (aux.getId() == id) {
-                            dis = aux;
                         }
                     }
                     String ip = request.getParameter("ip");
                     String puerto = request.getParameter("puerto");
                     int tipo = Integer.parseInt(request.getParameter("tipo"));
-                    
-                    
+
                     recurso.path("/sensores")
-                                .type("application/json")
-                                .put(ClientResponse.class, new Sensor(descripcion, d, ip, puerto, tipo, dis));
-                    
+                            .type("application/json")
+                            .put(ClientResponse.class, new Sensor(descripcion, d, ip, puerto, tipo, idFisico));
+
                     response.sendRedirect("/clienteAdmin/sensores");
-                }else{
+                } else {
                     request.setAttribute("sensores", sensores);
                     request.setAttribute("dependencias", dependencias);
-                    
+
                     rd = request.getRequestDispatcher("/WEB-INF/sensores/insertar.jsp");
                     rd.include(request, response);
                 }
@@ -160,36 +138,66 @@ public class sensores extends HttpServlet {
                 response.sendRedirect("/clienteAdmin/sensores");
                 break;
             case "/editar": //Editar sensor
-//                if (request.getParameter("modificar") != null) {
-//                    id = Integer.parseInt(request.getParameter("modificar"));
-//                    String descripcion = request.getParameter("descripcion");
-//                    //Recoger dependencia
-//                    Dependencia dependencia =;
-//                    String ip = request.getParameter("ip");
-//                    String puerto = request.getParameter("puerto");
-//
-//                    recurso.path("/sensores/" + id)
-//                            .type("application/json")
-//                            .post(ClientResponse.class, new Sensor(descripcion, dependencia, ip, puerto));
-//
-//                    response.sendRedirect("/clienteAdmin/sensores");
-//                } else {
-//                    request.setAttribute("sensores", sensores);
-//                    s = new Sensor();
-//                    id = Integer.parseInt(request.getParameter("id"));
-//                    for (int i = 0; i < dependencias.size(); i++) {
-//                        Sensor aux = mapper.convertValue(sensores.get(i), Sensor.class);
-//                        if (aux.getId() == id) {
-//                            s = aux;
-//                        }
-//                    }
-//                    request.setAttribute("sensor", s);
-//                    rd = request.getRequestDispatcher("/WEB-INF/sensores/editar.jsp");
-//                    rd.include(request, response);
-//                    rd = request.getRequestDispatcher("/WEB-INF/sensores/modalEliminar.jsp");
-//                    rd.include(request, response);
-//                }
-//                break;
+                if (request.getParameter("modificar") != null) {
+                    id = Integer.parseInt(request.getParameter("modificar"));
+                    int idFisico = Integer.parseInt(request.getParameter("idFisico"));
+                    String descripcion = request.getParameter("descripcion");
+                    int idD = Integer.parseInt(request.getParameter("dependencia"));
+                    Dependencia d = null;
+                    for (int i = 0; i < dependencias.size() && d == null; i++) {
+                        Dependencia aux = mapper.convertValue(dependencias.get(i), Dependencia.class);
+                        if (aux.getId() == idD) {
+                            d = aux;
+                        }
+                    }
+                    String ip = request.getParameter("ip");
+                    String puerto = request.getParameter("puerto");
+                    int tipo = Integer.parseInt(request.getParameter("tipo"));
+
+                    s = null;
+                    for (int i = 0; i < sensores.size() && s == null; i++) {
+                        Sensor aux = mapper.convertValue(sensores.get(i), Sensor.class);
+                        if (aux.getId() == id) {
+                            s = aux;
+                        }
+                    }
+                    s.setDescripcion(descripcion);
+                    s.setDependencia(d);
+                    s.setIp(ip);
+                    s.setPuerto(puerto);
+                    s.setIdFisico(idFisico);
+                    s.setTipo(tipo);
+
+                    recurso.path("/sensores/" + id)
+                            .type("application/json")
+                            .post(ClientResponse.class, s);
+
+                    response.sendRedirect("/clienteAdmin/sensores");
+                } else {
+                    request.setAttribute("sensores", sensores);
+                    request.setAttribute("dependencias", dependencias);
+                    s = new Sensor();
+                    id = Integer.parseInt(request.getParameter("id"));
+                    for (int i = 0; i < sensores.size(); i++) {
+                        Sensor aux = mapper.convertValue(sensores.get(i), Sensor.class);
+                        if (aux.getId() == id) {
+                            s = aux;
+                        }
+                    }
+                    request.setAttribute("sensor", s);
+                    rd = request.getRequestDispatcher("/WEB-INF/sensores/editar.jsp");
+                    rd.include(request, response);
+                    rd = request.getRequestDispatcher("/WEB-INF/sensores/modalEliminar.jsp");
+                    rd.include(request, response);
+                }
+                break;
+            default: //Ninguna opción seleccionada
+                request.setAttribute("sensores", sensores);
+                rd = request.getRequestDispatcher("/WEB-INF/sensores/index.jsp");
+                rd.include(request, response);
+                rd = request.getRequestDispatcher("/WEB-INF/sensores/modalEliminar.jsp");
+                rd.include(request, response);
+                break;
         }
 
         //Footer

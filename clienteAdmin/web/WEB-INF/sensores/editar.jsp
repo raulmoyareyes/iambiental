@@ -10,6 +10,13 @@
             <form class="form-horizontal" role="form">
 
                 <div class="form-group">
+                    <label for="inputIdFisicoSensor" class="col-sm-2 control-label">Id físico</label>
+                    <div class="col-sm-10">
+                        <input type="text" name="idFisico" class="form-control" id="inputIdFisicoSensor" placeholder="Id físico del actuador" value="${sensor.idFisico}"/>
+                    </div>
+                </div>
+
+                <div class="form-group">
                     <label for="inputDescripcionSensor" class="col-sm-2 control-label">Descripción</label>
                     <div class="col-sm-10">
                         <input type="text" name="descripcion" class="form-control" id="inputDescripcionSensor" placeholder="Descripción del actuador" value="${sensor.descripcion}"/>
@@ -21,7 +28,7 @@
                     <div class="col-sm-10">
                         <select class="form-control" name="dependencia" id="selectDependenciaSensor">
                             <c:forEach var="d" items="${dependencias}" varStatus="estado">
-                                <option value="${d.id}" ${(d.id==sensor.dependencia)?'selected="selected"':''}>${d.nombre}</option>
+                                <option value="${d.id}" ${(d.id==sensor.dependencia.id)?'selected="selected"':''}>${d.nombre}</option>
                             </c:forEach>
                         </select>
                     </div>
@@ -40,10 +47,20 @@
                         <input type="text" name="puerto" class="form-control" id="inputPuertoSensor" placeholder="Puerto (0-65534)" value="${sensor.puerto}"/>
                     </div>
                 </div>
-                
+
+                <div class="form-group">
+                    <label for="selectTipoSensor" class="col-sm-2 control-label">Tipo</label>
+                    <div class="col-sm-10">
+                        <select class="form-control" name="tipo" id="selectTipoSensor">
+                            <option value="0" ${(sensor.tipo==0)?'selected="selected"':''}>Otro</option>
+                            <option value="1" ${(sensor.tipo==1)?'selected="selected"':''}>Temperatura</option>
+                        </select>
+                    </div>
+                </div>
+
                 <div class="form-group">
                     <div class="col-sm-offset-2 col-sm-10">
-                        <button type="submit" name="modificar" class="btn btn-success">Guardar</button>
+                        <button type="submit" name="modificar" class="btn btn-success" value="${sensor.id}">Guardar</button>
                         <a href="${appUrl}/sensores" rol="button" class="btn btn-danger">Cancelar</a>
                     </div>
                 </div>

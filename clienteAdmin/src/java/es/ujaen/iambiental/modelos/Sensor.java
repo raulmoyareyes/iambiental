@@ -16,7 +16,7 @@ public class Sensor implements Serializable {
     private float dato;
     private String ip;
     private String puerto;
-    private int estado; //para que era??
+    private int estado;
     private int tipo; // 1 si es temperatura, 0 si es de otra cosa. Esto hay que ver como hacerlo bien
     private int idFisico;
 
