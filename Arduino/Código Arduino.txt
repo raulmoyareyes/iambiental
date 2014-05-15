@@ -6,6 +6,7 @@
 #include <Ethernet.h>
 #include <EthernetUdp.h>
 #include <MD5.h>
+#include <OneWire.h>
 
 // Aumentar el tamaño del paquete UDP
 #define UDP_TX_PACKET_MAX_SIZE 128 //Por defecto, 24 bytes
@@ -19,8 +20,8 @@ int dependenciaLocal = 88;              // Dependencia
 int tipoLocal = 99;                     // Tipo
 
 // Datos Receptor
-IPAddress ipReceptor(192, 168, 9, 177);    // IP
-unsigned int puertoReceptor = 8902;       // Puerto
+IPAddress ipReceptor(192, 168, 9, 203);    // IP
+unsigned int puertoReceptor = 8888;       // Puerto
 
 // Instancia UDP
 EthernetUDP Udp;
@@ -35,6 +36,7 @@ unsigned long time; // Cuidado con hacer operaciones con otros tipos que no sean
 unsigned long frecuenciaS10 = 1000 * 1;  // Frecuencia de la lectura del sensor
 unsigned long ultimaVezS10 = 0;          // Instante de la ultima lectura de S10
 String  idS10 = "10010";                 // Codigo unico de este sensor
+OneWire  ds(3);                          // Pin 3 sensor de temperatura
 
 //Sensor15
 unsigned long frecuenciaS15 = 1000 * 3;  // Frecuencia de la lectura del sensor
@@ -52,7 +54,7 @@ int idActuador20 = 20;
 
 // Otras variables
 
-String dato;
+char dato[10];
 String estado;
 
 
@@ -71,6 +73,14 @@ void setup(void) {
 }
 
 void loop(void) {
+  
+  byte i;
+  byte present = 0;
+  byte type_s;
+  byte data[12];
+  byte addr[8];
+  float celsius; //, fahrenheit;
+  
   // Tiempo actual
   time = millis();
   
@@ -85,7 +95,8 @@ void loop(void) {
 
     Serial.print(time);
     Serial.print(" ");
-    Serial.println(packetBuffer);
+    Serial.print(packetBuffer);
+    Serial.println("------------------------------------");
 
     // PARTIR STRING POR ";"
     char* cadena = packetBuffer;
@@ -99,7 +110,7 @@ void loop(void) {
     char* estadoS = strtok_r(cadena,";", &cadena);
     int estado = atoi(estadoS);
     char* fecha = strtok_r(cadena,";", &cadena);
-    long hash = atol(strtok_r(cadena,";", &cadena));
+    long hash = atoi(strtok_r(cadena,";", &cadena));
     
     // Comprobar checksum
     long hashCalculado = calcularHash(tipoDispositivo, idDispositivoS, datoS, estadoS, fecha);
@@ -160,10 +171,67 @@ void loop(void) {
     Serial.print(time);
     Serial.println(" - Sensor 10, al ataquer!");
     
-    dato = "25.6";
+    
+    
+    
+    
+  if ( !ds.search(addr)) {
+    Serial.println("No more addresses.");
+    Serial.println();
+    ds.reset_search();
+    //delay(150); //250 por defecto
+    return;
+  }
+
+  ds.reset();
+  ds.select(addr);
+  ds.write(0x44, 1);        // start conversion, with parasite power on at the end
+    
+  delay(750);     // maybe 750ms is enough, maybe not
+    
+  
+  present = ds.reset();
+  ds.select(addr);    
+  ds.write(0xBE);         // Read Scratchpad
+    
+  for ( i = 0; i < 9; i++) {           // we need 9 bytes
+    data[i] = ds.read();
+  }
+    
+  int16_t raw = (data[1] << 8) | data[0];
+  if (type_s) {
+    raw = raw << 3; // 9 bit resolution default
+    if (data[7] == 0x10) {
+      // "count remain" gives full 12 bit resolution
+      raw = (raw & 0xFFF0) + 12 - data[6];
+    }
+  } else {
+    byte cfg = (data[4] & 0x60);
+    // at lower res, the low bits are undefined, so let's zero them
+    if (cfg == 0x00) raw = raw & ~7;  // 9 bit resolution, 93.75 ms
+    else if (cfg == 0x20) raw = raw & ~3; // 10 bit res, 187.5 ms
+    else if (cfg == 0x40) raw = raw & ~1; // 11 bit res, 375 ms
+    //// default is 12 bit resolution, 750 ms conversion time
+  }
+    //itoa(temp,val1,10);
+    
+    
+    //dato = itoa((int)raw / 16.0);
+    //itoa(raw/16,dato,10);
+    
+    
+    dtostrf((float)raw / 16.0, 3, 1, dato);
+    
+    
+    Serial.println((float)raw / 16.0);
+    
+    
+    
+    
+    //dato = "25.6";
     estado = "0";
     
-    //mandarPaqueteUDP(idS10, dato, estado);
+    mandarPaqueteUDP(idS10, dato, estado);
     
     ultimaVezS10 = time;
   }
@@ -173,7 +241,8 @@ void loop(void) {
     Serial.print(time);
     Serial.println(" - Sensor 15, al ataquer!");
     
-    dato = "0";
+    dato[0] = '0';
+    dato[1] = '\0';
     estado = "1";
     
     //mandarPaqueteUDP(idS15, dato, estado);
