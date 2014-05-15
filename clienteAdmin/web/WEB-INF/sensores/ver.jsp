@@ -10,6 +10,13 @@
             <form class="form-horizontal" role="form">
 
                 <div class="form-group">
+                    <label for="inputPuertoSensor" class="col-sm-2 control-label">Id físico</label>
+                    <div class="col-sm-10">
+                        <p class="form-control-static">${sensor.idFisico}</p>
+                    </div>
+                </div>
+
+                <div class="form-group">
                     <label for="inputDescripcionSensor" class="col-sm-2 control-label">Descripción</label>
                     <div class="col-sm-10">
                         <p class="form-control-static">${sensor.descripcion}</p>
@@ -19,7 +26,7 @@
                 <div class="form-group">
                     <label for="selectDependenciaSensor" class="col-sm-2 control-label">Dependencia</label>
                     <div class="col-sm-10">
-                        <p class="form-control-static">${sensor.dependencia}</p>
+                        <p class="form-control-static">${sensor.dependencia.nombre}</p>
                     </div>
                 </div>
 
@@ -34,6 +41,13 @@
                     <label for="inputPuertoSensor" class="col-sm-2 control-label">Puerto</label>
                     <div class="col-sm-10">
                         <p class="form-control-static">${sensor.puerto}</p>
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <label for="inputPuertoSensor" class="col-sm-2 control-label">Tipo</label>
+                    <div class="col-sm-10">
+                        <p class="form-control-static">${sensor.tipo}</p>
                     </div>
                 </div>
 

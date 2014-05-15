@@ -4,10 +4,8 @@ import es.ujaen.iambiental.excepciones.ActuadorErrorActualizar;
 import es.ujaen.iambiental.excepciones.ActuadorErrorCambiarDependencia;
 import es.ujaen.iambiental.excepciones.ActuadorErrorEliminar;
 import es.ujaen.iambiental.excepciones.ActuadorErrorPersistir;
-import es.ujaen.iambiental.excepciones.SensorErrorCambiarDependencia;
 import es.ujaen.iambiental.modelos.Actuador;
 import es.ujaen.iambiental.modelos.Dependencia;
-import es.ujaen.iambiental.modelos.Sensor;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -145,4 +143,5 @@ public class ActuadorDAO {
             em.flush();
         }
     }
+    
 }

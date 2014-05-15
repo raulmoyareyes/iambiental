@@ -23,6 +23,11 @@ import es.ujaen.iambiental.excepciones.DependenciaErrorDatos;
 import es.ujaen.iambiental.excepciones.DependenciaErrorEliminar;
 import es.ujaen.iambiental.excepciones.DependenciaErrorPersistir;
 import es.ujaen.iambiental.excepciones.DependenciaNoEncontrada;
+import es.ujaen.iambiental.excepciones.DispositivoErrorActualizar;
+import es.ujaen.iambiental.excepciones.DispositivoErrorDatos;
+import es.ujaen.iambiental.excepciones.DispositivoErrorEliminar;
+import es.ujaen.iambiental.excepciones.DispositivoErrorPersistir;
+import es.ujaen.iambiental.excepciones.DispositivoNoEncontrado;
 import es.ujaen.iambiental.excepciones.ReglaProgramadaErrorActualizar;
 import es.ujaen.iambiental.excepciones.ReglaProgramadaErrorDatos;
 import es.ujaen.iambiental.excepciones.ReglaProgramadaErrorEliminar;
@@ -35,6 +40,7 @@ import es.ujaen.iambiental.excepciones.ReglaSensorActuadorErrorPersistir;
 import es.ujaen.iambiental.excepciones.ReglaSensorActuadorNoEncontrada;
 import es.ujaen.iambiental.excepciones.SensorErrorActualizar;
 import es.ujaen.iambiental.excepciones.SensorErrorCambiarDependencia;
+import es.ujaen.iambiental.excepciones.SensorErrorCambiarDispositivo;
 import es.ujaen.iambiental.excepciones.SensorErrorDatos;
 import es.ujaen.iambiental.excepciones.SensorErrorEliminar;
 import es.ujaen.iambiental.excepciones.SensorErrorPersistir;
@@ -181,7 +187,7 @@ public class AdminBean {
     public void modificarActuador(Actuador actuador) throws ActuadorErrorActualizar {
         actuadorDAO.actualizar(actuador);
     }
-    
+
     /**
      * Crear una tarea programada.
      *

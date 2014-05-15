@@ -50,3 +50,15 @@ function modalEliminarReglaSensorActuador(idItemEliminar, descripcionRegla) {
     $('#botonEliminarRegla').attr("href", appUrl+"reglas/eliminar?id="+idItemEliminar);
     $('#modalEliminarRegla').modal();
 }
+
+/**
+ * Mostrar modal para eliminar dispositivo
+ * @param string idItemEliminar Id del dispositivo a eliminar
+ * @param string descripcionDispositivo Descripción del dispositivo a eliminar
+ * @returns void
+ */
+function modalEliminarDispositivo(idItemEliminar, descripcionDispositivo) {
+    $('#descripcionDispositivoEliminar').text(descripcionDispositivo);
+    $('#botonEliminarDispositivo').attr("href", appUrl+"dispositivos/eliminar?id="+idItemEliminar);
+    $('#modalEliminarDispositivo').modal();
+}

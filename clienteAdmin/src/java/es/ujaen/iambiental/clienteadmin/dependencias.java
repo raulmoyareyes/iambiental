@@ -9,7 +9,6 @@ import com.sun.jersey.api.client.Client;
 import com.sun.jersey.api.client.ClientResponse;
 import com.sun.jersey.api.client.WebResource;
 import com.sun.jersey.api.client.config.DefaultClientConfig;
-import es.ujaen.iambiental.modelos.Actuador;
 import es.ujaen.iambiental.modelos.Dependencia;
 import java.io.IOException;
 import java.util.List;
@@ -82,7 +81,6 @@ public class dependencias extends HttpServlet {
                 break;
             case "/insertar": //Insertar dependencia
                 if(request.getParameter("crear") != null){
-                    // Recoger la dependencia
                     String nombre = request.getParameter("nombre");
                     String descripcion = request.getParameter("descripcion");
                     

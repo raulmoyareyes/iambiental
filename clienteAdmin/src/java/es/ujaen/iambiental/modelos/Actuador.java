@@ -19,13 +19,13 @@ public class Actuador implements Serializable {
     private String puerto;
     private int estado;
     private int tipo; // 1 si es interruptor, 0 si es de otra cosa. Esto hay que ver como hacerlo bien
-    private int dispositivo_id;
+    private int idFisico;
 
     public Actuador(){
         
     }    
 
-    public Actuador(String descripcion, Dependencia dependencia, Date fecha, float dato, String ip, String puerto, int estado, int tipo, int dispositivo_id) {
+    public Actuador(String descripcion, Dependencia dependencia, Date fecha, float dato, String ip, String puerto, int estado, int tipo, int idFisico) {
         this.descripcion = descripcion;
         this.dependencia = dependencia;
         this.fecha = fecha;
@@ -34,7 +34,17 @@ public class Actuador implements Serializable {
         this.puerto = puerto;
         this.estado = estado;
         this.tipo = tipo;
-        this.dispositivo_id = dispositivo_id;
+        this.idFisico = idFisico;
+    }
+    
+    public Actuador(String descripcion, Dependencia dependencia, String ip, String puerto, int tipo, int idFisico){
+        this.descripcion = descripcion;
+        this.dependencia = dependencia;
+        this.ip = ip;
+        this.puerto = puerto;
+        this.estado = 0;
+        this.tipo = tipo;
+        this.idFisico = idFisico;
     }
     
     public int getId(){
@@ -105,12 +115,12 @@ public class Actuador implements Serializable {
         this.estado = estado;
     }
 
-    public int getDispositivo_id() {
-        return dispositivo_id;
+    public int getIdFisico() {
+        return idFisico;
     }
 
-    public void setDispositivo_id(int dispositivo_id) {
-        this.dispositivo_id = dispositivo_id;
+    public void setDispositivo(int idFisico) {
+        this.idFisico = idFisico;
     }
     
 }
