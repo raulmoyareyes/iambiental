@@ -10,6 +10,13 @@
             <form class="form-horizontal" role="form">
 
                 <div class="form-group">
+                    <label for="inputPuertoActuador" class="col-sm-2 control-label">Id físico</label>
+                    <div class="col-sm-10">
+                        <p class="form-control-static">${actuador.idFisico}</p>
+                    </div>
+                </div>
+
+                <div class="form-group">
                     <label for="inputDescripcionActuador" class="col-sm-2 control-label">Descripción</label>
                     <div class="col-sm-10">
                         <p class="form-control-static">${actuador.descripcion}</p>
@@ -34,6 +41,13 @@
                     <label for="inputPuertoActuador" class="col-sm-2 control-label">Puerto</label>
                     <div class="col-sm-10">
                         <p class="form-control-static">${actuador.puerto}</p>
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <label for="inputTipoActuador" class="col-sm-2 control-label">Tipo</label>
+                    <div class="col-sm-10">
+                        <p class="form-control-static">${(actuador.tipo==0)?'Otro':'Interruptor'}</p>
                     </div>
                 </div>
 

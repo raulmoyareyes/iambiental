@@ -1,8 +1,3 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
 package es.ujaen.iambiental.clienteadmin;
 
 import com.sun.jersey.api.client.Client;
@@ -24,6 +19,7 @@ import org.codehaus.jackson.map.ObjectMapper;
 /**
  * 
  * @author Agustín Ruiz Linares <www.agustruiz.es>
+ * @author Raúl Moya Reyes <www.raulmoya.com>
  */
 @WebServlet(name = "dependencias", urlPatterns = {"/dependencias/*"})
 public class dependencias extends HttpServlet {
@@ -98,8 +94,8 @@ public class dependencias extends HttpServlet {
             case "/ver": //Ver dependencia
                 request.setAttribute("dependencias", dependencias);
                 int id = Integer.parseInt(request.getParameter("id"));
-                Dependencia d = new Dependencia();
-                for (int i = 0; i < dependencias.size(); i++) {
+                Dependencia d = null;
+                for (int i = 0; i < dependencias.size() && d==null; i++) {
                         Dependencia aux = mapper.convertValue(dependencias.get(i), Dependencia.class);
                         if (aux.getId() == id) {
                             d = aux;
@@ -114,7 +110,7 @@ public class dependencias extends HttpServlet {
             case "/eliminar": //Dependencia eliminada
                 int idEliminar = Integer.parseInt(request.getParameter("id"));
                 d = new Dependencia();
-                for (int i = 0; i < dependencias.size(); i++) {
+                for (int i = 0; i < dependencias.size() && d==null; i++) {
                     Dependencia aux = mapper.convertValue(dependencias.get(i), Dependencia.class);
                     if (aux.getId() == idEliminar) {
                         d = aux;
@@ -138,9 +134,9 @@ public class dependencias extends HttpServlet {
                     response.sendRedirect("/clienteAdmin/dependencias");
                 } else {
                     request.setAttribute("dependencias", dependencias);
-                    d = new Dependencia();
+                    d = null;
                     id = Integer.parseInt(request.getParameter("id"));
-                    for (int i = 0; i < dependencias.size(); i++) {
+                    for (int i = 0; i < dependencias.size() && d==null; i++) {
                         Dependencia aux = mapper.convertValue(dependencias.get(i), Dependencia.class);
                         if (aux.getId() == id) {
                             d = aux;

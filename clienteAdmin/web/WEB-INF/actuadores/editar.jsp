@@ -10,16 +10,23 @@
             <form class="form-horizontal" role="form">
 
                 <div class="form-group">
+                    <label for="inputIdFisicoActuador" class="col-sm-2 control-label">Id físico</label>
+                    <div class="col-sm-10">
+                        <input type="text" name="idFisico" class="form-control" id="inputIdFisicoActuador" placeholder="Id físico del actuador" value="${actuador.idFisico}"/>
+                    </div>
+                </div>
+
+                <div class="form-group">
                     <label for="inputDescripcionActuador" class="col-sm-2 control-label">Descripción</label>
                     <div class="col-sm-10">
-                        <input type="text" name="descripcionActuador" class="form-control" id="inputDescripcionActuador" placeholder="Descripción del actuador" value="${actuador.descripcion}"/>
+                        <input type="text" name="descripcion" class="form-control" id="inputDescripcionActuador" placeholder="Descripción del actuador" value="${actuador.descripcion}"/>
                     </div>
                 </div>
 
                 <div class="form-group">
                     <label for="selectDependenciaActuador" class="col-sm-2 control-label">Dependencia</label>
                     <div class="col-sm-10">
-                        <select class="form-control" name="dependenciaActuador" id="selectDependenciaActuador">
+                        <select class="form-control" name="dependencia" id="selectDependenciaActuador">
                             <c:forEach var="d" items="${dependencias}" varStatus="estado">
                                 <option value="${d.id}" ${(d.id==actuador.dependencia.id)?'selected="selected"':''}>${d.nombre}</option>
                             </c:forEach>
@@ -30,17 +37,27 @@
                 <div class="form-group">
                     <label for="inputIpActuador" class="col-sm-2 control-label">Dirección IP</label>
                     <div class="col-sm-10">
-                        <input type="text" name="ipActuador" class="form-control" id="inputIpActuador" placeholder="Dirección IP (xxx.xxx.xxx.xxx)" value="${actuador.ip}"/>
+                        <input type="text" name="ip" class="form-control" id="inputIpActuador" placeholder="Dirección IP (xxx.xxx.xxx.xxx)" value="${actuador.ip}"/>
                     </div>
                 </div>
 
                 <div class="form-group">
                     <label for="inputPuertoActuador" class="col-sm-2 control-label">Puerto</label>
                     <div class="col-sm-10">
-                        <input type="text" name="puertoActuador" class="form-control" id="inputPuertoActuador" placeholder="Puerto (0-65534)" value="${actuador.puerto}"/>
+                        <input type="text" name="puerto" class="form-control" id="inputPuertoActuador" placeholder="Puerto (0-65534)" value="${actuador.puerto}"/>
                     </div>
                 </div>
-                
+
+                <div class="form-group">
+                    <label for="selectTipoSensor" class="col-sm-2 control-label">Tipo</label>
+                    <div class="col-sm-10">
+                        <select class="form-control" name="tipo" id="selectTipoSensor">
+                            <option value="0" ${(sensor.tipo==0)?'selected="selected"':''}>Otro</option>
+                            <option value="1" ${(sensor.tipo==1)?'selected="selected"':''}>Interruptor</option>
+                        </select>
+                    </div>
+                </div>
+
                 <div class="form-group">
                     <div class="col-sm-offset-2 col-sm-10">
                         <button type="submit" class="btn btn-success" name="modificar" value="${actuador.id}">Guardar</button>
