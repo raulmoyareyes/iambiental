@@ -45,9 +45,9 @@
                 </div>
 
                 <div class="form-group">
-                    <label for="inputPuertoSensor" class="col-sm-2 control-label">Tipo</label>
+                    <label for="inputTipoSensor" class="col-sm-2 control-label">Tipo</label>
                     <div class="col-sm-10">
-                        <p class="form-control-static">${sensor.tipo}</p>
+                        <p class="form-control-static">${(sensor.tipo==0)?'Otro':'Temperatura'}</p>
                     </div>
                 </div>
 

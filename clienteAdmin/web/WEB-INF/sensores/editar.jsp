@@ -12,7 +12,7 @@
                 <div class="form-group">
                     <label for="inputIdFisicoSensor" class="col-sm-2 control-label">Id físico</label>
                     <div class="col-sm-10">
-                        <input type="text" name="idFisico" class="form-control" id="inputIdFisicoSensor" placeholder="Id físico del actuador" value="${sensor.idFisico}"/>
+                        <input type="text" name="idFisico" class="form-control" id="inputIdFisicoSensor" placeholder="Id físico del sensor" value="${sensor.idFisico}"/>
                     </div>
                 </div>
 

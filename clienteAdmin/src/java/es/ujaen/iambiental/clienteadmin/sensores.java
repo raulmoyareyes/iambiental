@@ -1,8 +1,3 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
 package es.ujaen.iambiental.clienteadmin;
 
 import com.sun.jersey.api.client.Client;
@@ -25,6 +20,7 @@ import org.codehaus.jackson.map.ObjectMapper;
 /**
  *
  * @author Agustín Ruiz Linares <www.agustruiz.es>
+ * @author Raúl Moya Reyes <www.raulmoya.com>
  */
 @WebServlet(name = "sensores", urlPatterns = {"/sensores/*"})
 public class sensores extends HttpServlet {
@@ -77,6 +73,13 @@ public class sensores extends HttpServlet {
         //Cuerpo
         switch (action) {
             case "/listado":
+            default: //Ninguna opción seleccionada
+                request.setAttribute("sensores", sensores);
+                rd = request.getRequestDispatcher("/WEB-INF/sensores/index.jsp");
+                rd.include(request, response);
+                rd = request.getRequestDispatcher("/WEB-INF/sensores/modalEliminar.jsp");
+                rd.include(request, response);
+                break;
 
             case "/insertar": //Insertar sensor
                 if (request.getParameter("crear") != null) {
@@ -110,8 +113,8 @@ public class sensores extends HttpServlet {
             case "/ver": //Ver sensor
                 request.setAttribute("sensores", sensores);
                 int id = Integer.parseInt(request.getParameter("id"));
-                Sensor s = new Sensor();
-                for (int i = 0; i < sensores.size(); i++) {
+                Sensor s = null;
+                for (int i = 0; i < sensores.size() && s == null; i++) {
                     Sensor aux = mapper.convertValue(sensores.get(i), Sensor.class);
                     if (aux.getId() == id) {
                         s = aux;
@@ -125,8 +128,8 @@ public class sensores extends HttpServlet {
                 break;
             case "/eliminar": //Sensor eliminado
                 int idEliminar = Integer.parseInt(request.getParameter("id"));
-                s = new Sensor();
-                for (int i = 0; i < sensores.size(); i++) {
+                s = null;
+                for (int i = 0; i < sensores.size() && s == null; i++) {
                     Sensor aux = mapper.convertValue(sensores.get(i), Sensor.class);
                     if (aux.getId() == idEliminar) {
                         s = aux;
@@ -176,9 +179,9 @@ public class sensores extends HttpServlet {
                 } else {
                     request.setAttribute("sensores", sensores);
                     request.setAttribute("dependencias", dependencias);
-                    s = new Sensor();
+                    s = null;
                     id = Integer.parseInt(request.getParameter("id"));
-                    for (int i = 0; i < sensores.size(); i++) {
+                    for (int i = 0; i < sensores.size() && s == null; i++) {
                         Sensor aux = mapper.convertValue(sensores.get(i), Sensor.class);
                         if (aux.getId() == id) {
                             s = aux;
@@ -190,13 +193,6 @@ public class sensores extends HttpServlet {
                     rd = request.getRequestDispatcher("/WEB-INF/sensores/modalEliminar.jsp");
                     rd.include(request, response);
                 }
-                break;
-            default: //Ninguna opción seleccionada
-                request.setAttribute("sensores", sensores);
-                rd = request.getRequestDispatcher("/WEB-INF/sensores/index.jsp");
-                rd.include(request, response);
-                rd = request.getRequestDispatcher("/WEB-INF/sensores/modalEliminar.jsp");
-                rd.include(request, response);
                 break;
         }
 

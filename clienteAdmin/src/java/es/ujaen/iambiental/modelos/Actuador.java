@@ -9,7 +9,7 @@ import java.util.Date;
  * @author Raúl Moya Reyes <www.raulmoya.es>
  */
 public class Actuador implements Serializable {
-    
+
     private int id;
     private String descripcion;
     private Dependencia dependencia;
@@ -21,9 +21,9 @@ public class Actuador implements Serializable {
     private int tipo; // 1 si es interruptor, 0 si es de otra cosa. Esto hay que ver como hacerlo bien
     private int idFisico;
 
-    public Actuador(){
-        
-    }    
+    public Actuador() {
+
+    }
 
     public Actuador(String descripcion, Dependencia dependencia, Date fecha, float dato, String ip, String puerto, int estado, int tipo, int idFisico) {
         this.descripcion = descripcion;
@@ -36,8 +36,8 @@ public class Actuador implements Serializable {
         this.tipo = tipo;
         this.idFisico = idFisico;
     }
-    
-    public Actuador(String descripcion, Dependencia dependencia, String ip, String puerto, int tipo, int idFisico){
+
+    public Actuador(String descripcion, Dependencia dependencia, String ip, String puerto, int tipo, int idFisico) {
         this.descripcion = descripcion;
         this.dependencia = dependencia;
         this.ip = ip;
@@ -46,11 +46,11 @@ public class Actuador implements Serializable {
         this.tipo = tipo;
         this.idFisico = idFisico;
     }
-    
-    public int getId(){
+
+    public int getId() {
         return id;
     }
-    
+
     public Dependencia getDependencia() {
         return dependencia;
     }
@@ -119,8 +119,12 @@ public class Actuador implements Serializable {
         return idFisico;
     }
 
+    public void setIdFisico(int idFisico) {
+        this.idFisico = idFisico;
+    }
+
     public void setDispositivo(int idFisico) {
         this.idFisico = idFisico;
     }
-    
+
 }

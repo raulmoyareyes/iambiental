@@ -20,6 +20,7 @@ import org.codehaus.jackson.map.ObjectMapper;
 /**
  *
  * @author agustin
+ * @author Raúl Moya Reyes <www.raulmoya.com>
  */
 @WebServlet(name = "actuadores", urlPatterns = {"/actuadores/*"})
 public class actuadores extends HttpServlet {
@@ -82,10 +83,6 @@ public class actuadores extends HttpServlet {
             case "/insertar": //Insertar dependencia
                 if (false) {
 
-                    // Recoger el actuador
-//                recurso.path("/actuadores/" + id)
-//                            .type("application/json")
-//                            .put(ClientResponse.class, new Actuador());
                 } else {
                     request.setAttribute("actuadores", actuadores);
                     request.setAttribute("dependencias", dependencias);
@@ -96,8 +93,8 @@ public class actuadores extends HttpServlet {
             case "/ver": //Ver dependencia
                 request.setAttribute("actuadores", actuadores);
                 int id = Integer.parseInt(request.getParameter("id"));
-                Actuador a = new Actuador();
-                for (int i = 0; i < actuadores.size(); i++) { // no cambiar al for-loop
+                Actuador a = null;
+                for (int i = 0; i < actuadores.size() && a == null; i++) { // no cambiar al for-loop
                     Actuador aux = mapper.convertValue(actuadores.get(i), Actuador.class);
                     if (aux.getId() == id) {
                         a = aux;
@@ -111,8 +108,8 @@ public class actuadores extends HttpServlet {
                 break;
             case "/eliminar": //Dependencia eliminada
                 id = Integer.parseInt(request.getParameter("id"));
-                a = new Actuador();
-                for (int i = 0; i < actuadores.size(); i++) { // no cambiar al for-loop
+                a = null;
+                for (int i = 0; i < actuadores.size() && a == null; i++) { // no cambiar al for-loop
                     Actuador aux = mapper.convertValue(actuadores.get(i), Actuador.class);
                     if (aux.getId() == id) {
                         a = aux;
@@ -127,21 +124,45 @@ public class actuadores extends HttpServlet {
             case "/editar": //Insertar dependencia
                 if (request.getParameter("modificar") != null) {
                     id = Integer.parseInt(request.getParameter("modificar"));
-                    String ipActuador = request.getParameter("ipActuador");
-                    String puertoActuador = request.getParameter("puertoActuador");
-                    String descripcion = request.getParameter("descripcionActuador");
+                    int idFisico = Integer.parseInt(request.getParameter("idFisico"));
+                    String descripcion = request.getParameter("descripcion");
+                    int idD = Integer.parseInt(request.getParameter("dependencia"));
+                    Dependencia d = null;
+                    for (int i = 0; i < dependencias.size() && d == null; i++) {
+                        Dependencia aux = mapper.convertValue(dependencias.get(i), Dependencia.class);
+                        if (aux.getId() == idD) {
+                            d = aux;
+                        }
+                    }
+                    String ip = request.getParameter("ip");
+                    String puerto = request.getParameter("puerto");
+                    int tipo = Integer.parseInt(request.getParameter("tipo"));
+
+                    a = null;
+                    for (int i = 0; i < actuadores.size() && a == null; i++) {
+                        Actuador aux = mapper.convertValue(actuadores.get(i), Actuador.class);
+                        if (aux.getId() == id) {
+                            a = aux;
+                        }
+                    }
+                    a.setDescripcion(descripcion);
+                    a.setDependencia(d);
+                    a.setIp(ip);
+                    a.setPuerto(puerto);
+                    a.setIdFisico(idFisico);
+                    a.setTipo(tipo);
 
                     recurso.path("/actuadores/" + id)
                             .type("application/json")
-                            .post(ClientResponse.class, new Actuador());// meter el objeto
+                            .post(ClientResponse.class, a);
 
                     response.sendRedirect("/clienteAdmin/actuadores");
                 } else {
                     request.setAttribute("actuadores", actuadores);
                     request.setAttribute("dependencias", dependencias);
                     id = Integer.parseInt(request.getParameter("id"));
-                    a = new Actuador();
-                    for (int i = 0; i < actuadores.size(); i++) { // no cambiar al for-loop
+                    a = null;
+                    for (int i = 0; i < actuadores.size() && a == null; i++) { // no cambiar al for-loop
                         Actuador aux = mapper.convertValue(actuadores.get(i), Actuador.class);
                         if (aux.getId() == id) {
                             a = aux;
