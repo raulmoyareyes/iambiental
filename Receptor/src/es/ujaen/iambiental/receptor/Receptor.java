@@ -69,7 +69,7 @@ public class Receptor {
                 // Esperamos el mensaje con la lectura del sensor
                 socketServidor.receive(paqueteRecepcion);
                 System.out.println("Mensaje entrante");
-                mensaje = new String(paqueteRecepcion.getData());
+                mensaje = new String(paqueteRecepcion.getData(), paqueteRecepcion.getOffset(), paqueteRecepcion.getLength());
                 Boolean actualiza = false;
 
                 // Parte la cadena devuelta por Arduino que contiene varios campos
@@ -151,9 +151,7 @@ public class Receptor {
                     if (checksum < 0) {
                         checksum *= -1;
                     }
-                    // MENSAJE DE TESTEO
-                    System.out.println(checksum);
-
+                    
                     // Actualización en BD
                     if (checksum == Integer.parseInt(splitChain[5].trim())) {
                         // Comprobamos si existe en BD
