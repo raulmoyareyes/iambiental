@@ -1,4 +1,4 @@
-
+var server = "http://192.168.1.15:8084";
 $(function() {
     /* Spinner */
     $("input[name='spinner']").TouchSpin({min: 0, max: 40, step: 0.5, decimals: 1,
@@ -6,7 +6,7 @@ $(function() {
     $(".bootstrap-touchspin-up").click(function() {
         $.ajax({
             type: "POST",
-            url: "http://localhost:8084/clienteUso/c/actuador?id=" +
+            url: server+"/clienteUso/c/actuador?id=" +
                     $(".spinner").attr('id') + "&dato=" + $(".spinner").val()
         });
 
@@ -14,7 +14,7 @@ $(function() {
     $(".bootstrap-touchspin-down").click(function() {
         $.ajax({
             type: "POST",
-            url: "http://localhost:8084/clienteUso/c/actuador?id=" +
+            url: server+"/clienteUso/c/actuador?id=" +
                     $(".spinner").attr('id') + "&dato=" + $(".spinner").val()
         });
 
@@ -41,7 +41,7 @@ $(function() {
             $(this).children().html("OFF");
             $.ajax({
                 type: "POST",
-                url: "http://localhost:8084/clienteUso/c/actuador?id="
+                url: server+"/clienteUso/c/actuador?id="
                         + $(this).parent().attr('id') + "&estado=0"
             });
         } else {
@@ -49,7 +49,7 @@ $(function() {
             $(this).children().html("ON");
             $.ajax({
                 type: "POST",
-                url: "http://localhost:8084/clienteUso/c/actuador?id="
+                url: server+"/clienteUso/c/actuador?id="
                         + $(this).parent().attr('id') + "&estado=1"
             });
         }
@@ -111,7 +111,7 @@ function recargarDatos(dependencia) {
     });
 
     // Recarga de dependencias
-    $.getJSON("http://localhost:8084/servidorWeb/recursos/dependencias", function(data) {
+    $.getJSON(server+"/servidorWeb/recursos/dependencias", function(data) {
         var content = "";
         var d = false;
         for (var i = 0, len = data.length; i < len; i++) {
@@ -129,7 +129,7 @@ function recargarDatos(dependencia) {
     });
 
     // Recarga de sensores
-    $.getJSON("http://localhost:8084/servidorWeb/recursos/sensores/dependencia/" + dependencia, function(data) {
+    $.getJSON(server+"/servidorWeb/recursos/sensores/dependencia/" + dependencia, function(data) {
         $("#temperaturaDisplayControl").html(0);
         $("#temperaturaDisplay").html(0);
         for (var i = 0, len = data.length; i < len; i++) {
@@ -142,7 +142,7 @@ function recargarDatos(dependencia) {
     });
 
     // Recarga de actuadores
-    $.getJSON("http://localhost:8084/servidorWeb/recursos/actuadores/dependencia/" + dependencia, function(data) {
+    $.getJSON(server+"/servidorWeb/recursos/actuadores/dependencia/" + dependencia, function(data) {
         var interuptores = "";
         $("input[name='spinner']").val(0);
         for (var i = 0, len = data.length; i < len; i++) {
