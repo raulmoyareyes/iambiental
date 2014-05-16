@@ -1,11 +1,5 @@
 package es.ujaen.iambiental.emisor;
 
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
-
 import java.net.DatagramPacket;
 import java.net.DatagramSocket;
 import java.net.InetAddress;
@@ -32,6 +26,7 @@ public class Emisor {
         DatagramPacket paqueteEnvio = 
                 new DatagramPacket(datosEnvio, datosEnvio.length, direccionIP, Integer.parseInt(puerto));
         socketActuador.send(paqueteEnvio);
+        System.out.println("Enviado");
     }
     
     public static void main(String[] args) throws Exception {
@@ -89,6 +84,7 @@ public class Emisor {
                             + String.valueOf(estado) + ";" 
                             + String.valueOf(fecha) + ";"
                             + checksum;
+                        System.out.println(text + " " + ip + " " + puerto);
                         envioActuador(text, ip, puerto);
                     } else {
                         System.out.println("Error en el checksum");

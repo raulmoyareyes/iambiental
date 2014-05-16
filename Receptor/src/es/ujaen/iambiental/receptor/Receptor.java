@@ -1,8 +1,3 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
 package es.ujaen.iambiental.receptor;
 
 import static es.ujaen.iambiental.daos.ReceptorDAO.actualizaDatosActuador;
@@ -29,6 +24,7 @@ import java.util.logging.Logger;
  * @author Vicente
  */
 public class Receptor {
+
     /**
      * Envia un paquete a Emisor con lo necesario para reenviar al Arduino
      * objetivo
@@ -79,7 +75,7 @@ public class Receptor {
                 // Parte la cadena devuelta por Arduino que contiene varios campos
                 // separador por ";"
                 splitChain = mensaje.split(";");
-                
+
                 // MENSAJE DE TESTEO
                 System.out.println("El dispositivo con id: " + mensaje);
                 // Si recibimos un paquete Sensor o Actuador se trata de manera diferente
@@ -96,21 +92,23 @@ public class Receptor {
 
                     int fechaEnSecs = Integer.parseInt(splitChain[4]);
                     // Hallamos el checksum mediante la función
-                    checksum = 0 + id + (int)dato + estado + fechaEnSecs;
-                    if (checksum<0) checksum *= -1;
+                    checksum = 0 + id + (int) dato + estado + fechaEnSecs;
+                    if (checksum < 0) {
+                        checksum *= -1;
+                    }
 
                     // Actualización en BD
                     if (checksum == Integer.parseInt(splitChain[5].trim())) {
                         // Comprobamos si existe en BD
                         Connection cnx = openConexion();
-                        String qry = "SELECT * FROM sensores WHERE dispositivo_id=?";
+                        String qry = "SELECT * FROM sensores WHERE idFisico=?";
                         PreparedStatement stmn = cnx.prepareStatement(qry);
                         stmn.setInt(1, id);
                         ResultSet rs = stmn.executeQuery();
                         // Una vez obtenido, si .next() que apunta al siguiente dato de la tupla
                         // está vacío, o sea, no se ha recibido nada, se ignora este mensaje
                         if (rs.next()) {
-                            actualiza = actualizaDatosSensor(id, dato, estado, fechaSensor);
+                            actualiza = actualizaDatosSensor(id, dato, estado, fecha);
                         } else {
                             System.out.println("Sensor no existente en BD");
                         }
@@ -121,7 +119,7 @@ public class Receptor {
                     // Comprobación de los datos insertados en BD
                     Sensor s_aux = lecturaSensorBD(Integer.parseInt(splitChain[1]));
 
-                    if (actualiza && (s_aux.getDispositivoId() == id)) {
+                    if (actualiza && (s_aux.getIdFisico() == id)) {
                         System.out.println("Actualización realizada con éxito");
                     } else {
                         // SE INFORMA DEL ERROR Y NO SE GUARDA EN BD
@@ -149,8 +147,10 @@ public class Receptor {
                     int fechaEnSecs = Integer.parseInt(splitChain[4]);
 
                     // Hallamos el checksum mediante la función
-                    checksum = 0 + id + (int)dato + estado + fechaEnSecs;
-                    if (checksum<0) checksum *= -1;
+                    checksum = 0 + id + (int) dato + estado + fechaEnSecs;
+                    if (checksum < 0) {
+                        checksum *= -1;
+                    }
                     // MENSAJE DE TESTEO
                     System.out.println(checksum);
 
@@ -158,33 +158,29 @@ public class Receptor {
                     if (checksum == Integer.parseInt(splitChain[5].trim())) {
                         // Comprobamos si existe en BD
                         Connection cnx = openConexion();
-                        String qry = "SELECT * FROM actuadores WHERE dispositivo_id=?";
+                        String qry = "SELECT * FROM actuadores WHERE idFisico=?";
                         PreparedStatement stmn = cnx.prepareStatement(qry);
                         stmn.setInt(1, id);
                         ResultSet rs = stmn.executeQuery();
-
+                        rs.next();
                         // Obtenemos IP y puerto del arduino objetivo
                         String ip = rs.getString("ip");
                         String puerto = rs.getString("puerto");
                         //String ip ="192.168.9.250";
                         //String puerto = "8888";
-                        
+
                         // Acabamos de construir el paquete con el checksum 
                         // y lo enviamos al Emisor para que se encargue
                         // de enviarlo al Arduino
                         // Hallamos el checksum mediante la función
-                        checksum = 0 + id + (int)dato + estado + fechaEnSecs;
-                        if (checksum<0) checksum *= -1;
+                        checksum = 0 + id + (int) dato + estado + fechaEnSecs;
+                        if (checksum < 0) {
+                            checksum *= -1;
+                        }
                         text = text + ";" + ip + ";" + puerto + ";" + checksum;
                         envioActuador(text);
-
-                        // Una vez obtenido, si .next() que apunta al siguiente dato de la tupla
-                        // está vacío, o sea, no se ha recibido nada, se ignora este mensaje
-                        if (rs.next()) {
-                            actualiza = actualizaDatosActuador(id, dato, estado, fechaActuador);
-                        } else {
-                            System.out.println("Actuador no existente en BD");
-                        }
+                        actualiza = actualizaDatosActuador(id, dato, estado, fecha);
+                        //System.out.println("Actuador no existente en BD");
                     } else {
                         System.out.println("Error en el checksum");
                     }
@@ -192,7 +188,7 @@ public class Receptor {
                     // Comprobación de los datos insertados en BD
                     Actuador a_aux = lecturaActuadorBD(Integer.parseInt(splitChain[1]));
 
-                    if (actualiza && (a_aux.getDispositivoId() == id)) {
+                    if (actualiza && (a_aux.getIdFisico() == id)) {
                         System.out.println("Actualización realizada con éxito");
                     } else {
                         // SE INFORMA DEL ERROR Y NO SE GUARDA EN BD

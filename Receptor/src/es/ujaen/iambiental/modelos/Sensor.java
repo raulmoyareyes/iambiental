@@ -1,61 +1,44 @@
 package es.ujaen.iambiental.modelos;
 
-import java.io.Serializable;
 import java.util.Date;
 
 /**
  *
  * @author Raúl Moya Reyes <www.raulmoya.es>
+ * @author Vicente Plaza
  */
-public class Sensor implements Serializable {
+public class Sensor {
 
     private int id;
-    private String descripcion;
-    private Dependencia dependencia;
     private Date fecha;
     private float dato;
     private String ip;
     private String puerto;
     private int estado;
-    private int tipo; // 1 si es temperatura, 0 si es de otra cosa. Esto hay que ver como hacerlo bien
+    private int tipo;
     private int idFisico;
 
     public Sensor() {
-        dependencia = new Dependencia();
+
     }
 
-    public Sensor(String descripcion, Dependencia dependencia, Date fecha, float dato, String ip, String puerto, int estado, int tipo, int idFisico) {
-        this.descripcion = descripcion;
-        this.dependencia = dependencia;
-        this.fecha = fecha;
+    public Sensor(int idFisico, float dato, int estado, Date fecha) {
+        this.idFisico = idFisico;
         this.dato = dato;
-        this.ip = ip;
-        this.puerto = puerto;
         this.estado = estado;
-        this.tipo = tipo;
-        this.idFisico = idFisico;
-    }
-    
-    public Sensor(String descripcion, Dependencia dependencia, String ip, String puerto, int tipo, int idFisico){
-        this.descripcion = descripcion;
-        this.dependencia = dependencia;
-        this.ip = ip;
-        this.puerto = puerto;
-        this.estado = 0;
-        this.tipo = tipo;
-        this.idFisico = idFisico;
+        this.fecha = fecha;
     }
 
-    public Integer getId() {
+    public int getId() {
         return id;
     }
 
-    public Dependencia getDependencia() {
-        return dependencia;
+    public Date getFecha() {
+        return fecha;
     }
 
-    public void setDependencia(Dependencia dependencia) {
-        this.dependencia = dependencia;
+    public void setFecha(Date fecha) {
+        this.fecha = fecha;
     }
 
     public float getDato() {
@@ -64,14 +47,6 @@ public class Sensor implements Serializable {
 
     public void setDato(float dato) {
         this.dato = dato;
-    }
-
-    public String getDescripcion() {
-        return descripcion;
-    }
-
-    public void setDescripcion(String descripcion) {
-        this.descripcion = descripcion;
     }
 
     public String getIp() {
@@ -98,14 +73,6 @@ public class Sensor implements Serializable {
         this.estado = estado;
     }
 
-    public Date getFecha() {
-        return fecha;
-    }
-
-    public void setFecha(Date fecha) {
-        this.fecha = fecha;
-    }
-
     public int getTipo() {
         return tipo;
     }
@@ -121,5 +88,5 @@ public class Sensor implements Serializable {
     public void setIdFisico(int idFisico) {
         this.idFisico = idFisico;
     }
-    
+
 }
