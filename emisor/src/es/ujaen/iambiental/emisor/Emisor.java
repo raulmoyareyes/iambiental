@@ -52,8 +52,8 @@ public class Emisor {
 
                 // Espera a recibir algo
                 socketServidor.receive(paqueteRecepcion);
-                System.out.println("Mensaje entrante en Emisor");
-                mensaje = new String(paqueteRecepcion.getData());
+                mensaje = new String(paqueteRecepcion.getData(), paqueteRecepcion.getOffset(), paqueteRecepcion.getLength());
+                System.out.println("Mensaje entrante en Emisor: " + mensaje);
 
                 // Parte la cadena devuelta por Arduino que contiene varios campos
                 // separador por ";"

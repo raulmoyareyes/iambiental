@@ -1,9 +1,3 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
-
 package es.ujaen.iambiental.beans;
 
 import es.ujaen.iambiental.daos.ActuadorDAO;
@@ -12,6 +6,7 @@ import es.ujaen.iambiental.daos.ReglaProgramadaDAO;
 import es.ujaen.iambiental.daos.ReglaSensorActuadorDAO;
 import es.ujaen.iambiental.daos.SensorDAO;
 import es.ujaen.iambiental.daos.TareaProgramadaDAO;
+import es.ujaen.iambiental.emisorWeb.EmisorWeb;
 import es.ujaen.iambiental.excepciones.ActuadorErrorActualizar;
 import es.ujaen.iambiental.excepciones.ActuadorErrorCambiarDependencia;
 import es.ujaen.iambiental.excepciones.ActuadorErrorDatos;
@@ -23,11 +18,6 @@ import es.ujaen.iambiental.excepciones.DependenciaErrorDatos;
 import es.ujaen.iambiental.excepciones.DependenciaErrorEliminar;
 import es.ujaen.iambiental.excepciones.DependenciaErrorPersistir;
 import es.ujaen.iambiental.excepciones.DependenciaNoEncontrada;
-import es.ujaen.iambiental.excepciones.DispositivoErrorActualizar;
-import es.ujaen.iambiental.excepciones.DispositivoErrorDatos;
-import es.ujaen.iambiental.excepciones.DispositivoErrorEliminar;
-import es.ujaen.iambiental.excepciones.DispositivoErrorPersistir;
-import es.ujaen.iambiental.excepciones.DispositivoNoEncontrado;
 import es.ujaen.iambiental.excepciones.ReglaProgramadaErrorActualizar;
 import es.ujaen.iambiental.excepciones.ReglaProgramadaErrorDatos;
 import es.ujaen.iambiental.excepciones.ReglaProgramadaErrorEliminar;
@@ -40,7 +30,6 @@ import es.ujaen.iambiental.excepciones.ReglaSensorActuadorErrorPersistir;
 import es.ujaen.iambiental.excepciones.ReglaSensorActuadorNoEncontrada;
 import es.ujaen.iambiental.excepciones.SensorErrorActualizar;
 import es.ujaen.iambiental.excepciones.SensorErrorCambiarDependencia;
-import es.ujaen.iambiental.excepciones.SensorErrorCambiarDispositivo;
 import es.ujaen.iambiental.excepciones.SensorErrorDatos;
 import es.ujaen.iambiental.excepciones.SensorErrorEliminar;
 import es.ujaen.iambiental.excepciones.SensorErrorPersistir;
@@ -56,6 +45,9 @@ import es.ujaen.iambiental.modelos.ReglaProgramada;
 import es.ujaen.iambiental.modelos.ReglaSensorActuador;
 import es.ujaen.iambiental.modelos.Sensor;
 import es.ujaen.iambiental.modelos.TareaProgramada;
+import java.io.IOException;
+import java.net.SocketException;
+import java.net.UnknownHostException;
 import java.util.Date;
 import java.util.Map;
 import javax.annotation.Resource;
@@ -63,7 +55,7 @@ import org.springframework.stereotype.Component;
 
 /**
  *
- * @author raulm
+ * @author Raúl Moya Reyes <www.raulmoya.es>
  */
 @Component(value = "beanAdmin")
 public class AdminBean {
@@ -186,6 +178,13 @@ public class AdminBean {
      */
     public void modificarActuador(Actuador actuador) throws ActuadorErrorActualizar {
         actuadorDAO.actualizar(actuador);
+        try {
+            EmisorWeb.envioActuador(actuador);
+        } catch (SocketException | UnknownHostException ex) {
+            System.out.println("No se puede conectar con el emisor");
+        } catch (IOException ex) {
+            System.out.println("No se puede enviar el paquete");
+        }
     }
 
     /**

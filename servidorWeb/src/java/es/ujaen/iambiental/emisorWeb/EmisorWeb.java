@@ -1,14 +1,12 @@
 package es.ujaen.iambiental.emisorWeb;
 
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
 import es.ujaen.iambiental.modelos.Actuador;
+import java.io.IOException;
 import java.net.DatagramPacket;
 import java.net.DatagramSocket;
 import java.net.InetAddress;
+import java.net.SocketException;
+import java.net.UnknownHostException;
 
 /**
  *
@@ -21,23 +19,28 @@ public class EmisorWeb {
      * objetivo
      *
      * @param a Recibe un objeto Actuador
-     * @throws Exception
+     * @throws java.net.SocketException
+     * @throws java.net.UnknownHostException
      */
-    public static void envioActuador(Actuador a) throws Exception {
-        DatagramSocket socketActuador = new DatagramSocket(Integer.parseInt(a.getPuerto()));
-        InetAddress direccionIP = InetAddress.getByName(a.getIp());
+    public static void envioActuador(Actuador a) throws SocketException, UnknownHostException, IOException {
+        DatagramSocket socketActuador = new DatagramSocket();
+        InetAddress direccionIP = InetAddress.getByName("localhost");
 
-        String text = "";
-        int checksum = 0;
+        String text;
+        int checksum;
+
+        System.out.println("Enviando paquete desde emisor web");
 
         text = "a" + ";"
-            + String.valueOf(a.getId()) + ";"
-            + String.valueOf(a.getDato()) + ";"
-            + String.valueOf(a.getEstado()) + ";"
-            + String.valueOf(a.getFecha().getSeconds());
-        
-        checksum = 0 + a.getId() + (int)a.getDato() 
-                + a.getEstado() + a.getFecha().getSeconds();
+                + String.valueOf(a.getIdFisico()) + ";"
+                + String.valueOf(a.getDato()) + ";"
+                + String.valueOf(a.getEstado()) + ";"
+                + String.valueOf(a.getFecha().getTime()/1000) + ";"
+                + String.valueOf(a.getIp()) + ";"
+                + String.valueOf(a.getPuerto());
+
+        checksum = 0 + a.getIdFisico() + (int) a.getDato()
+                + a.getEstado() + (int)(a.getFecha().getTime()/1000);
 
         byte[] datosEnvio = new byte[1024];
 
