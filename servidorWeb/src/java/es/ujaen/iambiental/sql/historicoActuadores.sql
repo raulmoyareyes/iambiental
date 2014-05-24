@@ -2,7 +2,7 @@ CREATE TABLE historicoactuadores (
     id      INT,
     dato    DOUBLE,
     estado  INT,
-    fecha   DATE
+    fecha   DATETIME
 );
 
 DELIMITER |
