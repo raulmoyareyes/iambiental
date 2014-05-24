@@ -62,3 +62,16 @@ function modalEliminarDispositivo(idItemEliminar, descripcionDispositivo) {
     $('#botonEliminarDispositivo').attr("href", appUrl+"dispositivos/eliminar?id="+idItemEliminar);
     $('#modalEliminarDispositivo').modal();
 }
+
+
+/**
+ * Mostrar modal para eliminar tareas programadas
+ * @param string idItemEliminar Id de la tarea programada a eliminar
+ * @param string descripcionTarea Descripción de la tarea programada a eliminar
+ * @returns void
+ */
+function modalEliminarTarea(idItemEliminar, descripcionTarea) {
+    $('#descripcionTareaEliminar').text(descripcionTarea);
+    $('#botonEliminarTarea').attr("href", appUrl+"tareas/eliminar?id="+idItemEliminar);
+    $('#modalEliminarTarea').modal();
+}

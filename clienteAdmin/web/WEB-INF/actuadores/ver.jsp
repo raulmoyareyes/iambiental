@@ -64,6 +64,7 @@
         <div class="list-group">
             <a href="${appUrl}/actuadores/insertar" class="list-group-item"><span class="glyphicon glyphicon-plus-sign"></span> Insertar nuevo actuador</a>
             <a href="${appUrl}/actuadores/editar?id=${actuador.id}" class="list-group-item"><span class="glyphicon glyphicon-edit"></span> Editar actuador</a>
+            <a href="#" class="list-group-item"><span class="glyphicon glyphicon-signal"></span> Ver histórico</a>
             <a href="#" class="list-group-item" onclick="modalEliminarActuador('${actuador.id}', '${actuador.descripcion}')"><span class="glyphicon glyphicon-minus-sign"></span> Eliminar actuador</a>
         </div>
         <div class="list-group">

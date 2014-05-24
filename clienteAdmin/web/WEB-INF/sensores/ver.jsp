@@ -64,6 +64,7 @@
         <div class="list-group">
             <a href="${appUrl}/sensores/insertar" class="list-group-item"><span class="glyphicon glyphicon-plus-sign"></span> Insertar nuevo sensor</a>
             <a href="${appUrl}/sensores/editar?id=${sensor.id}" class="list-group-item"><span class="glyphicon glyphicon-edit"></span> Editar sensor</a>
+            <a href="#" class="list-group-item"><span class="glyphicon glyphicon-signal"></span> Ver histórico</a>
             <a href="#" class="list-group-item" onclick="modalEliminarSensor('${sensor.id}', '${sensor.descripcion}')"><span class="glyphicon glyphicon-minus-sign"></span> Eliminar sensor</a>
         </div>
         <div class="list-group">

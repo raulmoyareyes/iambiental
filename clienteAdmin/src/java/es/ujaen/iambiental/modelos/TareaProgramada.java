@@ -1,7 +1,8 @@
 package es.ujaen.iambiental.modelos;
 
 import java.io.Serializable;
-import java.util.Map;
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  *
@@ -12,32 +13,36 @@ public class TareaProgramada implements Serializable {
 
     private int id;
     private String descripcion;
-    private Map<Integer, ReglaProgramada> reglasProgramadas;
+    private List<ReglaProgramada> reglasProgramadas;
 
     public TareaProgramada() {
 
     }
 
-    public TareaProgramada(String descripcion, Map<Integer, ReglaProgramada> reglasProgramadas) {
+    public TareaProgramada(String descripcion) {
+        this.descripcion = descripcion;
+        this.reglasProgramadas = new ArrayList();
+    }
+
+    public TareaProgramada(String descripcion, List<ReglaProgramada> reglasProgramadas) {
         this.descripcion = descripcion;
         this.reglasProgramadas = reglasProgramadas;
     }
 
-    public int getId(){
+    public int getId() {
         return id;
     }
-    
-    public Map<Integer, ReglaProgramada> getReglasProgramadas() {
+
+    public List<ReglaProgramada> getReglasProgramadas() {
         return reglasProgramadas;
     }
 
-    public void setReglasProgramadas(Map<Integer, ReglaProgramada> reglasProgramadas) {
+    public void setReglasProgramadas(List<ReglaProgramada> reglasProgramadas) {
         this.reglasProgramadas = reglasProgramadas;
     }
 
-    
     public void addReglaProgramada(ReglaProgramada reglaProgramada) {
-        reglasProgramadas.put(reglaProgramada.getId(), reglaProgramada);
+        reglasProgramadas.add(reglaProgramada);
     }
 
     public String getDescripcion() {
