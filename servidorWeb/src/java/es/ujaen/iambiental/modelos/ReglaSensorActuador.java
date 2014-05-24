@@ -7,6 +7,7 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.OneToOne;
 import javax.persistence.Table;
+import javax.xml.bind.annotation.XmlTransient;
 
 /**
  *
@@ -226,7 +227,8 @@ public class ReglaSensorActuador implements Serializable {
      * @return true si se cumplen las condiciones para aplicar el valor al
      * actuador o false en caso contrario
      */
-    public boolean isTrue() {
+    //@XmlTransient
+    private boolean isTrue() {
         /*  Hay cinco franjas posibles divididas por cuatro separadores:
          +Infinito
          ························ FALSE
