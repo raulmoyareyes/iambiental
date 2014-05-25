@@ -5,7 +5,7 @@
             <button type="button" class="btn btn-primary btn-xs" data-toggle="offcanvas">Menú lateral</button>
         </p>
         <div class="row padding1em">
-            <h1>Editar regla sensor-actuador</h1>
+            <h1>Ver regla - ${reglaSensorActuador.descripcion}</h1>
 
             <form class="form-horizontal" role="form">
 
@@ -19,21 +19,34 @@
                 <div class="form-group">
                     <label class="col-sm-2 control-label">Sensor</label>
                     <div class="col-sm-10">
-                        <p class="form-control-static">${reglaSensorActuador.sensor.descripcion}</p>
+                        <p class="form-control-static">${reglaSensorActuador.sensor.descripcion} (${reglaSensorActuador.sensor.dependencia.descripcion})</p>
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <label class="col-sm-2 control-label">Dato sensor</label>
+                    <div class="col-sm-10">
+                        <p class="form-control-static">Entre ${reglaSensorActuador.valorMin} y ${reglaSensorActuador.valorMax} (con una tolerancia de ruido &plusmn;${reglaSensorActuador.margenRuido})</p>
                     </div>
                 </div>
 
                 <div class="form-group">
                     <label class="col-sm-2 control-label">Actuador</label>
                     <div class="col-sm-10">
-                        <p class="form-control-static">${reglaSensorActuador.actuador.descripcion}</p>
+                        <p class="form-control-static">${reglaSensorActuador.actuador.descripcion} (${reglaSensorActuador.actuador.dependencia.descripcion})</p>
                     </div>
                 </div>
-                
+
+                <div class="form-group">
+                    <label class="col-sm-2 control-label">Estado actuador</label>
+                    <div class="col-sm-10">
+                        <p class="form-control-static">${reglaSensorActuador.estadoActuador}</p>
+                    </div>
+                </div>
+
                 <div class="form-group">
                     <div class="col-sm-offset-2 col-sm-10">
-                        <button type="submit" class="btn btn-success">Guardar</button>
-                        <a href="${appUrl}/reglas" rol="button" class="btn btn-danger">Cancelar</a>
+                        <a href="${appUrl}/reglas" rol="button" class="btn btn-default">Volver al listado</a>
                     </div>
                 </div>
             </form>
