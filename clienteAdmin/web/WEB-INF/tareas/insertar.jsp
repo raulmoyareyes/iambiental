@@ -8,11 +8,38 @@
             <h1>Insertar nueva tarea programada</h1>
 
             <form class="form-horizontal" role="form">
-                    
+
                 <div class="form-group">
                     <label for="inputDescripcionTarea" class="col-sm-2 control-label">Descripción</label>
                     <div class="col-sm-10">
-                        <input type="text" name="descripcion" class="form-control" id="inputDescripcionSensor" placeholder="Descripción de la tarea programada"/>
+                        <input type="text" name="descripcion" class="form-control" id="inputDescripcionTarea" placeholder="Descripción de la tarea programada"/>
+                    </div>
+                </div>
+                
+                <div class="form-group">
+                    <label for="inputCronTarea" class="col-sm-2 control-label">Cron</label>
+                    <div class="col-sm-10">
+                        <input type="text" name="cron" class="form-control" id="inputCronTarea" placeholder="Cron de la tarea programada"/>
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <label class="control-labelcol-sm-2">Reglas programadas</label>
+
+                    <div class="form-group col-sm-9 pull-right">
+                        <input type="text" name="descripcionRegla" class="form-control" id="inputDescripcionRegla" placeholder="Descripción"/>
+                        <select class="form-control" name="sensores" id="selectSensorTareas">
+                            <c:forEach var="s" items="${sensores}" varStatus="estado">
+                                <option value="${s.id}">${s.descripcion}</option>
+                            </c:forEach>
+                        </select>
+                        <select class="form-control" name="actuadores" id="selectActuadorTareas">
+                            <c:forEach var="a" items="${actuadores}" varStatus="estado">
+                                <option value="${a.id}">${a.descripcion}</option>
+                            </c:forEach>
+                        </select>
+                        <input type="text" name="condicion" class="form-control" id="inputCondicionRegla" placeholder="Condición"/>
+                        <button type="button" class="btn btn-default btn-add">+</button>
                     </div>
                 </div>
 

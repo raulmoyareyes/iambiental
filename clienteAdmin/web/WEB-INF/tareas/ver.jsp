@@ -18,20 +18,27 @@
                 </div>
 
                 <h3>Reglas programadas</h3>
-                <div class="list-group">
+                <div class="panel-group" id="accordion">
                     <c:forEach var="r" items="${tarea.reglasProgramadas}" varStatus="estado">
-                        <div class="list-group-item">
-                            ${r.id} - ${r.descripcion}
-
-                            <a href="#" class="btn pull-right" onclick="modalEliminarReglaProgramada('${r.id}', '${r.descripcion}')">
-                                <span class="glyphicon glyphicon-minus-sign"></span>
-                            </a>
-                            <a href="/clienteAdmin/reglasprogramadas/editar?id=${r.id}" class="btn pull-right">
-                                <span class="glyphicon glyphicon-edit"></span>
-                            </a>
-                            <a href="/clienteAdmin/reglasprogramadas/ver?id=${r.id}" class="btn pull-right">
-                                <span class="glyphicon glyphicon-eye-open"></span>
-                            </a>
+                        <div class="panel panel-default">
+                            <div class="panel-heading">
+                                <h4 class="panel-title">
+                                    ${r.id} - ${r.descripcion}
+                                    <a data-toggle="collapse" data-parent="#accordion" href="#collapse${r.id}" class="pull-right">
+                                        <span class="glyphicon glyphicon-eye-open"></span>
+                                    </a>
+                                </h4>
+                            </div>
+                            <div id="collapse${r.id}" class="panel-collapse collapse">
+                                <div class="panel-body">
+                                    <div class="form-group">
+                                        <label for="inputDescripcionTarea" class="col-sm-2 control-label">Sensor</label>
+                                        <div class="col-sm-10">
+                                            <p class="form-control-static">${r.sensor.id} - ${r.sensor.descripcion}</p>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
                         </div>
                     </c:forEach>
                 </div>
@@ -47,8 +54,8 @@
 
     <div class="col-xs-6 col-sm-3 sidebar-offcanvas" id="sidebar" role="navigation">
         <div class="list-group">
-            <a href="${appUrl}/sensores/insertar" class="list-group-item"><span class="glyphicon glyphicon-plus-sign"></span> Insertar nueva tarea programada</a>
-            <a href="${appUrl}/sensores/editar?id=${tarea.id}" class="list-group-item"><span class="glyphicon glyphicon-edit"></span> Editar tarea programada</a>
+            <a href="${appUrl}/tareas/insertar" class="list-group-item"><span class="glyphicon glyphicon-plus-sign"></span> Insertar nueva tarea programada</a>
+            <a href="${appUrl}/tareas/editar?id=${tarea.id}" class="list-group-item"><span class="glyphicon glyphicon-edit"></span> Editar tarea programada</a>
             <a href="#" class="list-group-item" onclick="modalEliminarTarea('${tarea.id}', '${tarea.descripcion}')"><span class="glyphicon glyphicon-minus-sign"></span> Eliminar tarea programada</a>
         </div>
         <div class="list-group">

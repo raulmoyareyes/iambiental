@@ -4,8 +4,12 @@ import com.sun.jersey.api.client.Client;
 import com.sun.jersey.api.client.ClientResponse;
 import com.sun.jersey.api.client.WebResource;
 import com.sun.jersey.api.client.config.DefaultClientConfig;
+import es.ujaen.iambiental.modelos.Actuador;
+import es.ujaen.iambiental.modelos.ReglaProgramada;
+import es.ujaen.iambiental.modelos.Sensor;
 import es.ujaen.iambiental.modelos.TareaProgramada;
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.List;
 import javax.servlet.RequestDispatcher;
 import javax.servlet.ServletException;
@@ -59,6 +63,14 @@ public class tareas extends HttpServlet {
         ClientResponse responseJSOND = recurso.path("/tareasProgramadas").accept("application/json").get(ClientResponse.class);
         List<TareaProgramada> tareas = responseJSOND.getEntity(List.class);
 
+        // Sensores
+        ClientResponse responseJSONS = recurso.path("/sensores").accept("application/json").get(ClientResponse.class);
+        List<Sensor> sensores = responseJSONS.getEntity(List.class);
+
+        // Actuadores
+        ClientResponse responseJSONA = recurso.path("/actuadores").accept("application/json").get(ClientResponse.class);
+        List<Actuador> actuadores = responseJSONA.getEntity(List.class);
+
         //Cabecera
         request.setAttribute("mainMenuOption", "tareas");
         rd = request.getRequestDispatcher("/WEB-INF/cabecera.jsp");
@@ -78,14 +90,39 @@ public class tareas extends HttpServlet {
             case "/insertar": //Insertar tarea programada
                 if (request.getParameter("crear") != null) {
                     String descripcion = request.getParameter("descripcion");
-                    
+                    String cron = request.getParameter("cron");
+                    String[] reglasensor = request.getParameterValues("sensores");
+                    String[] reglaactuador = request.getParameterValues("actuadores");
+                    String condicion = request.getParameter("condicion");
+                    List<ReglaProgramada> reglas = new ArrayList();
+                    for (int i = 0; i < reglasensor.length; i++) {
+                        Sensor s = null;
+                        for (int j = 0; j < sensores.size() && s == null; j++) {
+                            Sensor aux = mapper.convertValue(sensores.get(j), Sensor.class);
+                            if (aux.getId() == Integer.parseInt(reglasensor[i])) {
+                                s = aux;
+                            }
+                        }
+                        Actuador a = null;
+                        for (int j = 0; j < sensores.size() && a == null; j++) {
+                            Actuador aux = mapper.convertValue(actuadores.get(j), Actuador.class);
+                            if (aux.getId() == Integer.parseInt(reglaactuador[i])) {
+                                a = aux;
+                            }
+                        }
+                        reglas.add(new ReglaProgramada(descripcion, condicion, s, a));
+                    }
+                    TareaProgramada tarea = new TareaProgramada(descripcion, reglas, cron);
+
                     recurso.path("/tareasProgramadas")
                             .type("application/json")
-                            .put(ClientResponse.class, new TareaProgramada(descripcion));
+                            .put(ClientResponse.class, tarea);
 
                     response.sendRedirect("/clienteAdmin/tareas");
                 } else {
                     request.setAttribute("tareas", tareas);
+                    request.setAttribute("sensores", sensores);
+                    request.setAttribute("actuadores", actuadores);
                     rd = request.getRequestDispatcher("/WEB-INF/tareas/insertar.jsp");
                     rd.include(request, response);
                 }

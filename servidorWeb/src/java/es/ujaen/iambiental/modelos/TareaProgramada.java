@@ -26,20 +26,22 @@ public class TareaProgramada implements Serializable {
     private String descripcion;
     @OneToMany(fetch = FetchType.EAGER, cascade = CascadeType.ALL, orphanRemoval = true)
     private List<ReglaProgramada> reglasProgramadas;
+    private String cron;
 
     public TareaProgramada() {
 
     }
 
-    public TareaProgramada(String descripcion, List<ReglaProgramada> reglasProgramadas) {
+    public TareaProgramada(String descripcion, List<ReglaProgramada> reglasProgramadas, String cron) {
         this.descripcion = descripcion;
         this.reglasProgramadas = reglasProgramadas;
+        this.cron = cron;
     }
 
-    public int getId(){
+    public int getId() {
         return id;
     }
-    
+
     public List<ReglaProgramada> getReglasProgramadas() {
         return reglasProgramadas;
     }
@@ -48,7 +50,6 @@ public class TareaProgramada implements Serializable {
         this.reglasProgramadas = reglasProgramadas;
     }
 
-    
     public void addReglaProgramada(ReglaProgramada reglaProgramada) {
         reglasProgramadas.add(reglaProgramada.getId(), reglaProgramada);
     }
@@ -59,6 +60,14 @@ public class TareaProgramada implements Serializable {
 
     public void setDescripcion(String descripcion) {
         this.descripcion = descripcion;
+    }
+
+    public String getCron() {
+        return cron;
+    }
+
+    public void setCron(String cron) {
+        this.cron = cron;
     }
 
 }

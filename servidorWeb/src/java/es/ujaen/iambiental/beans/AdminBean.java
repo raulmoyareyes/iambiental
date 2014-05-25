@@ -1,5 +1,6 @@
 package es.ujaen.iambiental.beans;
 
+import es.ujaen.iambiental.disparadorTarea.Tarea;
 import es.ujaen.iambiental.daos.ActuadorDAO;
 import es.ujaen.iambiental.daos.DependenciaDAO;
 import es.ujaen.iambiental.daos.ReglaProgramadaDAO;
@@ -50,7 +51,19 @@ import java.net.SocketException;
 import java.net.UnknownHostException;
 import java.util.Date;
 import java.util.Map;
+import java.util.logging.Level;
+import java.util.logging.Logger;
+import javax.annotation.PostConstruct;
 import javax.annotation.Resource;
+import org.quartz.CronScheduleBuilder;
+import org.quartz.JobBuilder;
+import org.quartz.JobDetail;
+import org.quartz.JobKey;
+import org.quartz.Scheduler;
+import org.quartz.SchedulerException;
+import org.quartz.Trigger;
+import org.quartz.TriggerBuilder;
+import org.quartz.impl.StdSchedulerFactory;
 import org.springframework.stereotype.Component;
 
 /**
@@ -59,22 +72,22 @@ import org.springframework.stereotype.Component;
  */
 @Component(value = "beanAdmin")
 public class AdminBean {
-    
+
     @Resource
     SensorDAO sensorDAO;
-    
+
     @Resource
     ActuadorDAO actuadorDAO;
-    
+
     @Resource
     TareaProgramadaDAO tareaProgramadaDAO;
-    
+
     @Resource
     ReglaProgramadaDAO reglaProgramadaDAO;
-    
+
     @Resource
     ReglaSensorActuadorDAO reglaSensorActuadorDAO;
-    
+
     @Resource
     DependenciaDAO dependenciaDAO;
 
@@ -85,8 +98,8 @@ public class AdminBean {
      * @throws es.ujaen.iambiental.excepciones.SensorErrorDatos
      * @throws es.ujaen.iambiental.excepciones.SensorErrorPersistir
      */
-    public void crearSensor(Sensor sensor) throws SensorErrorDatos, SensorErrorPersistir{
-        
+    public void crearSensor(Sensor sensor) throws SensorErrorDatos, SensorErrorPersistir {
+
         try {
             sensorDAO.insertar(sensor);
         } catch (SensorErrorPersistir e) {
@@ -94,7 +107,7 @@ public class AdminBean {
         }
 
     }
-    
+
     /**
      * Devuelve el sensor con el id indicado
      *
@@ -104,7 +117,7 @@ public class AdminBean {
     public Sensor obtenerSensor(Integer idSensor) {
         return sensorDAO.buscar(idSensor);
     }
-    
+
     /**
      * Elimina un sensor del sistema.
      *
@@ -112,24 +125,24 @@ public class AdminBean {
      * @throws es.ujaen.iambiental.excepciones.SensorErrorEliminar
      * @throws es.ujaen.iambiental.excepciones.SensorNoEncontrado
      */
-    public void eliminarSensor(Integer idSensor) throws SensorErrorEliminar, SensorNoEncontrado{
+    public void eliminarSensor(Integer idSensor) throws SensorErrorEliminar, SensorNoEncontrado {
         Sensor s = sensorDAO.buscar(idSensor);
         if (s == null) {
             throw new SensorNoEncontrado();
         }
         sensorDAO.eliminar(s);
     }
-    
+
     /**
      * Modifica un sensor del sistema.
      *
      * @param sensor
      * @throws es.ujaen.iambiental.excepciones.SensorErrorActualizar
      */
-    public void modificarSensor(Sensor sensor) throws SensorErrorActualizar{
+    public void modificarSensor(Sensor sensor) throws SensorErrorActualizar {
         sensorDAO.actualizar(sensor);
     }
-    
+
     /**
      * Crear un actuador.
      *
@@ -137,14 +150,14 @@ public class AdminBean {
      * @throws es.ujaen.iambiental.excepciones.ActuadorErrorDatos
      * @throws es.ujaen.iambiental.excepciones.ActuadorErrorPersistir
      */
-    public void crearActuador(Actuador actuador) throws ActuadorErrorDatos, ActuadorErrorPersistir{
+    public void crearActuador(Actuador actuador) throws ActuadorErrorDatos, ActuadorErrorPersistir {
         try {
             actuadorDAO.insertar(actuador);
         } catch (ActuadorErrorPersistir e) {
             throw new ActuadorErrorPersistir();
         }
     }
-    
+
     /**
      * Devuelve el actuador con el id indicado
      *
@@ -154,7 +167,7 @@ public class AdminBean {
     public Actuador obtenerActuador(Integer idActuador) {
         return actuadorDAO.buscar(idActuador);
     }
-    
+
     /**
      * Elimina un actuador del sistema.
      *
@@ -169,7 +182,7 @@ public class AdminBean {
         }
         actuadorDAO.eliminar(a);
     }
-    
+
     /**
      * Modifica un actuador del sistema.
      *
@@ -194,14 +207,14 @@ public class AdminBean {
      * @throws es.ujaen.iambiental.excepciones.TareaProgramadaErrorDatos
      * @throws es.ujaen.iambiental.excepciones.TareaProgramadaErrorPersistir
      */
-    public void crearTareaProgramada(TareaProgramada tareaProgramada) throws TareaProgramadaErrorDatos, TareaProgramadaErrorPersistir{
+    public void crearTareaProgramada(TareaProgramada tareaProgramada) throws TareaProgramadaErrorDatos, TareaProgramadaErrorPersistir {
         try {
             tareaProgramadaDAO.insertar(tareaProgramada);
         } catch (TareaProgramadaErrorPersistir e) {
             throw new TareaProgramadaErrorPersistir();
         }
     }
-    
+
     /**
      * Devuelve la tarea programada con el id indicado
      *
@@ -211,7 +224,7 @@ public class AdminBean {
     public TareaProgramada obtenerTareaProgramada(Integer idTareaProgramada) {
         return tareaProgramadaDAO.buscar(idTareaProgramada);
     }
-    
+
     /**
      * Elimina una tarea programada del sistema.
      *
@@ -226,7 +239,7 @@ public class AdminBean {
         }
         tareaProgramadaDAO.eliminar(tp);
     }
-    
+
     /**
      * Modifica una tarea programada del sistema.
      *
@@ -236,7 +249,7 @@ public class AdminBean {
     public void modificarTareaProgramada(TareaProgramada tareaProgramada) throws TareaProgramadaErrorActualizar {
         tareaProgramadaDAO.actualizar(tareaProgramada);
     }
-    
+
     /**
      * Crear una regla programada y asociarla a una tarea programada.
      *
@@ -248,21 +261,21 @@ public class AdminBean {
      */
     public void crearReglaProgramada(ReglaProgramada reglaProgramada) throws ReglaProgramadaErrorDatos, ReglaProgramadaErrorPersistir, SensorNoEncontrado, ActuadorNoEncontrado {
         Sensor s = sensorDAO.buscar(reglaProgramada.getSensor().getId());
-        if(s==null){
+        if (s == null) {
             throw new SensorNoEncontrado();
         }
         Actuador a = actuadorDAO.buscar(reglaProgramada.getActuador().getId());
-        if(a==null){
+        if (a == null) {
             throw new ActuadorNoEncontrado();
         }
-        ReglaProgramada r = new ReglaProgramada(reglaProgramada.getDescripcion(),reglaProgramada.getCondicion(),s,a);
+        ReglaProgramada r = new ReglaProgramada(reglaProgramada.getDescripcion(), reglaProgramada.getCondicion(), s, a);
         try {
             reglaProgramadaDAO.insertar(r);
         } catch (ReglaProgramadaErrorPersistir e) {
             throw new ReglaProgramadaErrorPersistir();
         }
     }
-    
+
     /**
      * Devuelve la regla programada con el id indicado
      *
@@ -272,7 +285,7 @@ public class AdminBean {
     public ReglaProgramada obtenerReglaProgramada(Integer idReglaProgramada) {
         return reglaProgramadaDAO.buscar(idReglaProgramada);
     }
-    
+
     /**
      * Elimina una regla programada del sistema.
      *
@@ -287,7 +300,7 @@ public class AdminBean {
         }
         reglaProgramadaDAO.eliminar(rp);
     }
-    
+
     /**
      * Modifica una regla programada del sistema.
      *
@@ -297,7 +310,7 @@ public class AdminBean {
     public void modificarReglaProgramada(ReglaProgramada reglaProgramada) throws ReglaProgramadaErrorActualizar {
         reglaProgramadaDAO.actualizar(reglaProgramada);
     }
-    
+
     /**
      * Crear una regla sensor-actuador.
      *
@@ -305,14 +318,14 @@ public class AdminBean {
      * @throws es.ujaen.iambiental.excepciones.ReglaSensorActuadorErrorDatos
      * @throws es.ujaen.iambiental.excepciones.ReglaSensorActuadorErrorPersistir
      */
-    public void crearReglaSensorActuador(ReglaSensorActuador reglaSensorActuador) throws ReglaSensorActuadorErrorDatos, ReglaSensorActuadorErrorPersistir{
+    public void crearReglaSensorActuador(ReglaSensorActuador reglaSensorActuador) throws ReglaSensorActuadorErrorDatos, ReglaSensorActuadorErrorPersistir {
         try {
             reglaSensorActuadorDAO.insertar(reglaSensorActuador);
         } catch (ReglaSensorActuadorErrorPersistir e) {
             throw new ReglaSensorActuadorErrorPersistir();
         }
     }
-    
+
     /**
      * Devuelve la regla sensor-actuador con el id indicado
      *
@@ -322,7 +335,7 @@ public class AdminBean {
     public ReglaSensorActuador obtenerReglaSensorActuador(Integer idReglaSensorActuador) {
         return reglaSensorActuadorDAO.buscar(idReglaSensorActuador);
     }
-    
+
     /**
      * Elimina una regla sensor-actuador del sistema.
      *
@@ -337,17 +350,18 @@ public class AdminBean {
         }
         reglaSensorActuadorDAO.eliminar(rsa);
     }
-    
+
     /**
      * Modifica una regla sensor-actuador del sistema.
      *
      * @param reglaSensorActuador
-     * @throws es.ujaen.iambiental.excepciones.ReglaSensorActuadorErrorActualizar
+     * @throws
+     * es.ujaen.iambiental.excepciones.ReglaSensorActuadorErrorActualizar
      */
     public void modificarReglaSensorActuador(ReglaSensorActuador reglaSensorActuador) throws ReglaSensorActuadorErrorActualizar {
         reglaSensorActuadorDAO.actualizar(reglaSensorActuador);
     }
-    
+
     /**
      * Crear una dependencia.
      *
@@ -355,8 +369,8 @@ public class AdminBean {
      * @throws es.ujaen.iambiental.excepciones.DependenciaErrorDatos
      * @throws es.ujaen.iambiental.excepciones.DependenciaErrorPersistir
      */
-    public void crearDependencia(Dependencia dependencia) throws DependenciaErrorDatos, DependenciaErrorPersistir{
-        
+    public void crearDependencia(Dependencia dependencia) throws DependenciaErrorDatos, DependenciaErrorPersistir {
+
         try {
             dependenciaDAO.insertar(dependencia);
         } catch (DependenciaErrorPersistir e) {
@@ -364,7 +378,7 @@ public class AdminBean {
         }
 
     }
-    
+
     /**
      * Devuelve la dependencia con el id indicado
      *
@@ -374,7 +388,7 @@ public class AdminBean {
     public Dependencia obtenerDependencia(Integer idDependencia) {
         return dependenciaDAO.buscar(idDependencia);
     }
-    
+
     /**
      * Elimina una dependencia del sistema.
      *
@@ -384,27 +398,27 @@ public class AdminBean {
      * @throws es.ujaen.iambiental.excepciones.SensorErrorCambiarDependencia
      * @throws es.ujaen.iambiental.excepciones.ActuadorErrorCambiarDependencia
      */
-    public void eliminarDependencia(Integer idDependencia) throws DependenciaErrorEliminar, DependenciaNoEncontrada, SensorErrorCambiarDependencia, ActuadorErrorCambiarDependencia{
+    public void eliminarDependencia(Integer idDependencia) throws DependenciaErrorEliminar, DependenciaNoEncontrada, SensorErrorCambiarDependencia, ActuadorErrorCambiarDependencia {
         Dependencia d = dependenciaDAO.buscar(idDependencia);
         if (d == null) {
             throw new DependenciaNoEncontrada();
         }
-        
-        sensorDAO.cambiarDependencia(null,d);
-        actuadorDAO.cambiarDependencia(null,d);
+
+        sensorDAO.cambiarDependencia(null, d);
+        actuadorDAO.cambiarDependencia(null, d);
         dependenciaDAO.eliminar(d);
     }
-    
+
     /**
      * Modifica una dependencia del sistema.
      *
      * @param dependencia
      * @throws es.ujaen.iambiental.excepciones.DependenciaErrorActualizar
      */
-    public void modificarDependencia(Dependencia dependencia) throws DependenciaErrorActualizar{
+    public void modificarDependencia(Dependencia dependencia) throws DependenciaErrorActualizar {
         dependenciaDAO.actualizar(dependencia);
     }
-    
+
     /**
      * Devuelve un mapa con la lista de sensores.
      *
@@ -413,7 +427,7 @@ public class AdminBean {
     public Map<Integer, Sensor> listarSensores() {
         return sensorDAO.listar();
     }
-    
+
     /**
      * Devuelve un mapa con la lista de actuadores.
      *
@@ -422,7 +436,7 @@ public class AdminBean {
     public Map<Integer, Actuador> listarActuadores() {
         return actuadorDAO.listar();
     }
-    
+
     /**
      * Devuelve un mapa con la lista de tareas programadas.
      *
@@ -431,7 +445,7 @@ public class AdminBean {
     public Map<Integer, TareaProgramada> listarTareasProgramadas() {
         return tareaProgramadaDAO.listar();
     }
-    
+
     /**
      * Devuelve un mapa con la lista de reglas programadas.
      *
@@ -440,7 +454,7 @@ public class AdminBean {
     public Map<Integer, ReglaProgramada> listarReglasProgramadas() {
         return reglaProgramadaDAO.listar();
     }
-    
+
     /**
      * Devuelve un mapa con la lista de reglas sensor-actuador.
      *
@@ -449,7 +463,7 @@ public class AdminBean {
     public Map<Integer, ReglaSensorActuador> listarReglasSensorActuador() {
         return reglaSensorActuadorDAO.listar();
     }
-    
+
     /**
      * Devuelve un mapa con la lista de dependencias.
      *
@@ -458,7 +472,7 @@ public class AdminBean {
     public Map<Integer, Dependencia> listarDependencias() {
         return dependenciaDAO.listar();
     }
-    
+
     /**
      * Devuelve un mapa con el histórico de valores de un sensor.
      *
@@ -470,7 +484,7 @@ public class AdminBean {
     public Map<Date, Double> obtenerHistoricoSensor(Integer idSensor, Date fechaInicio, Date fechaFinal) {
         return null;
     }
-    
+
     /**
      * Devuelve un mapa con el histórico de valores de un actuador.
      *
@@ -482,5 +496,37 @@ public class AdminBean {
     public Map<Date, Double> obtenerHistoricoActuador(Integer idActuador, Date fechaInicio, Date fechaFinal) {
         return null;
     }
-    
+
+    @PostConstruct
+    public void lanzarTodasTareas(){
+        // cargar todas las tareas programadas
+        Map<Integer, TareaProgramada> tareas = tareaProgramadaDAO.listar();
+        for(Map.Entry t : tareas.entrySet()){
+            TareaProgramada tarea = (TareaProgramada) t.getValue();
+            try {
+                lanzarTarea(tarea);
+            } catch (SchedulerException ex) {
+                Logger.getLogger(AdminBean.class.getName()).log(Level.SEVERE, null, ex);
+            }
+        }
+    }
+
+    private void lanzarTarea(TareaProgramada t) throws SchedulerException {
+        JobKey tareaKey = new JobKey(String.valueOf(t.getId()), "group-"+t.getId());
+        JobDetail tarea = JobBuilder.newJob(Tarea.class)
+                .withIdentity(tareaKey).build();
+
+        Trigger trigger = TriggerBuilder
+                .newTrigger()
+                .withIdentity("Trigger-"+t.getId(), "group-"+t.getId())
+                .withSchedule(
+                        CronScheduleBuilder.cronSchedule(t.getCron()))
+                .build(); // "0/20 * * * * ?"
+
+        Scheduler scheduler = new StdSchedulerFactory().getScheduler();
+
+        scheduler.start();
+        scheduler.scheduleJob(tarea, trigger);
+    }
+
 }

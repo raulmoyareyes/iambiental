@@ -14,6 +14,7 @@ public class TareaProgramada implements Serializable {
     private int id;
     private String descripcion;
     private List<ReglaProgramada> reglasProgramadas;
+    private String cron;
 
     public TareaProgramada() {
 
@@ -24,9 +25,10 @@ public class TareaProgramada implements Serializable {
         this.reglasProgramadas = new ArrayList();
     }
 
-    public TareaProgramada(String descripcion, List<ReglaProgramada> reglasProgramadas) {
+    public TareaProgramada(String descripcion, List<ReglaProgramada> reglasProgramadas, String cron) {
         this.descripcion = descripcion;
         this.reglasProgramadas = reglasProgramadas;
+        this.cron = cron;
     }
 
     public int getId() {
@@ -51,6 +53,14 @@ public class TareaProgramada implements Serializable {
 
     public void setDescripcion(String descripcion) {
         this.descripcion = descripcion;
+    }
+
+    public String getCron() {
+        return cron;
+    }
+
+    public void setCron(String cron) {
+        this.cron = cron;
     }
 
 }
