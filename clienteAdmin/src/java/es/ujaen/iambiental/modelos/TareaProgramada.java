@@ -1,7 +1,6 @@
 package es.ujaen.iambiental.modelos;
 
 import java.io.Serializable;
-import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -17,12 +16,6 @@ public class TareaProgramada implements Serializable {
     private String cron;
 
     public TareaProgramada() {
-
-    }
-
-    public TareaProgramada(String descripcion) {
-        this.descripcion = descripcion;
-        this.reglasProgramadas = new ArrayList();
     }
 
     public TareaProgramada(String descripcion, List<ReglaProgramada> reglasProgramadas, String cron) {
@@ -44,7 +37,7 @@ public class TareaProgramada implements Serializable {
     }
 
     public void addReglaProgramada(ReglaProgramada reglaProgramada) {
-        reglasProgramadas.add(reglaProgramada);
+        reglasProgramadas.add(reglaProgramada.getId(), reglaProgramada);
     }
 
     public String getDescripcion() {
@@ -54,7 +47,7 @@ public class TareaProgramada implements Serializable {
     public void setDescripcion(String descripcion) {
         this.descripcion = descripcion;
     }
-
+    
     public String getCron() {
         return cron;
     }

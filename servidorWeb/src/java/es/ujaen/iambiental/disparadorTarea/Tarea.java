@@ -25,6 +25,14 @@ public class Tarea implements Job {
 
         int id = Integer.parseInt(context.getJobDetail().getKey().getName());
         System.out.println(administrador.obtenerTareaProgramada(id).getDescripcion());
+        
+        
+        /*
+        Aquí hay que comprobar todas las reglas que devuelve administrador.obtenerTareaProgramada(id)
+        y ejecutar la que corresponda (lo dice el CRON)
+        
+        Modificar desde el AdminBean.modificarActuador(actuador)
+        */
     }
 
 }

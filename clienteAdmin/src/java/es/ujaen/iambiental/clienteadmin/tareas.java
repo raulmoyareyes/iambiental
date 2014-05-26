@@ -93,7 +93,11 @@ public class tareas extends HttpServlet {
                     String cron = request.getParameter("cron");
                     String[] reglasensor = request.getParameterValues("sensores");
                     String[] reglaactuador = request.getParameterValues("actuadores");
-                    String condicion = request.getParameter("condicion");
+                    String[] descripcionRegla = request.getParameterValues("descripcionRegla"); //CUIDAO EL JSP
+                    String[] valorMin = request.getParameterValues("valorMin");
+                    String[] valorMax= request.getParameterValues("valorMax");
+                    String[] margenRuido = request.getParameterValues("margenRuido");
+                    String[] estadoActuador = request.getParameterValues("estadoActuador");
                     List<ReglaProgramada> reglas = new ArrayList();
                     for (int i = 0; i < reglasensor.length; i++) {
                         Sensor s = null;
@@ -104,14 +108,21 @@ public class tareas extends HttpServlet {
                             }
                         }
                         Actuador a = null;
-                        for (int j = 0; j < sensores.size() && a == null; j++) {
+                        for (int j = 0; j < actuadores.size() && a == null; j++) {
                             Actuador aux = mapper.convertValue(actuadores.get(j), Actuador.class);
                             if (aux.getId() == Integer.parseInt(reglaactuador[i])) {
                                 a = aux;
                             }
                         }
-                        reglas.add(new ReglaProgramada(descripcion, condicion, s, a));
+                        
+                        reglas.add(new ReglaProgramada(descripcionRegla[i] ,s, a,
+                                Float.parseFloat(valorMin[i]), 
+                                Float.parseFloat(valorMax[i]),
+                                Float.parseFloat(margenRuido[i]),
+                                Integer.parseInt(estadoActuador[i])));
+//                        reglas.add(new ReglaProgramada(descripcion, condicion, s, a));
                     }
+                    
                     TareaProgramada tarea = new TareaProgramada(descripcion, reglas, cron);
 
                     recurso.path("/tareasProgramadas")
