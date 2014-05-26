@@ -1,12 +1,12 @@
 package es.ujaen.iambiental.beans;
 
-import es.ujaen.iambiental.disparadorTarea.Tarea;
 import es.ujaen.iambiental.daos.ActuadorDAO;
 import es.ujaen.iambiental.daos.DependenciaDAO;
 import es.ujaen.iambiental.daos.ReglaProgramadaDAO;
 import es.ujaen.iambiental.daos.ReglaSensorActuadorDAO;
 import es.ujaen.iambiental.daos.SensorDAO;
 import es.ujaen.iambiental.daos.TareaProgramadaDAO;
+import es.ujaen.iambiental.disparadorTarea.Tarea;
 import es.ujaen.iambiental.emisorWeb.EmisorWeb;
 import es.ujaen.iambiental.excepciones.ActuadorErrorActualizar;
 import es.ujaen.iambiental.excepciones.ActuadorErrorCambiarDependencia;
@@ -49,7 +49,9 @@ import es.ujaen.iambiental.modelos.TareaProgramada;
 import java.io.IOException;
 import java.net.SocketException;
 import java.net.UnknownHostException;
+import java.util.ArrayList;
 import java.util.Date;
+import java.util.HashMap;
 import java.util.Map;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -63,6 +65,7 @@ import org.quartz.Scheduler;
 import org.quartz.SchedulerException;
 import org.quartz.Trigger;
 import org.quartz.TriggerBuilder;
+import org.quartz.UnableToInterruptJobException;
 import org.quartz.impl.StdSchedulerFactory;
 import org.springframework.stereotype.Component;
 
@@ -90,6 +93,8 @@ public class AdminBean {
 
     @Resource
     DependenciaDAO dependenciaDAO;
+
+    Map<Integer, Scheduler> tareas;
 
     /**
      * Crear un sensor.
@@ -222,7 +227,9 @@ public class AdminBean {
      * @return Devuelve la tarea programada, null si no es encontrada.
      */
     public TareaProgramada obtenerTareaProgramada(Integer idTareaProgramada) {
-        return tareaProgramadaDAO.buscar(idTareaProgramada);
+        TareaProgramada tarea = tareaProgramadaDAO.buscar(idTareaProgramada);
+        lanzarTarea(tarea);
+        return tarea;
     }
 
     /**
@@ -237,6 +244,14 @@ public class AdminBean {
         if (tp == null) {
             throw new TareaProgramadaNoEncontrada();
         }
+        Scheduler t = tareas.get(idTareaProgramada);
+        try {
+            t.interrupt(String.valueOf(idTareaProgramada));
+            t.shutdown(true);
+        } catch (SchedulerException ex) {
+            Logger.getLogger(AdminBean.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        tareas.remove(tp.getId());
         tareaProgramadaDAO.eliminar(tp);
     }
 
@@ -248,6 +263,15 @@ public class AdminBean {
      */
     public void modificarTareaProgramada(TareaProgramada tareaProgramada) throws TareaProgramadaErrorActualizar {
         tareaProgramadaDAO.actualizar(tareaProgramada);
+        Scheduler t = tareas.get(tareaProgramada.getId());
+        try {
+            t.interrupt(String.valueOf(tareaProgramada.getId()));
+            t.shutdown(true);
+        } catch (SchedulerException ex) {
+            Logger.getLogger(AdminBean.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        tareas.remove(tareaProgramada.getId());
+        lanzarTarea(tareaProgramada);
     }
 
     /**
@@ -268,7 +292,7 @@ public class AdminBean {
         if (a == null) {
             throw new ActuadorNoEncontrado();
         }
-        ReglaProgramada r = new ReglaProgramada(reglaProgramada.getDescripcion(), reglaProgramada.getCondicion(), s, a);
+        ReglaProgramada r = new ReglaProgramada(reglaProgramada.getDescripcionRegla(), s, a, reglaProgramada.getValorMin(), reglaProgramada.getValorMax(), reglaProgramada.getMargenRuido(), reglaProgramada.getEstadoActuador());
         try {
             reglaProgramadaDAO.insertar(r);
         } catch (ReglaProgramadaErrorPersistir e) {
@@ -443,7 +467,12 @@ public class AdminBean {
      * @return Devuelve un mapa con la lista de tareas programadas
      */
     public Map<Integer, TareaProgramada> listarTareasProgramadas() {
-        return tareaProgramadaDAO.listar();
+        Map<Integer, TareaProgramada> tareasP = tareaProgramadaDAO.listar();
+        for (Map.Entry t : tareasP.entrySet()) {
+            TareaProgramada tarea = (TareaProgramada) t.getValue();
+            lanzarTarea(tarea);
+        }
+        return tareasP;
     }
 
     /**
@@ -498,35 +527,40 @@ public class AdminBean {
     }
 
     @PostConstruct
-    public void lanzarTodasTareas(){
+    public void lanzarTodasTareas() {
         // cargar todas las tareas programadas
-        Map<Integer, TareaProgramada> tareas = tareaProgramadaDAO.listar();
-        for(Map.Entry t : tareas.entrySet()){
+        tareas = new HashMap();
+        Map<Integer, TareaProgramada> tareasP = tareaProgramadaDAO.listar();
+        for (Map.Entry t : tareasP.entrySet()) {
             TareaProgramada tarea = (TareaProgramada) t.getValue();
-            try {
-                lanzarTarea(tarea);
-            } catch (SchedulerException ex) {
-                Logger.getLogger(AdminBean.class.getName()).log(Level.SEVERE, null, ex);
-            }
+            lanzarTarea(tarea);
         }
     }
 
-    private void lanzarTarea(TareaProgramada t) throws SchedulerException {
-        JobKey tareaKey = new JobKey(String.valueOf(t.getId()), "group-"+t.getId());
-        JobDetail tarea = JobBuilder.newJob(Tarea.class)
-                .withIdentity(tareaKey).build();
+    private void lanzarTarea(TareaProgramada t) {
+        if (tareas.get(t.getId()) == null) {
+            JobKey tareaKey = new JobKey(String.valueOf(t.getId()), "group-" + t.getId());
+            JobDetail tarea = JobBuilder.newJob(Tarea.class)
+                    .withIdentity(tareaKey).build();
 
-        Trigger trigger = TriggerBuilder
-                .newTrigger()
-                .withIdentity("Trigger-"+t.getId(), "group-"+t.getId())
-                .withSchedule(
-                        CronScheduleBuilder.cronSchedule(t.getCron()))
-                .build(); // "0/20 * * * * ?"
+            Trigger trigger = TriggerBuilder
+                    .newTrigger()
+                    .withIdentity("Trigger-" + t.getId(), "group-" + t.getId())
+                    .withSchedule(
+                            CronScheduleBuilder.cronSchedule(t.getCron()))
+                    .build(); // "0/20 * * * * ?"
 
-        Scheduler scheduler = new StdSchedulerFactory().getScheduler();
+            Scheduler scheduler = null;
+            try {
+                scheduler = new StdSchedulerFactory().getScheduler();
+                scheduler.start();
+                scheduler.scheduleJob(tarea, trigger);
+            } catch (SchedulerException ex) {
+                Logger.getLogger(AdminBean.class.getName()).log(Level.SEVERE, null, ex);
+            }
 
-        scheduler.start();
-        scheduler.scheduleJob(tarea, trigger);
+            tareas.put(t.getId(), scheduler);
+        }
     }
 
 }

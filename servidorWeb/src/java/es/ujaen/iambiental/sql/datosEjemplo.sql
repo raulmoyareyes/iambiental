@@ -30,11 +30,11 @@ INSERT INTO iambiental.sensores (dato, descripcion, estado, fecha, ip, puerto, t
 	VALUES (21.0, 'Sensor de temperatura dormitorio 1', 0, '2014-05-03 00:27:58.0', NULL, NULL, 1, 2, 1);
 
 /** TAREAS PROGRAMADAS */
-INSERT INTO iambiental.tareasprogramadas (descripcion) 
-	VALUES ('Depuradora');
+INSERT INTO iambiental.tareasprogramadas (cron, descripcion) 
+	VALUES ('0/20 * * * * ?', 'Depuradora');
 
 /** REGLAS PROGRAMADAS */
-INSERT INTO iambiental.reglasprogramadas (condicion, descripcion, actuador_id, sensor_id) 
-	VALUES ('9<3', 'Encender motor', 1, 1);
+INSERT INTO iambiental.reglasprogramadas (`descripcionRegla`, `estadoActuador`, `margenRuido`, `valorMax`, `valorMin`, actuador_id, sensor_id) 
+	VALUES ('Encender motor', 1, 5.0, 50.0, 10.0, 1, 1);
 INSERT INTO iambiental.tareasprogramadas_reglasprogramadas (tareasprogramadas_id, `reglasProgramadas_id`) 
 	VALUES (1, 1);
