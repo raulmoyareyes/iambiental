@@ -228,7 +228,7 @@ public class ReglaSensorActuador implements Serializable {
      * actuador o false en caso contrario
      */
     //@XmlTransient
-    private boolean isTrue() {
+    private boolean seCumple() {
         /*  Hay cinco franjas posibles divididas por cuatro separadores:
          +Infinito
          ························ FALSE
@@ -259,7 +259,7 @@ public class ReglaSensorActuador implements Serializable {
      * Actualiza el valor del actuador en función del dato del sensor
      */
     public void updateActuador() {
-        if (this.isTrue()) {
+        if (this.seCumple()) {
             this.actuador.setEstado(this.estadoActuador);
         } else {
             this.actuador.setEstado(0);  //Por defecto, si no se cumple ninguna regla, será 0

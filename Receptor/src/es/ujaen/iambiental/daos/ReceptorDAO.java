@@ -29,7 +29,7 @@ public class ReceptorDAO {
         cnx = null;
         try {
             cnx = DriverManager.getConnection("jdbc:mysql://localhost:3306/iAmbiental?"
-                    + "user=root&password=123456");
+                    + "user=root&password=toor");
 
         } catch (SQLException ex) {
             Logger.getLogger(ReceptorDAO.class.getName()).log(Level.SEVERE, ex.getMessage(), ex);

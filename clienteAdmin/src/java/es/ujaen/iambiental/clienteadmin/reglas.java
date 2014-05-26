@@ -5,8 +5,14 @@
  */
 package es.ujaen.iambiental.clienteadmin;
 
+import com.sun.jersey.api.client.Client;
+import com.sun.jersey.api.client.ClientResponse;
+import com.sun.jersey.api.client.WebResource;
+import com.sun.jersey.api.client.config.DefaultClientConfig;
+import es.ujaen.iambiental.modelos.Actuador;
+import es.ujaen.iambiental.modelos.ReglaSensorActuador;
+import es.ujaen.iambiental.modelos.Sensor;
 import java.io.IOException;
-import java.util.ArrayList;
 import java.util.List;
 import javax.servlet.RequestDispatcher;
 import javax.servlet.ServletException;
@@ -14,7 +20,8 @@ import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-
+import org.codehaus.jackson.jaxrs.JacksonJsonProvider;
+import org.codehaus.jackson.map.ObjectMapper;
 
 /**
  *
@@ -32,7 +39,7 @@ public class reglas extends HttpServlet {
      * @throws ServletException if a servlet-specific error occurs
      */
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
-            throws ServletException, IOException{
+            throws ServletException, IOException {
         response.setContentType("text/html;charset=UTF-8");
 
         RequestDispatcher rd;
@@ -45,108 +52,199 @@ public class reglas extends HttpServlet {
         //Pathinfo
         String action = (request.getPathInfo() != null ? request.getPathInfo() : "");
 
+        // Mapeador
+        ObjectMapper mapper = new ObjectMapper();
+
         //Cliente para JSON
-//        DefaultClientConfig defaultClientConfig = new DefaultClientConfig();
-//        defaultClientConfig.getClasses().add(JacksonJsonProvider.class);
-//        Client cliente = Client.create(defaultClientConfig);
-//        WebResource recurso = null;
-//        WebResource recurso = cliente.resource("http://localhost:8080/Hoteles-DAE-REST/recursos");
-        /* SÓLO PARA PRUEBAS */
-//        Sensor_provisional.reset(); //Resetear id de sensores
-//        List<Sensor_provisional> sensores;
-//        sensores = new ArrayList<>();
-//        sensores.add(new Sensor_provisional("Sensor 1", 1, 10f, "192.168.1.10", "1111", 1));
-//        sensores.add(new Sensor_provisional("Sensor 2", 2, 20f, "192.168.1.20", "2222", 2));
-//        sensores.add(new Sensor_provisional("Sensor 3", 3, 30f, "192.168.1.30", "3333", 3));
-//        sensores.add(new Sensor_provisional("Sensor 4", 4, 40f, "192.168.1.40", "4444", 4));
-//        sensores.add(new Sensor_provisional("Sensor 5", 5, 50f, "192.168.1.50", "5555", 5));
-//        sensores.add(new Sensor_provisional("Sensor 6", 6, 60f, "192.168.1.60", "6666", 6));
-//        sensores.add(new Sensor_provisional("Sensor 7", 7, 70f, "192.168.1.70", "7777", 7));
-//        
-//        Actuador_provisional.reset(); //Resetear id de actuador
-//        List<Actuador_provisional> actuadores;
-//        actuadores = new ArrayList<>();
-//        actuadores.add(new Actuador_provisional("Actuador 1", 1, 10f, "192.168.1.10", "1111", 1));
-//        actuadores.add(new Actuador_provisional("Actuador 2", 2, 20f, "192.168.1.20", "2222", 2));
-//        actuadores.add(new Actuador_provisional("Actuador 3", 3, 30f, "192.168.1.30", "3333", 3));
-//        actuadores.add(new Actuador_provisional("Actuador 4", 4, 40f, "192.168.1.40", "4444", 4));
-//        actuadores.add(new Actuador_provisional("Actuador 5", 5, 50f, "192.168.1.50", "5555", 5));
-//        actuadores.add(new Actuador_provisional("Actuador 6", 6, 60f, "192.168.1.60", "6666", 6));
-//        actuadores.add(new Actuador_provisional("Actuador 7", 7, 70f, "192.168.1.70", "7777", 7));
-//        
-//        ReglaSensorActuador_provisional.reset();
-//        List<ReglaSensorActuador_provisional> reglasSensorActuador;
-//        reglasSensorActuador = new ArrayList<>();
-//        reglasSensorActuador.add(new ReglaSensorActuador_provisional("Regla 1", sensores.get(0), actuadores.get(0)));
-//        reglasSensorActuador.add(new ReglaSensorActuador_provisional("Regla 2", sensores.get(1), actuadores.get(2)));
-//        reglasSensorActuador.add(new ReglaSensorActuador_provisional("Regla 3", sensores.get(2), actuadores.get(2)));
-//        
-//        Dependencia_provisional.reset(); //Resetear id de dependencia
-//        List<Dependencia_provisional> dependencias;
-//        dependencias = new ArrayList<>();
-//        dependencias.add(new Dependencia_provisional("Salón", "Descripción del salón"));
-//        dependencias.add(new Dependencia_provisional("Cocina", "Descripción de cocina"));
-//        dependencias.add(new Dependencia_provisional("Baño", "Descripción de baño"));
-//        dependencias.add(new Dependencia_provisional("Dormitorio principal", "Descripción de dormitorio principal"));
-//        dependencias.add(new Dependencia_provisional("Dormitorio individual", "Descripción de dormitorio individual"));
-//        dependencias.add(new Dependencia_provisional("Pasillo", "Descripción de pasillo"));
-//        dependencias.add(new Dependencia_provisional("Piscina", "Descripción de piscina"));
-        /* FIN DE PRUEBAS */
+        DefaultClientConfig defaultClientConfig = new DefaultClientConfig();
+        defaultClientConfig.getClasses().add(JacksonJsonProvider.class);
+        Client cliente = Client.create(defaultClientConfig);
+        WebResource recurso = cliente.resource("http://localhost:8084/servidorWeb/recursos");
+
+        // Sensores
+        ClientResponse responseJSONS = recurso.path("/sensores").accept("application/json").get(ClientResponse.class);
+        List<Sensor> sensores = responseJSONS.getEntity(List.class);
+
+        // Actuadores
+        ClientResponse responseJSONA = recurso.path("/actuadores").accept("application/json").get(ClientResponse.class);
+        List<Actuador> actuadores = responseJSONA.getEntity(List.class);
+
+        // Reglas Sensor-Actuador
+        ClientResponse responseJSONR = recurso.path("/reglasSensorActuador").accept("application/json").get(ClientResponse.class);
+        List<ReglaSensorActuador> reglasSensorActuador = responseJSONR.getEntity(List.class);
 
         //Cabecera
-//        request.setAttribute("mainMenuOption", "reglas");
-//        rd = request.getRequestDispatcher("/WEB-INF/cabecera.jsp");
-//        rd.include(request, response);
-//        
-//        //Cuerpo
-//        switch (action) {
-//            case "/listado":
-//            default: //Ninguna opción seleccionada
-//                request.setAttribute("reglasSensorActuador", reglasSensorActuador);
-//                rd = request.getRequestDispatcher("/WEB-INF/reglas/index.jsp");
-//                rd.include(request, response);
-//                rd = request.getRequestDispatcher("/WEB-INF/reglas/modalEliminar.jsp");
-//                rd.include(request, response);
-//                break;
-//            case "/insertar": //Insertar sensor
-//                request.setAttribute("sensores", sensores);
-//                request.setAttribute("actuadores", actuadores);
-//                request.setAttribute("reglasSensorActuador", reglasSensorActuador);
-//                rd = request.getRequestDispatcher("/WEB-INF/reglas/insertar.jsp");
-//                rd.include(request, response);
-//                break;
-//            case "/ver": //Ver sensor
-//                request.setAttribute("sensores", sensores);
-//                request.setAttribute("actuadores", actuadores);
-//                request.setAttribute("reglasSensorActuador", reglasSensorActuador);
-//                request.setAttribute("reglaSensorActuador", reglasSensorActuador.get(Integer.parseInt(request.getParameter("id"))));
-//                rd = request.getRequestDispatcher("/WEB-INF/reglas/ver.jsp");
-//                rd.include(request, response);
-//                rd = request.getRequestDispatcher("/WEB-INF/reglas/modalEliminar.jsp");
-//                rd.include(request, response);
-//                break;
-//            case "/eliminar": //Sensor eliminado
-//                int idEliminar = Integer.parseInt(request.getParameter("id"));
-//                request.setAttribute("eliminado", reglasSensorActuador.get(idEliminar).getDescripcion());
-//                reglasSensorActuador.remove(idEliminar); //¿Comprobar si hay error?
-//                request.setAttribute("reglasSensorActuador", reglasSensorActuador);
-//                rd = request.getRequestDispatcher("/WEB-INF/reglas/index.jsp");
-//                rd.include(request, response);
-//                rd = request.getRequestDispatcher("/WEB-INF/reglas/modalEliminar.jsp");
-//                rd.include(request, response);
-//                break;
-//            case "/editar": //Editar sensor
-//                request.setAttribute("sensores", sensores);
-//                request.setAttribute("actuadores", actuadores);
-//                request.setAttribute("reglasSensorActuador", reglasSensorActuador);
-//                request.setAttribute("reglaSensorActuador", reglasSensorActuador.get(Integer.parseInt(request.getParameter("id"))));
-//                rd = request.getRequestDispatcher("/WEB-INF/reglas/editar.jsp");
-//                rd.include(request, response);
-//                rd = request.getRequestDispatcher("/WEB-INF/reglas/modalEliminar.jsp");
-//                rd.include(request, response);
-//                break;
-//        }
-//        
+        request.setAttribute("mainMenuOption", "reglas");
+        rd = request.getRequestDispatcher("/WEB-INF/cabecera.jsp");
+        rd.include(request, response);
+
+        //Cuerpo
+        switch (action) {
+            case "/listado":
+            default: //Ninguna opción seleccionada
+                request.setAttribute("reglasSensorActuador", reglasSensorActuador);
+                rd = request.getRequestDispatcher("/WEB-INF/reglas/index.jsp");
+                rd.include(request, response);
+                rd = request.getRequestDispatcher("/WEB-INF/reglas/modalEliminar.jsp");
+                rd.include(request, response);
+                break;
+            case "/insertar": //Insertar regla
+                if (request.getParameter("crear") != null) {
+                    //Insertar regla
+                    String descripcion = request.getParameter("descripcion");
+                    int estadoActuador = Integer.parseInt(request.getParameter("estadoActuador"));
+                    float margenRuido = Float.parseFloat(request.getParameter("margenRuido"));
+                    float valorMin = Float.parseFloat(request.getParameter("valorMin"));
+                    float valorMax = Float.parseFloat(request.getParameter("valorMax"));
+                    int sensor_id = Integer.parseInt(request.getParameter("sensor"));
+                    int actuador_id = Integer.parseInt(request.getParameter("actuador"));
+                    //Verificar valorMin y valorMax
+                    if (valorMin > valorMax) {
+                        float aux = valorMin;
+                        valorMin = valorMax;
+                        valorMax = aux;
+                    }
+                    //Buscar sensor y actuador expecífico
+                    Sensor s = null;
+                    for (int i = 0; i < sensores.size() && s == null; i++) {
+                        Sensor aux = mapper.convertValue(sensores.get(i), Sensor.class);
+                        if (aux.getId() == sensor_id) {
+                            s = aux;
+                        }
+                    }
+                    Actuador a = null;
+                    for (int i = 0; i < actuadores.size() && a == null; i++) {
+                        Actuador aux = mapper.convertValue(actuadores.get(i), Actuador.class);
+                        if (aux.getId() == actuador_id) {
+                            a = aux;
+                        }
+                    }
+
+                    ReglaSensorActuador r = new ReglaSensorActuador(descripcion, s, a, valorMax, valorMin, margenRuido, estadoActuador);
+
+                    recurso.path("/reglasSensorActuador")
+                            .type("application/json")
+                            .put(ClientResponse.class, r);
+
+                    response.sendRedirect("/clienteAdmin/reglas");
+                } else {
+                    //Formulario nueva regla
+                    request.setAttribute("sensores", sensores);
+                    request.setAttribute("actuadores", actuadores);
+                    request.setAttribute("reglasSensorActuador", reglasSensorActuador);
+                    rd = request.getRequestDispatcher("/WEB-INF/reglas/insertar.jsp");
+                    rd.include(request, response);
+                }
+                break;
+            case "/ver": //Ver regla
+                request.setAttribute("sensores", sensores);
+                request.setAttribute("actuadores", actuadores);
+                request.setAttribute("reglasSensorActuador", reglasSensorActuador);
+                int id = Integer.parseInt(request.getParameter("id"));
+                ReglaSensorActuador r = null;
+                for (int i = 0; i < reglasSensorActuador.size() && r == null; i++) { // no cambiar al for-loop
+                    ReglaSensorActuador aux = mapper.convertValue(reglasSensorActuador.get(i), ReglaSensorActuador.class);
+                    if (aux.getId() == id) {
+                        r = aux;
+                    }
+                }
+                request.setAttribute("reglaSensorActuador", r);
+                rd = request.getRequestDispatcher("/WEB-INF/reglas/ver.jsp");
+                rd.include(request, response);
+                rd = request.getRequestDispatcher("/WEB-INF/reglas/modalEliminar.jsp");
+                rd.include(request, response);
+                break;
+            case "/eliminar": //regla eliminada
+                int idEliminar = Integer.parseInt(request.getParameter("id"));
+                r = null;
+                for (int i = 0; i < reglasSensorActuador.size() && r == null; i++) {
+                    ReglaSensorActuador aux = mapper.convertValue(reglasSensorActuador.get(i), ReglaSensorActuador.class);
+                    if (aux.getId() == idEliminar) {
+                        r = aux;
+                    }
+                }
+                request.setAttribute("eliminado", r.getDescripcion());
+                recurso.path("/reglasSensorActuador/" + idEliminar).delete();
+                request.setAttribute("reglasSensorActuador", reglasSensorActuador);
+                response.sendRedirect("/clienteAdmin/reglas");
+                break;
+            case "/editar": //Editar regla
+                if (request.getParameter("modificar") != null) {
+
+                    //Insertar regla
+                    int idModificar = Integer.parseInt(request.getParameter("modificar"));
+                    String descripcion = request.getParameter("descripcion");
+                    int estadoActuador = Integer.parseInt(request.getParameter("estadoActuador"));
+                    float margenRuido = Float.parseFloat(request.getParameter("margenRuido"));
+                    float valorMin = Float.parseFloat(request.getParameter("valorMin"));
+                    float valorMax = Float.parseFloat(request.getParameter("valorMax"));
+                    int sensor_id = Integer.parseInt(request.getParameter("sensor"));
+                    int actuador_id = Integer.parseInt(request.getParameter("actuador"));
+                    //Verificar valorMin y valorMax
+                    if (valorMin > valorMax) {
+                        float aux = valorMin;
+                        valorMin = valorMax;
+                        valorMax = aux;
+                    }
+                    //Buscar sensor y actuador expecífico
+                    Sensor s = null;
+                    for (int i = 0; i < sensores.size() && s == null; i++) {
+                        Sensor aux = mapper.convertValue(sensores.get(i), Sensor.class);
+                        if (aux.getId() == sensor_id) {
+                            s = aux;
+                        }
+                    }
+                    Actuador a = null;
+                    for (int i = 0; i < actuadores.size() && a == null; i++) {
+                        Actuador aux = mapper.convertValue(actuadores.get(i), Actuador.class);
+                        if (aux.getId() == actuador_id) {
+                            a = aux;
+                        }
+                    }
+
+                    r = null;
+                    for (int i = 0; i < reglasSensorActuador.size() && r == null; i++) {
+                        ReglaSensorActuador aux = mapper.convertValue(reglasSensorActuador.get(i), ReglaSensorActuador.class);
+                        if (aux.getId() == idModificar) {
+                            r = aux;
+                        }
+                    }
+
+                    r.setDescripcion(descripcion);
+                    r.setEstadoActuador(estadoActuador);
+                    r.setMargenRuido(margenRuido);
+                    r.setValorMin(valorMin);
+                    r.setValorMax(valorMax);
+                    r.setSensor(s);
+                    r.setActuador(a);
+
+                    recurso.path("/reglasSensorActuador/" + idModificar)
+                            .type("application/json")
+                            .post(ClientResponse.class, r);
+
+                    response.sendRedirect("/clienteAdmin/reglas/ver?id="+idModificar);
+                } else {
+                    //Formulario editar regla
+                    int idEditar = Integer.parseInt(request.getParameter("id"));
+                    r = null;
+                    for (int i = 0; i < reglasSensorActuador.size() && r == null; i++) {
+                        ReglaSensorActuador aux = mapper.convertValue(reglasSensorActuador.get(i), ReglaSensorActuador.class);
+                        if (aux.getId() == idEditar) {
+                            r = aux;
+                        }
+                    }
+                    request.setAttribute("sensores", sensores);
+                    request.setAttribute("actuadores", actuadores);
+                    request.setAttribute("reglasSensorActuador", reglasSensorActuador);
+                    request.setAttribute("reglaSensorActuador", r);
+                    rd = request.getRequestDispatcher("/WEB-INF/reglas/editar.jsp");
+                    rd.include(request, response);
+                    rd = request.getRequestDispatcher("/WEB-INF/reglas/modalEliminar.jsp");
+                    rd.include(request, response);
+                }
+                break;
+        }
+
         //Footer
         rd = request.getRequestDispatcher("/WEB-INF/pie.jsp");
         rd.include(request, response);

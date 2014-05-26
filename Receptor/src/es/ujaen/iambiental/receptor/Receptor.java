@@ -79,7 +79,7 @@ public class Receptor {
                 // MENSAJE DE TESTEO
                 System.out.println("El dispositivo con id: " + mensaje);
                 // Si recibimos un paquete Sensor o Actuador se trata de manera diferente
-                if (splitChain[0].compareTo("s") == 0) {
+                if (splitChain[0].compareTo("s") == 0) {    //Sensor
                     // Asignamos los datos extraidos a sus respectivas variables
                     id = Integer.parseInt(splitChain[1]);
                     dato = Float.parseFloat(splitChain[2]);
@@ -113,7 +113,7 @@ public class Receptor {
                             System.out.println("Sensor no existente en BD");
                         }
                     } else {
-                        System.out.println("Error en el checksum");
+                        System.out.println("Error en el checksum (" + checksum + ")");
                     }
 
                     // Comprobación de los datos insertados en BD
@@ -121,6 +121,91 @@ public class Receptor {
 
                     if (actualiza && (s_aux.getIdFisico() == id)) {
                         System.out.println("Actualización realizada con éxito");
+
+                        // COMPROBAMOS REGLAS SENSOR-ACTUADOR
+                        System.out.println("Comprobando reglas...");
+
+                        //Consultar en la BBDD todas las reglas que imputan al sensor
+                        Connection cnx = openConexion();
+                        String qry = "SELECT * FROM reglassensoractuador, actuadores WHERE reglassensoractuador.actuador_id = actuadores.idFisico AND sensor_id=?";
+                        PreparedStatement stmn = cnx.prepareStatement(qry);
+                        stmn.setInt(1, id);
+                        ResultSet rs = stmn.executeQuery();
+                        // Una vez obtenido, si .next() que apunta al siguiente dato de la tupla
+                        // está vacío, o sea, no se ha recibido nada, se ignora este mensaje
+                        while (rs.next()) {
+                            float valorMin = Float.parseFloat(rs.getString("valorMin"));
+                            float valorMax = Float.parseFloat(rs.getString("valorMax"));
+                            float margenRuido = Float.parseFloat(rs.getString("margenRuido"));
+
+                            //dato
+                            int estadoCambio = Integer.parseInt(rs.getString("estadoActuador"));
+                            int estadoActual = Integer.parseInt(rs.getString("estado"));
+
+                            String ip = rs.getString("ip");
+                            String puerto = "60000";//rs.getString("puerto");
+                            
+                            boolean reglaSeCumple = false;
+
+                            if (dato > valorMax + margenRuido || dato < valorMin - margenRuido) {
+                                //Fuera de la regla
+                                //ACTUALIZAR A VALOR 0
+                                reglaSeCumple = false;
+                            } else if (dato < valorMax - margenRuido && dato > valorMin + margenRuido) {
+                                //En la regla plena
+                                //ACTUALIZAR A VALOR DEL ESTADO
+                                reglaSeCumple = true;
+                            }
+//                            else if (dato <= valorMax + margenRuido && dato >= valorMax - margenRuido) {
+//                                //Dato en margen máximo. Hay que comprobar
+//                            } else if (dato <= valorMin + margenRuido && dato >= valorMin - margenRuido) {
+//                                //Dato en margen mínimo. Hay que comprobar
+//                            }
+//                            
+                            if(reglaSeCumple){
+                                System.out.println("REGLA SE CUMPLE");
+                                //Valor a Cero
+                                //ACTUALIZAR A VALOR DE LA REGLA
+                                long fechaHora = new Date().getTime(); //Integer.parseInt(splitChain[4]);
+                                String text = "a" + ";"
+                                        + String.valueOf(id) + ";"
+                                        + String.valueOf(dato) + ";"
+                                        + String.valueOf(estadoCambio) + ";"
+                                        + String.valueOf(fechaHora);
+
+                                // Hallamos el checksum mediante la función
+                                checksum = 0 + id + (int) dato + estadoCambio + (int) fechaHora;
+                                if (checksum < 0) {
+                                    checksum *= -1;
+                                }
+
+                                text = text + ";" + ip + ";" + puerto + ";" + checksum;
+                                envioActuador(text);
+                                actualizaDatosActuador(id, dato, estadoCambio, fecha);
+                            }else{
+                                System.out.println("REGLA NO SE CUMPLE");
+                                //Valor de la regla
+                                //ACTUALIZAR A VALOR POR DEFECTO (0)
+                                long fechaHora = new Date().getTime(); //Integer.parseInt(splitChain[4]);
+                                String text = "a" + ";"
+                                        + String.valueOf(id) + ";"
+                                        + String.valueOf(dato) + ";"
+                                        + "0" + ";"
+                                        + String.valueOf(fechaHora);
+
+                                // Hallamos el checksum mediante la función
+                                checksum = 0 + id + (int) dato + 0 + (int) fechaHora;
+                                if (checksum < 0) {
+                                    checksum *= -1;
+                                }
+
+                                text = text + ";" + ip + ";" + puerto + ";" + checksum;
+                                envioActuador(text);
+                                actualizaDatosActuador(id, dato, 0, fecha);
+                            }
+                        }
+
+                        //FIN DE COMPROBACIÓN DE REGLAS SENSOR-ACTUADOR
                     } else {
                         // SE INFORMA DEL ERROR Y NO SE GUARDA EN BD
                         System.out.println("Actualización no coincidente");
@@ -137,21 +222,21 @@ public class Receptor {
                     SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy HH:mm:ss.SS");
                     String fechaActuador = sdf.format(fecha);
 
-                    // Obtenemos el checksum en el servidor
+                        // Obtenemos el checksum en el servidor
                     // id, dato, estado, fecha
                     String text = "a" + ";"
                             + String.valueOf(id) + ";"
                             + String.valueOf(dato) + ";"
                             + String.valueOf(estado) + ";"
                             + String.valueOf(splitChain[4]);
-                    int fechaEnSecs = Integer.parseInt(splitChain[4]);
+                    long fechaEnSecs = new Date().getTime(); //Integer.parseInt(splitChain[4]);
 
                     // Hallamos el checksum mediante la función
-                    checksum = 0 + id + (int) dato + estado + fechaEnSecs;
+                    checksum = 0 + id + (int) dato + estado + (int) fechaEnSecs;
                     if (checksum < 0) {
                         checksum *= -1;
                     }
-                    
+
                     // Actualización en BD
                     if (checksum == Integer.parseInt(splitChain[5].trim())) {
                         // Comprobamos si existe en BD
@@ -167,11 +252,11 @@ public class Receptor {
                         //String ip ="192.168.9.250";
                         //String puerto = "8888";
 
-                        // Acabamos de construir el paquete con el checksum 
+                            // Acabamos de construir el paquete con el checksum 
                         // y lo enviamos al Emisor para que se encargue
                         // de enviarlo al Arduino
                         // Hallamos el checksum mediante la función
-                        checksum = 0 + id + (int) dato + estado + fechaEnSecs;
+                        checksum = 0 + id + (int) dato + estado + (int) fechaEnSecs;
                         if (checksum < 0) {
                             checksum *= -1;
                         }
@@ -180,7 +265,7 @@ public class Receptor {
                         actualiza = actualizaDatosActuador(id, dato, estado, fecha);
                         //System.out.println("Actuador no existente en BD");
                     } else {
-                        System.out.println("Error en el checksum");
+                        System.out.println("Error en el checksum (" + checksum + ")");
                     }
 
                     // Comprobación de los datos insertados en BD

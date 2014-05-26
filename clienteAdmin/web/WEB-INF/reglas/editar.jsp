@@ -12,35 +12,51 @@
                 <div class="form-group">
                     <label for="inputDescripcionRegla" class="col-sm-2 control-label">Descripción</label>
                     <div class="col-sm-10">
-                        <input type="text" name="descripcionRegla" class="form-control" id="inputDescripcionRegla" placeholder="Descripción de la regla sensor-actuador" value="${reglaSensorActuador.descripcion}"/>
+                        <input type="text" name="descripcion" class="form-control" id="inputDescripcionRegla" placeholder="Descripción de la regla sensor-actuador" value="${reglaSensorActuador.descripcion}"/>
                     </div>
                 </div>
 
                 <div class="form-group">
                     <label for="selectSensorRegla" class="col-sm-2 control-label">Sensor</label>
                     <div class="col-sm-10">
-                        <select class="form-control" name="sensorRegla" id="selectSensorRegla">
+                        <select class="form-control" name="sensor" id="selectSensorRegla">
                             <c:forEach var="s" items="${sensores}" varStatus="estado">
-                                <option value="${s.id}"  ${(s.id==reglaSensorActuador.sensor.id)?'selected="selected"':''}>${s.descripcion}</option>
+                                <option value="${s.id}"  ${(s.id==reglaSensorActuador.sensor.id)?'selected="selected"':''}>${s.descripcion} (${s.dependencia.descripcion})</option>
                             </c:forEach>
                         </select>
                     </div>
                 </div>
 
                 <div class="form-group">
+                    <label for="selectSensorRegla" class="col-sm-2 control-label">Dato sensor</label>
+                    <div class="col-sm-10">
+                        <input type="text" name="valorMin" class="form-control" id="inputValorMin" placeholder="Valor mínimo" value="${reglaSensorActuador.valorMin}"/>
+                        <input type="text" name="valorMax" class="form-control" id="inputValorMax" placeholder="Valor máximo" value="${reglaSensorActuador.valorMax}"/>
+                        <input type="text" name="margenRuido" class="form-control" id="inputMargenRuido" placeholder="Margen de ruido" value="${reglaSensorActuador.margenRuido}"/>
+                    </div>
+                </div>
+
+                <div class="form-group">
                     <label for="selectActuadorRegla" class="col-sm-2 control-label">Actuador</label>
                     <div class="col-sm-10">
-                        <select class="form-control" name="actuadorRegla" id="selectActuadorRegla">
+                        <select class="form-control" name="actuador" id="selectActuadorRegla">
                             <c:forEach var="a" items="${actuadores}" varStatus="estado">
-                                <option value="${a.id}" ${(a.id==reglaSensorActuador.actuador.id)?'selected="selected"':''}>${a.descripcion}</option>
+                                <option value="${a.id}" ${(a.id==reglaSensorActuador.actuador.id)?'selected="selected"':''}>${a.descripcion} (${a.dependencia.descripcion})</option>
                             </c:forEach>
                         </select>
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <label for="selectSensorRegla" class="col-sm-2 control-label">Estado actuador</label>
+                    <div class="col-sm-10">
+                        <input type="text" name="estadoActuador" class="form-control" id="inputEstadoActuador" placeholder="Estado a establecer el actuador" value="${reglaSensorActuador.estadoActuador}"/>
                     </div>
                 </div>
                 
                 <div class="form-group">
                     <div class="col-sm-offset-2 col-sm-10">
-                        <button type="submit" class="btn btn-success">Guardar</button>
+                        <button type="submit"  name="modificar" class="btn btn-success" value="${reglaSensorActuador.id}">Guardar</button>
                         <a href="${appUrl}/reglas" rol="button" class="btn btn-danger">Cancelar</a>
                     </div>
                 </div>

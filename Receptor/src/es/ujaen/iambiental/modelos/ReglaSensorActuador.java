@@ -34,7 +34,6 @@ public class ReglaSensorActuador implements Serializable {
     int estadoActuador;
 
     public ReglaSensorActuador() {
-        
     }
 
     /**
