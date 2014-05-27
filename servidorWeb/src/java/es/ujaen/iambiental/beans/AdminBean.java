@@ -49,7 +49,6 @@ import es.ujaen.iambiental.modelos.TareaProgramada;
 import java.io.IOException;
 import java.net.SocketException;
 import java.net.UnknownHostException;
-import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
@@ -247,8 +246,8 @@ public class AdminBean {
         Scheduler t = tareas.get(idTareaProgramada);
         try {
             t.interrupt(String.valueOf(idTareaProgramada));
-            t.shutdown(true);
-        } catch (SchedulerException ex) {
+            //t.shutdown(true);
+        } catch (UnableToInterruptJobException ex) {
             Logger.getLogger(AdminBean.class.getName()).log(Level.SEVERE, null, ex);
         }
         tareas.remove(tp.getId());
@@ -266,8 +265,8 @@ public class AdminBean {
         Scheduler t = tareas.get(tareaProgramada.getId());
         try {
             t.interrupt(String.valueOf(tareaProgramada.getId()));
-            t.shutdown(true);
-        } catch (SchedulerException ex) {
+            //t.shutdown(true);
+        } catch (UnableToInterruptJobException ex) {
             Logger.getLogger(AdminBean.class.getName()).log(Level.SEVERE, null, ex);
         }
         tareas.remove(tareaProgramada.getId());
@@ -292,7 +291,7 @@ public class AdminBean {
         if (a == null) {
             throw new ActuadorNoEncontrado();
         }
-        ReglaProgramada r = new ReglaProgramada(reglaProgramada.getDescripcionRegla(), s, a, reglaProgramada.getValorMin(), reglaProgramada.getValorMax(), reglaProgramada.getMargenRuido(), reglaProgramada.getEstadoActuador());
+        ReglaProgramada r = new ReglaProgramada(reglaProgramada.getDescripcion(), s, a, reglaProgramada.getValorMin(), reglaProgramada.getValorMax(), reglaProgramada.getMargenRuido(), reglaProgramada.getEstadoActuador());
         try {
             reglaProgramadaDAO.insertar(r);
         } catch (ReglaProgramadaErrorPersistir e) {

@@ -10,7 +10,7 @@ import java.io.Serializable;
 public class ReglaProgramada implements Serializable {
 
     private int id;
-    private String descripcionRegla;
+    private String descripcion;
     private Sensor sensor;
     private Actuador actuador;
     float valorMin;
@@ -24,7 +24,7 @@ public class ReglaProgramada implements Serializable {
     }
 
     public ReglaProgramada(String descripcion, Sensor sensor, Actuador actuador, float valorMin, float valorMax, float margenRuido, int estadoActuador) {
-        this.descripcionRegla = descripcion;
+        this.descripcion = descripcion;
         this.sensor = sensor;
         this.actuador = actuador;
         this.valorMin = valorMin;
@@ -37,12 +37,12 @@ public class ReglaProgramada implements Serializable {
         return id;
     }
 
-    public String getDescripcionRegla() {
-        return descripcionRegla;
+    public String getDescripcion() {
+        return descripcion;
     }
 
-    public void setDescripcionRegla(String descripcionRegla) {
-        this.descripcionRegla = descripcionRegla;
+    public void setDescripcion(String descripcionRegla) {
+        this.descripcion = descripcionRegla;
     }
 
     public Sensor getSensor() {

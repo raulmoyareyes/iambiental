@@ -16,6 +16,13 @@
                         <p class="form-control-static">${tarea.descripcion}</p>
                     </div>
                 </div>
+                    
+                <div class="form-group">
+                    <label for="inputDescripcionTarea" class="col-sm-2 control-label">Cron</label>
+                    <div class="col-sm-10">
+                        <p class="form-control-static">${tarea.cron}</p>
+                    </div>
+                </div>
 
                 <h3>Reglas programadas</h3>
                 <div class="panel-group" id="accordion">
@@ -32,9 +39,39 @@
                             <div id="collapse${r.id}" class="panel-collapse collapse">
                                 <div class="panel-body">
                                     <div class="form-group">
-                                        <label for="inputDescripcionTarea" class="col-sm-2 control-label">Sensor</label>
-                                        <div class="col-sm-10">
+                                        <label for="inputSensorRegla" class="col-sm-4 control-label">Sensor</label>
+                                        <div class="col-sm-6">
                                             <p class="form-control-static">${r.sensor.id} - ${r.sensor.descripcion}</p>
+                                        </div>
+                                    </div>
+                                    <div class="form-group">
+                                        <label for="inputActuadorRegla" class="col-sm-4 control-label">Actuador</label>
+                                        <div class="col-sm-6">
+                                            <p class="form-control-static">${r.actuador.id} - ${r.actuador.descripcion}</p>
+                                        </div>
+                                    </div>
+                                    <div class="form-group">
+                                        <label for="inputValorMinRegla" class="col-sm-4 control-label">Valor mínimo</label>
+                                        <div class="col-sm-6">
+                                            <p class="form-control-static">${r.valorMin}</p>
+                                        </div>
+                                    </div>
+                                    <div class="form-group">
+                                        <label for="inputValorMaxRegla" class="col-sm-4 control-label">Valor máximo</label>
+                                        <div class="col-sm-6">
+                                            <p class="form-control-static">${r.valorMax}</p>
+                                        </div>
+                                    </div>
+                                    <div class="form-group">
+                                        <label for="inputMargenRuidoRegla" class="col-sm-4 control-label">Margen de ruido</label>
+                                        <div class="col-sm-6">
+                                            <p class="form-control-static">${r.margenRuido}</p>
+                                        </div>
+                                    </div>
+                                    <div class="form-group">
+                                        <label for="inputEstadoActuadorRegla" class="col-sm-4 control-label">Estado a establecer el actuador</label>
+                                        <div class="col-sm-6">
+                                            <p class="form-control-static">${r.estadoActuador}</p>
                                         </div>
                                     </div>
                                 </div>

@@ -120,7 +120,6 @@ public class tareas extends HttpServlet {
                                 Float.parseFloat(valorMax[i]),
                                 Float.parseFloat(margenRuido[i]),
                                 Integer.parseInt(estadoActuador[i])));
-//                        reglas.add(new ReglaProgramada(descripcion, condicion, s, a));
                     }
                     
                     TareaProgramada tarea = new TareaProgramada(descripcion, reglas, cron);
@@ -168,59 +167,75 @@ public class tareas extends HttpServlet {
                 request.setAttribute("tareas", tareas);
                 response.sendRedirect("/clienteAdmin/tareas");
                 break;
-            case "/editar": //Editar sensor
-//                if (request.getParameter("modificar") != null) {
-//                    id = Integer.parseInt(request.getParameter("modificar"));
-//                    int idFisico = Integer.parseInt(request.getParameter("idFisico"));
-//                    String descripcion = request.getParameter("descripcion");
-//                    int idD = Integer.parseInt(request.getParameter("dependencia"));
-//                    Dependencia d = null;
-//                    for (int i = 0; i < dependencias.size() && d == null; i++) {
-//                        Dependencia aux = mapper.convertValue(dependencias.get(i), Dependencia.class);
-//                        if (aux.getId() == idD) {
-//                            d = aux;
-//                        }
-//                    }
-//                    String ip = request.getParameter("ip");
-//                    String puerto = request.getParameter("puerto");
-//                    int tipo = Integer.parseInt(request.getParameter("tipo"));
-//
-//                    s = null;
-//                    for (int i = 0; i < sensores.size() && s == null; i++) {
-//                        Sensor aux = mapper.convertValue(sensores.get(i), Sensor.class);
-//                        if (aux.getId() == id) {
-//                            s = aux;
-//                        }
-//                    }
-//                    s.setDescripcion(descripcion);
-//                    s.setDependencia(d);
-//                    s.setIp(ip);
-//                    s.setPuerto(puerto);
-//                    s.setIdFisico(idFisico);
-//                    s.setTipo(tipo);
-//
-//                    recurso.path("/sensores/" + id)
-//                            .type("application/json")
-//                            .post(ClientResponse.class, s);
-//
-//                    response.sendRedirect("/clienteAdmin/sensores");
-//                } else {
-//                    request.setAttribute("sensores", sensores);
-//                    request.setAttribute("dependencias", dependencias);
-//                    s = null;
-//                    id = Integer.parseInt(request.getParameter("id"));
-//                    for (int i = 0; i < sensores.size() && s == null; i++) {
-//                        Sensor aux = mapper.convertValue(sensores.get(i), Sensor.class);
-//                        if (aux.getId() == id) {
-//                            s = aux;
-//                        }
-//                    }
-//                    request.setAttribute("sensor", s);
-//                    rd = request.getRequestDispatcher("/WEB-INF/sensores/editar.jsp");
-//                    rd.include(request, response);
-//                    rd = request.getRequestDispatcher("/WEB-INF/sensores/modalEliminar.jsp");
-//                    rd.include(request, response);
-//                }
+            case "/editar": //Editar tarea programada
+                if (request.getParameter("modificar") != null) {
+                    id = Integer.parseInt(request.getParameter("modificar"));
+                    String descripcion = request.getParameter("descripcion");
+                    String cron = request.getParameter("cron");
+                    String[] reglasensor = request.getParameterValues("sensores");
+                    String[] reglaactuador = request.getParameterValues("actuadores");
+                    String[] descripcionRegla = request.getParameterValues("descripcionRegla"); //CUIDAO EL JSP
+                    String[] valorMin = request.getParameterValues("valorMin");
+                    String[] valorMax= request.getParameterValues("valorMax");
+                    String[] margenRuido = request.getParameterValues("margenRuido");
+                    String[] estadoActuador = request.getParameterValues("estadoActuador");
+                    List<ReglaProgramada> reglas = new ArrayList();
+                    for (int i = 0; i < reglasensor.length; i++) {
+                        Sensor s = null;
+                        for (int j = 0; j < sensores.size() && s == null; j++) {
+                            Sensor aux = mapper.convertValue(sensores.get(j), Sensor.class);
+                            if (aux.getId() == Integer.parseInt(reglasensor[i])) {
+                                s = aux;
+                            }
+                        }
+                        Actuador a = null;
+                        for (int j = 0; j < actuadores.size() && a == null; j++) {
+                            Actuador aux = mapper.convertValue(actuadores.get(j), Actuador.class);
+                            if (aux.getId() == Integer.parseInt(reglaactuador[i])) {
+                                a = aux;
+                            }
+                        }
+                        
+                        reglas.add(new ReglaProgramada(descripcionRegla[i] ,s, a,
+                                Float.parseFloat(valorMin[i]), 
+                                Float.parseFloat(valorMax[i]),
+                                Float.parseFloat(margenRuido[i]),
+                                Integer.parseInt(estadoActuador[i])));
+                    }
+                    
+                    t = null;
+                    for (int i = 0; i < tareas.size() && t == null; i++) {
+                        TareaProgramada aux = mapper.convertValue(tareas.get(i), TareaProgramada.class);
+                        if (aux.getId() == id) {
+                            t = aux;
+                        }
+                    }
+                    
+                    t.setCron(cron);
+                    t.setDescripcion(descripcion);
+                    t.setReglasProgramadas(reglas);
+                    
+                    recurso.path("/tareasProgramadas")
+                            .type("application/json")
+                            .post(ClientResponse.class, t);
+
+                    response.sendRedirect("/clienteAdmin/tareas");
+                } else {
+                    t = null;
+                    id = Integer.parseInt(request.getParameter("id"));
+                    for (int i = 0; i < tareas.size() && t == null; i++) {
+                        TareaProgramada aux = mapper.convertValue(tareas.get(i), TareaProgramada.class);
+                        if (aux.getId() == id) {
+                            t = aux;
+                        }
+                    }
+                    request.setAttribute("tarea", t);
+                    request.setAttribute("tareas", tareas);
+                    request.setAttribute("sensores", sensores);
+                    request.setAttribute("actuadores", actuadores);
+                    rd = request.getRequestDispatcher("/WEB-INF/tareas/editar.jsp");
+                    rd.include(request, response);
+                }
                 break;
         }
 

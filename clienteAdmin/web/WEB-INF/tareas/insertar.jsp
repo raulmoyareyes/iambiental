@@ -19,7 +19,7 @@
                 <div class="form-group">
                     <label for="inputCronTarea" class="col-sm-2 control-label">Cron</label>
                     <div class="col-sm-10">
-                        <input type="text" name="cron" class="form-control" id="inputCronTarea" placeholder="Cron de la tarea programada"/>
+                        <input type="text" name="cron" class="form-control" id="inputCronTarea" placeholder="Cron de la tarea programada (Ejemplo cada 20s 0/20 * * * * ?)"/>
                     </div>
                 </div>
 
@@ -38,7 +38,10 @@
                                 <option value="${a.id}">${a.descripcion}</option>
                             </c:forEach>
                         </select>
-                        <input type="text" name="condicion" class="form-control" id="inputCondicionRegla" placeholder="Condición"/>
+                        <input type="text" name="valorMin" class="form-control" id="inputValorMinRegla" placeholder="Valor mínimo"/>
+                        <input type="text" name="valorMax" class="form-control" id="inputValorMaxRegla" placeholder="Valor máximo"/>
+                        <input type="text" name="margenRuido" class="form-control" id="inputMargenRuidoRegla" placeholder="Margen de ruido"/>
+                        <input type="text" name="estadoActuador" class="form-control" id="inputEstadoActuadorRegla" placeholder="Estado a establecer el actuador"/>
                         <button type="button" class="btn btn-default btn-add">+</button>
                     </div>
                 </div>
