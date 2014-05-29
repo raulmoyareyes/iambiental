@@ -126,6 +126,22 @@ public class sensores extends HttpServlet {
                 rd = request.getRequestDispatcher("/WEB-INF/sensores/modalEliminar.jsp");
                 rd.include(request, response);
                 break;
+            case "/historico": //Ver histórico
+                request.setAttribute("sensores", sensores);
+                id = Integer.parseInt(request.getParameter("id"));
+                s = null;
+                for (int i = 0; i < sensores.size() && s == null; i++) {
+                    Sensor aux = mapper.convertValue(sensores.get(i), Sensor.class);
+                    if (aux.getId() == id) {
+                        s = aux;
+                    }
+                }
+                request.setAttribute("sensor", s);
+                rd = request.getRequestDispatcher("/WEB-INF/sensores/historico.jsp");
+                rd.include(request, response);
+                rd = request.getRequestDispatcher("/WEB-INF/sensores/modalEliminar.jsp");
+                rd.include(request, response);
+                break;
             case "/eliminar": //Sensor eliminado
                 int idEliminar = Integer.parseInt(request.getParameter("id"));
                 s = null;
