@@ -2,7 +2,7 @@ CREATE TABLE historicosensores (
     id      INT,
     dato    DOUBLE,
     estado  INT,
-    fecha   DATE
+    fecha   DATETIME
 );
 
 DELIMITER |

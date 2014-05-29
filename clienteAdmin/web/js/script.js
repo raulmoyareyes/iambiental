@@ -11,7 +11,7 @@ var appUrl = "/clienteAdmin/"; //${appUrl};
  */
 function modalEliminarDependencia(idItemEliminar, nombreDependencia) {
     $('#nombreDependenciaEliminar').text(nombreDependencia);
-    $('#botonEliminarDependencia').attr("href", appUrl+"dependencias/eliminar?id="+idItemEliminar);
+    $('#botonEliminarDependencia').attr("href", appUrl + "dependencias/eliminar?id=" + idItemEliminar);
     $('#modalEliminarDependencia').modal();
 }
 
@@ -23,7 +23,7 @@ function modalEliminarDependencia(idItemEliminar, nombreDependencia) {
  */
 function modalEliminarSensor(idItemEliminar, descripcionSensor) {
     $('#descripcionSensorEliminar').text(descripcionSensor);
-    $('#botonEliminarSensor').attr("href", appUrl+"sensores/eliminar?id="+idItemEliminar);
+    $('#botonEliminarSensor').attr("href", appUrl + "sensores/eliminar?id=" + idItemEliminar);
     $('#modalEliminarSensor').modal();
 }
 
@@ -35,7 +35,7 @@ function modalEliminarSensor(idItemEliminar, descripcionSensor) {
  */
 function modalEliminarActuador(idItemEliminar, descripcionActuador) {
     $('#descripcionActuadorEliminar').text(descripcionActuador);
-    $('#botonEliminarActuador').attr("href", appUrl+"actuadores/eliminar?id="+idItemEliminar);
+    $('#botonEliminarActuador').attr("href", appUrl + "actuadores/eliminar?id=" + idItemEliminar);
     $('#modalEliminarActuador').modal();
 }
 
@@ -47,7 +47,7 @@ function modalEliminarActuador(idItemEliminar, descripcionActuador) {
  */
 function modalEliminarReglaSensorActuador(idItemEliminar, descripcionRegla) {
     $('#descripcionReglaEliminar').text(descripcionRegla);
-    $('#botonEliminarRegla').attr("href", appUrl+"reglas/eliminar?id="+idItemEliminar);
+    $('#botonEliminarRegla').attr("href", appUrl + "reglas/eliminar?id=" + idItemEliminar);
     $('#modalEliminarRegla').modal();
 }
 
@@ -59,6 +59,69 @@ function modalEliminarReglaSensorActuador(idItemEliminar, descripcionRegla) {
  */
 function modalEliminarDispositivo(idItemEliminar, descripcionDispositivo) {
     $('#descripcionDispositivoEliminar').text(descripcionDispositivo);
-    $('#botonEliminarDispositivo').attr("href", appUrl+"dispositivos/eliminar?id="+idItemEliminar);
+    $('#botonEliminarDispositivo').attr("href", appUrl + "dispositivos/eliminar?id=" + idItemEliminar);
     $('#modalEliminarDispositivo').modal();
 }
+
+
+/**
+ * Mostrar modal para eliminar tareas programadas
+ * @param string idItemEliminar Id de la tarea programada a eliminar
+ * @param string descripcionTarea Descripción de la tarea programada a eliminar
+ * @returns void
+ */
+function modalEliminarTarea(idItemEliminar, descripcionTarea) {
+    $('#descripcionTareaEliminar').text(descripcionTarea);
+    $('#botonEliminarTarea').attr("href", appUrl + "tareas/eliminar?id=" + idItemEliminar);
+    $('#modalEliminarTarea').modal();
+}
+
+/**
+ *  Añadir o eliminar reglas programadas de forma dinamica
+ */
+(function ($) {
+    $(function () {
+
+        var addFormGroup = function (event) {
+            event.preventDefault();
+
+            var $formGroup = $(this).closest('.form-group');
+            var $multipleFormGroup = $formGroup.closest('.multiple-form-group');
+            var $formGroupClone = $formGroup.clone();
+
+            $(this)
+                .toggleClass('btn-default btn-add btn-danger btn-remove')
+                .html('–');
+
+            $formGroupClone.find('input').val('');
+            $formGroupClone.insertAfter($formGroup);
+
+//            var $lastFormGroupLast = $multipleFormGroup.find('.form-group:last');
+//            if ($multipleFormGroup.data('max') <= countFormGroup($multipleFormGroup)) {
+//                $lastFormGroupLast.find('.btn-add').attr('disabled', true);
+//            }
+        };
+
+        var removeFormGroup = function (event) {
+            event.preventDefault();
+
+            var $formGroup = $(this).closest('.form-group');
+            var $multipleFormGroup = $formGroup.closest('.multiple-form-group');
+
+//            var $lastFormGroupLast = $multipleFormGroup.find('.form-group:last');
+//            if ($multipleFormGroup.data('max') >= countFormGroup($multipleFormGroup)) {
+//                $lastFormGroupLast.find('.btn-add').attr('disabled', false);
+//            }
+
+            $formGroup.remove();
+        };
+
+        var countFormGroup = function ($form) {
+            return $form.find('.form-group').length;
+        };
+
+        $(document).on('click', '.btn-add', addFormGroup);
+        $(document).on('click', '.btn-remove', removeFormGroup);
+
+    });
+})(jQuery);

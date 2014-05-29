@@ -47,7 +47,7 @@ public class EmisorWeb {
         text = text + ";" + checksum;
 
         datosEnvio = text.getBytes();
-        DatagramPacket paqueteEnvio = new DatagramPacket(datosEnvio, datosEnvio.length, direccionIP, 8901);
+        DatagramPacket paqueteEnvio = new DatagramPacket(datosEnvio, datosEnvio.length, direccionIP, 8901); //Puerto Emisor
         socketActuador.send(paqueteEnvio);
     }
 }

@@ -7,6 +7,7 @@ import es.ujaen.iambiental.excepciones.TareaProgramadaErrorEliminar;
 import es.ujaen.iambiental.excepciones.TareaProgramadaErrorPersistir;
 import es.ujaen.iambiental.excepciones.TareaProgramadaNoEncontrada;
 import es.ujaen.iambiental.modelos.TareaProgramada;
+import java.util.ArrayList;
 import javax.ws.rs.Consumes;
 import javax.ws.rs.DELETE;
 import javax.ws.rs.GET;
@@ -47,8 +48,9 @@ public class RecursoTareasProgramadas {
     
     @GET
     @Produces("application/json; charset=utf-8")
-    public Response listarTareasProgramadas() {
-        return Response.ok(administrador.listarTareasProgramadas()).build();
+    public ArrayList<TareaProgramada> listarTareasProgramadas() {
+        return new ArrayList(administrador.listarTareasProgramadas().values());
+
     }
     
     @PUT
