@@ -215,7 +215,7 @@ public class tareas extends HttpServlet {
                     t.setDescripcion(descripcion);
                     t.setReglasProgramadas(reglas);
                     
-                    recurso.path("/tareasProgramadas")
+                    recurso.path("/tareasProgramadas/" + id)
                             .type("application/json")
                             .post(ClientResponse.class, t);
 

@@ -9,16 +9,42 @@
 
             <form class="form-horizontal" role="form">
 
-                ////eeeee
+                <div class="form-group">
+                    <label for="inputDescripcionTarea" class="col-sm-2 control-label">Descripción</label>
+                    <div class="col-sm-10">
+                        <input type="text" name="descripcion" class="form-control" id="inputDescripcionTarea" placeholder="Descripción de la tarea programada" value="${tarea.descripcion}"/>
+                    </div>
+                </div>
 
                 <div class="form-group">
-                    <label for="selectTipoSensor" class="col-sm-2 control-label">Tipo</label>
+                    <label for="inputCronTarea" class="col-sm-2 control-label">Cron</label>
                     <div class="col-sm-10">
-                        <select class="form-control" name="tipo" id="selectTipoSensor">
-                            <option value="0" ${(sensor.tipo==0)?'selected="selected"':''}>Otro</option>
-                            <option value="1" ${(sensor.tipo==1)?'selected="selected"':''}>Temperatura</option>
-                        </select>
+                        <input type="text" name="cron" class="form-control" id="inputCronTarea" placeholder="Cron de la tarea programada (Ejemplo cada 20s 0/20 * * * * ?)" value="${tarea.cron}"/>
                     </div>
+                </div>
+
+                <div class="form-group">
+                    <label class="control-labelcol-sm-2">Reglas programadas</label>
+                    <c:forEach var="r" items="${tarea.reglasProgramadas}" varStatus="estado">
+                        <div class="form-group col-sm-9 pull-right">
+                            <input type="text" name="descripcionRegla" class="form-control" id="inputDescripcionRegla" placeholder="Descripción" value="${r.descripcion}"/>
+                            <select class="form-control" name="sensores" id="selectSensorTareas">
+                                <c:forEach var="s" items="${sensores}" varStatus="estado">
+                                    <option value="${s.id}" ${(s.id==r.sensor.id)?'selected="selected"':''}>${s.descripcion}</option>
+                                </c:forEach>
+                            </select>
+                            <select class="form-control" name="actuadores" id="selectActuadorTareas">
+                                <c:forEach var="a" items="${actuadores}" varStatus="estado">
+                                    <option value="${a.id}" ${(a.id==r.actuador.id)?'selected="selected"':''}>${a.descripcion}</option>
+                                </c:forEach>
+                            </select>
+                            <input type="text" name="valorMin" class="form-control" id="inputValorMinRegla" placeholder="Valor mínimo" value="${r.valorMin}"/>
+                            <input type="text" name="valorMax" class="form-control" id="inputValorMaxRegla" placeholder="Valor máximo" value="${r.valorMax}"/>
+                            <input type="text" name="margenRuido" class="form-control" id="inputMargenRuidoRegla" placeholder="Margen de ruido" value="${r.margenRuido}"/>
+                            <input type="text" name="estadoActuador" class="form-control" id="inputEstadoActuadorRegla" placeholder="Estado a establecer el actuador" value="${r.estadoActuador}"/>
+                            <button type="button" class="btn btn-default btn-add">+</button>
+                        </div>
+                    </c:forEach>
                 </div>
 
                 <div class="form-group">

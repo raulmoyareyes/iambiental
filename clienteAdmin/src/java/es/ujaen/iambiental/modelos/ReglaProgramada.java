@@ -67,8 +67,8 @@ public class ReglaProgramada implements Serializable {
 
     public void setValorMin(float valorMin) {
         this.valorMin = valorMin;
-        comprobarValores();
-        fixMargenRuido();
+        //comprobarValores();
+        //fixMargenRuido();
     }
 
     public float getValorMax() {
@@ -77,8 +77,8 @@ public class ReglaProgramada implements Serializable {
 
     public void setValorMax(float valorMax) {
         this.valorMax = valorMax;
-        comprobarValores();
-        fixMargenRuido();
+        //comprobarValores();
+        //fixMargenRuido();
     }
 
     public float getMargenRuido() {
@@ -87,8 +87,8 @@ public class ReglaProgramada implements Serializable {
 
     public void setMargenRuido(float margenRuido) {
         this.margenRuido = margenRuido;
-        comprobarValores();
-        fixMargenRuido();
+        //comprobarValores();
+        //fixMargenRuido();
     }
 
     public int getEstadoActuador() {

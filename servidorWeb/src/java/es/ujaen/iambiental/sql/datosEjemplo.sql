@@ -32,9 +32,15 @@ INSERT INTO iambiental.sensores (dato, descripcion, estado, fecha, ip, puerto, t
 /** TAREAS PROGRAMADAS */
 INSERT INTO iambiental.tareasprogramadas (cron, descripcion) 
 	VALUES ('0/20 * * * * ?', 'Depuradora');
+INSERT INTO iambiental.tareasprogramadas (cron, descripcion) 
+	VALUES ('0/50 * * * * ?', 'Aspersores');
 
 /** REGLAS PROGRAMADAS */
-INSERT INTO iambiental.reglasprogramadas (`descripcionRegla`, `estadoActuador`, `margenRuido`, `valorMax`, `valorMin`, actuador_id, sensor_id) 
+INSERT INTO iambiental.reglasprogramadas (`descripcion`, `estadoActuador`, `margenRuido`, `valorMax`, `valorMin`, actuador_id, sensor_id) 
 	VALUES ('Encender motor', 1, 5.0, 50.0, 10.0, 1, 1);
 INSERT INTO iambiental.tareasprogramadas_reglasprogramadas (tareasprogramadas_id, `reglasProgramadas_id`) 
 	VALUES (1, 1);
+INSERT INTO iambiental.reglasprogramadas (`descripcion`, `estadoActuador`, `margenRuido`, `valorMax`, `valorMin`, actuador_id, sensor_id) 
+	VALUES ('Encender aspersores', 1, 5.0, 50.0, 10.0, 2, 2);
+INSERT INTO iambiental.tareasprogramadas_reglasprogramadas (tareasprogramadas_id, `reglasProgramadas_id`) 
+	VALUES (2, 2);
