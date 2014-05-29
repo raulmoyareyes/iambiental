@@ -6,7 +6,10 @@
         <title><%
             System.out.print("Inteligencia Ambiental");
             %></title>
-
+        
+        <!-- CSS de morris.js -->
+        <link href="${appUrl}/morris.js-0.4.3/morris.css" rel="stylesheet" type="text/css"/>
+        
         <!-- Bootstrap core CSS -->
         <link href="${appUrl}/css/bootstrap.min.css" rel="stylesheet">
 

@@ -7,13 +7,19 @@
         <div class="row padding1em">
             <h1>Histórico - ${sensor.descripcion}</h1>
 
+            <div id="area-example"></div>
+
+
+
+
+
+
+
             <div class="form-group">
-                <div class="col-sm-offset-2 col-sm-10">
+                <div class="col-sm-12">
                     <a href="${appUrl}/sensores/ver?id=${sensor.id}" rol="button" class="btn btn-default">Volver al sensor</a>
                 </div>
             </div>
-
-            
         </div><!--/row-->
     </div><!--/span-->
 
