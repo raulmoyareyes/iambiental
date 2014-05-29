@@ -7,7 +7,7 @@
         <div class="row padding1em">
             <h1>Histórico - ${sensor.descripcion}</h1>
 
-            <div id="area-example"></div>
+            <div id="graficoHistorico"></div>
 
 
 

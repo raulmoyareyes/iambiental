@@ -17,25 +17,27 @@
     <script src="${appUrl}/js/script.js"></script>
     
     
-    <script>/*
-     * Play with this code and it'll update in the panel opposite.
-     *
-     * Why not try some of the options above?
-     */
-        Morris.Area({
-            element: 'area-example',
-            data: [
-                {y: '2006', a: 100, b: 90},
-                {y: '2007', a: 75, b: 65},
-                {y: '2008', a: 50, b: 40},
-                {y: '2009', a: 75, b: 65},
-                {y: '2010', a: 50, b: 40},
-                {y: '2011', a: 75, b: 65},
-                {y: '2012', a: 100, b: 90}
-            ],
-            xkey: 'y',
-            ykeys: ['a', 'b'],
-            labels: ['Series A', 'Series B']
+    <script>
+        var day_data = [
+            {"period": "2012-10-01 12:00", "temperatura": 1, "sorned": 11},
+            {"period": "2012-10-01 12:01", "temperatura": 2, "sorned": 11},
+            {"period": "2012-10-01 12:02", "temperatura": 3, "sorned": 11},
+            {"period": "2012-10-01 12:03", "temperatura": 4, "sorned": 11},
+            
+            {"period": "2012-10-01 12:05", "temperatura": 4, "sorned": 11},
+            {"period": "2012-10-01 12:06", "temperatura": 5, "sorned": 11},
+            {"period": "2012-10-01 12:07", "temperatura": 4, "sorned": 11},
+            {"period": "2012-10-01 12:08", "temperatura": 6, "sorned": 11},
+            {"period": "2012-10-01 12:09", "temperatura": 7, "sorned": 11},
+            {"period": "2012-10-01 12:10", "temperatura": 8, "sorned": 11},
+            {"period": "2012-10-01 12:30", "temperatura": 4, "sorned": 10}
+        ];
+        Morris.Line({
+        element: 'graficoHistorico',
+        data: day_data,
+        xkey: 'period',
+        ykeys: ['temperatura'],
+        labels: ['Temperatura']
         });
 
         //# sourceURL=jsbin.otaxef.115-5.js
