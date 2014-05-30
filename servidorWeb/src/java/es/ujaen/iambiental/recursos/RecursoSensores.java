@@ -129,19 +129,19 @@ public class RecursoSensores {
 
     //Repasar
     @GET
-    @Path("/{idSensor}/{fechaInicio}/{fechaFinal}")
+    @Path("/{idSensor}?fechaInicio={fechaInicio}&fechaFinal={fechaFinal}")
     @Produces("application/json; charset=utf-8")
-    public Response obtenerHistoricoSensor(@PathParam("idSensor") Integer idSensor, @QueryParam("fechaInicio") Date fechaInicio, @QueryParam("fechaFinal") Date fechaFinal) {
+    public Response obtenerHistoricoSensor(@PathParam("idSensor") Integer idSensor, @QueryParam("fechaInicio") String fechaInicio, @QueryParam("fechaFinal") String fechaFinal) {
         Sensor sensor = administrador.obtenerSensor(idSensor);
         if (sensor == null) {
             throw new WebApplicationException(
                     Response.status(Status.NOT_FOUND).entity("Sensor no encontrado.").build()
             );
         } else {
-            Map<Date, Double> historico = administrador.obtenerHistoricoSensor(idSensor, fechaInicio, fechaFinal);
+            Map<Date, Double> historico = administrador.obtenerHistoricoSensor(idSensor, new Date(fechaInicio), new Date(fechaFinal));
             if (historico == null) {
                 throw new WebApplicationException(
-                        Response.status(Status.NOT_FOUND).entity("Sensor no encontrado.").build()
+                        Response.status(Status.NOT_FOUND).entity("Historico no encontrado.").build()
                 );
             }
             return Response.ok(historico).build();

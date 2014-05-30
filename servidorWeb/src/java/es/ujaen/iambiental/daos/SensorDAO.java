@@ -6,6 +6,8 @@ import es.ujaen.iambiental.excepciones.SensorErrorEliminar;
 import es.ujaen.iambiental.excepciones.SensorErrorPersistir;
 import es.ujaen.iambiental.modelos.Dependencia;
 import es.ujaen.iambiental.modelos.Sensor;
+import es.ujaen.iambiental.modelos.HistoricoSensor;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -124,7 +126,30 @@ public class SensorDAO {
         return sensores;
     }
     
-    //Capullo necesito el histórico de los sensores YAAAA!!!!!
+    /**
+     * Devuelve un mapa con el listado de lecturas de un sensor
+     * @param id Id del sensor
+     * @param inicio Fecha y hora inicial
+     * @param fin Fecha y hora final
+     * @return Mapa de lecturas
+     */
+    public Map<Date, Float> consultarHistorico(int id, Date inicio, Date fin){
+        
+        Map<Date, Float> historico = new HashMap();
+        
+        List<HistoricoSensor> lista =
+            em.createQuery("Select h from HistoricoSensor h WHERE h.id = ?1 AND h.fecha BETWEEN ?2  AND ?3", HistoricoSensor.class)
+                    .setParameter(1, id)
+                    .setParameter(2, inicio)
+                    .setParameter(3, fin)
+                    .getResultList();
+        
+        for (HistoricoSensor h : lista) {
+            historico.put(h.getFecha(), h.getDato());
+        }
+        
+        return historico;
+    }
     
     /**
      * Cambia la dependencia a null porque esta dependencia va a ser eliminada

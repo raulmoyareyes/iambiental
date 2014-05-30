@@ -19,18 +19,17 @@
     
     <script>
         var day_data = [
-            {"period": "2012-10-01 12:00", "temperatura": 1, "sorned": 11},
-            {"period": "2012-10-01 12:01", "temperatura": 2, "sorned": 11},
-            {"period": "2012-10-01 12:02", "temperatura": 3, "sorned": 11},
-            {"period": "2012-10-01 12:03", "temperatura": 4, "sorned": 11},
-            
-            {"period": "2012-10-01 12:05", "temperatura": 4, "sorned": 11},
-            {"period": "2012-10-01 12:06", "temperatura": 5, "sorned": 11},
-            {"period": "2012-10-01 12:07", "temperatura": 4, "sorned": 11},
-            {"period": "2012-10-01 12:08", "temperatura": 6, "sorned": 11},
-            {"period": "2012-10-01 12:09", "temperatura": 7, "sorned": 11},
-            {"period": "2012-10-01 12:10", "temperatura": 8, "sorned": 11},
-            {"period": "2012-10-01 12:30", "temperatura": 4, "sorned": 10}
+            {"period": "2012-10-01 12:00", "temperatura": 1},
+            {"period": "2012-10-01 12:01", "temperatura": 2},
+            {"period": "2012-10-01 12:02", "temperatura": 3},
+            {"period": "2012-10-01 12:03", "temperatura": 4},
+            {"period": "2012-10-01 12:04", "temperatura": 5},
+            {"period": "2012-10-01 12:05", "temperatura": 6},
+            {"period": "2012-10-01 12:06", "temperatura": 7},
+            {"period": "2012-10-01 12:07", "temperatura": 8},
+            {"period": "2012-10-01 12:08", "temperatura": 9},
+            {"period": "2012-10-01 12:09", "temperatura": 10},
+            {"period": "2012-10-01 12:10", "temperatura": 11
         ];
         Morris.Line({
         element: 'graficoHistorico',

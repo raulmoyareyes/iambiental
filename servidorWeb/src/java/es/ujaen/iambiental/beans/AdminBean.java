@@ -468,6 +468,8 @@ public class AdminBean {
      * @return Devuelve un mapa con el histórico de valores de un sensor
      */
     public Map<Date, Double> obtenerHistoricoSensor(Integer idSensor, Date fechaInicio, Date fechaFinal) {
+//        sensorDAO.
+        
         return null;
     }
     
