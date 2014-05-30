@@ -6,6 +6,8 @@ import es.ujaen.iambiental.excepciones.ActuadorErrorEliminar;
 import es.ujaen.iambiental.excepciones.ActuadorErrorPersistir;
 import es.ujaen.iambiental.modelos.Actuador;
 import es.ujaen.iambiental.modelos.Dependencia;
+import es.ujaen.iambiental.modelos.HistoricoActuadores;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -124,7 +126,24 @@ public class ActuadorDAO {
         return actuadores;
     }
     
-    //Capullo necesito el histórico de los actuadores YAAAA!!!!!
+        
+    /**
+     * Devuelve un list con el listado de lecturas de un sensor
+     * @param id Id del sensor
+     * @param inicio Fecha y hora inicial
+     * @param fin Fecha y hora final
+     * @return Mapa de lecturas
+     */
+    public List<HistoricoActuadores> consultarHistorico(int id, Date inicio, Date fin){
+        
+        List<HistoricoActuadores> historico = em.createQuery("Select h from HistoricoActuadores h WHERE h.actuador_id = ?1 AND fecha > ?2 AND fecha < ?3")
+                    .setParameter(1, id)
+                    .setParameter(2, inicio)
+                    .setParameter(3, fin)
+                    .getResultList();
+   
+        return historico;
+    }
     
     /**
      * Cambia la dependencia a null porque esta dependencia va a ser eliminada

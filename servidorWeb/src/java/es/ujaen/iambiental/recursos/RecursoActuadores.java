@@ -8,8 +8,10 @@ import es.ujaen.iambiental.excepciones.ActuadorErrorEliminar;
 import es.ujaen.iambiental.excepciones.ActuadorErrorPersistir;
 import es.ujaen.iambiental.excepciones.ActuadorNoEncontrado;
 import es.ujaen.iambiental.modelos.Actuador;
+import es.ujaen.iambiental.modelos.HistoricoActuadores;
 import java.util.ArrayList;
 import java.util.Date;
+import java.util.List;
 import java.util.Map;
 import javax.ws.rs.Consumes;
 import javax.ws.rs.DELETE;
@@ -125,16 +127,16 @@ public class RecursoActuadores {
 
     // Repasar
     @GET
-    @Path("/{idActuador}/{fechaInicio}/{fechaFinal}")
+    @Path("/{idActuador}/historico")
     @Produces("application/json; charset=utf-8")
-    public Response obtenerHistoricoActuador(@QueryParam("idActuador") int idActuador, @QueryParam("fechaInicio") Date fechaInicio, @QueryParam("fechaFinal") Date fechaFinal) {
+    public Response obtenerHistoricoActuador(@PathParam("idActuador") int idActuador, @QueryParam("fechaInicio") Date fechaInicio, @QueryParam("fechaFinal") Date fechaFinal) {
         Actuador actuador = administrador.obtenerActuador(idActuador);
         if (actuador == null) {
             throw new WebApplicationException(
                     Response.status(Response.Status.NOT_FOUND).entity("Actuador no encontrado.").build()
             );
         } else {
-            Map<Date, Double> historico = administrador.obtenerHistoricoActuador(idActuador, fechaInicio, fechaFinal);
+            List<HistoricoActuadores> historico = administrador.obtenerHistoricoActuador(idActuador, fechaInicio, fechaFinal);
             if (historico == null) {
                 throw new WebApplicationException(
                         Response.status(Response.Status.NOT_FOUND).entity("Actuador no encontrado.").build()

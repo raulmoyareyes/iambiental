@@ -41,6 +41,8 @@ import es.ujaen.iambiental.excepciones.TareaProgramadaErrorPersistir;
 import es.ujaen.iambiental.excepciones.TareaProgramadaNoEncontrada;
 import es.ujaen.iambiental.modelos.Actuador;
 import es.ujaen.iambiental.modelos.Dependencia;
+import es.ujaen.iambiental.modelos.HistoricoActuadores;
+import es.ujaen.iambiental.modelos.HistoricoSensores;
 import es.ujaen.iambiental.modelos.ReglaProgramada;
 import es.ujaen.iambiental.modelos.ReglaSensorActuador;
 import es.ujaen.iambiental.modelos.Sensor;
@@ -49,6 +51,7 @@ import java.io.IOException;
 import java.net.SocketException;
 import java.net.UnknownHostException;
 import java.util.Date;
+import java.util.List;
 import java.util.Map;
 import javax.annotation.Resource;
 import org.springframework.stereotype.Component;
@@ -460,29 +463,27 @@ public class AdminBean {
     }
     
     /**
-     * Devuelve un mapa con el histórico de valores de un sensor.
+     * Devuelve un List con el histórico de valores de un sensor.
      *
      * @param idSensor
      * @param fechaInicio
      * @param fechaFinal
      * @return Devuelve un mapa con el histórico de valores de un sensor
      */
-    public Map<Date, Double> obtenerHistoricoSensor(Integer idSensor, Date fechaInicio, Date fechaFinal) {
-//        sensorDAO.
-        
-        return null;
+    public List<HistoricoSensores> obtenerHistoricoSensor(Integer idSensor, Date fechaInicio, Date fechaFinal) {
+        return sensorDAO.consultarHistorico(idSensor, fechaInicio, fechaFinal);
     }
     
     /**
-     * Devuelve un mapa con el histórico de valores de un actuador.
+     * Devuelve un List con el histórico de valores de un actuador.
      *
      * @param idActuador
      * @param fechaInicio
      * @param fechaFinal
      * @return Devuelve un mapa con el histórico de valores de un actuador
      */
-    public Map<Date, Double> obtenerHistoricoActuador(Integer idActuador, Date fechaInicio, Date fechaFinal) {
-        return null;
+    public List<HistoricoActuadores> obtenerHistoricoActuador(Integer idActuador, Date fechaInicio, Date fechaFinal) {
+        return actuadorDAO.consultarHistorico(idActuador, fechaInicio, fechaFinal);
     }
     
 }

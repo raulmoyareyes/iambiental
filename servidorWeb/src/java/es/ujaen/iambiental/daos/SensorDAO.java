@@ -5,8 +5,9 @@ import es.ujaen.iambiental.excepciones.SensorErrorCambiarDependencia;
 import es.ujaen.iambiental.excepciones.SensorErrorEliminar;
 import es.ujaen.iambiental.excepciones.SensorErrorPersistir;
 import es.ujaen.iambiental.modelos.Dependencia;
+import es.ujaen.iambiental.modelos.HistoricoActuadores;
+import es.ujaen.iambiental.modelos.HistoricoSensores;
 import es.ujaen.iambiental.modelos.Sensor;
-import es.ujaen.iambiental.modelos.HistoricoSensor;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
@@ -127,27 +128,20 @@ public class SensorDAO {
     }
     
     /**
-     * Devuelve un mapa con el listado de lecturas de un sensor
+     * Devuelve un list con el listado de lecturas de un sensor
      * @param id Id del sensor
      * @param inicio Fecha y hora inicial
      * @param fin Fecha y hora final
      * @return Mapa de lecturas
      */
-    public Map<Date, Float> consultarHistorico(int id, Date inicio, Date fin){
+    public List<HistoricoSensores> consultarHistorico(int id, Date inicio, Date fin){
         
-        Map<Date, Float> historico = new HashMap();
-        
-        List<HistoricoSensor> lista =
-            em.createQuery("Select h from HistoricoSensor h WHERE h.id = ?1 AND h.fecha BETWEEN ?2  AND ?3", HistoricoSensor.class)
+        List<HistoricoSensores> historico = em.createQuery("Select h from HistoricoSensores h WHERE h.sensor_id = ?1 AND fecha > ?2 AND fecha < ?3")
                     .setParameter(1, id)
                     .setParameter(2, inicio)
                     .setParameter(3, fin)
                     .getResultList();
-        
-        for (HistoricoSensor h : lista) {
-            historico.put(h.getFecha(), h.getDato());
-        }
-        
+   
         return historico;
     }
     
