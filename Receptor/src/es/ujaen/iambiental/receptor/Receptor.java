@@ -143,15 +143,15 @@ public class Receptor {
                             int estadoActual = Integer.parseInt(rs.getString("estado"));
 
                             String ip = rs.getString("ip");
-                            String puerto = "60000";//rs.getString("puerto");
+                            String puerto = rs.getString("puerto");
                             
                             boolean reglaSeCumple = false;
 
-                            if (dato > valorMax + margenRuido || dato < valorMin - margenRuido) {
+                            if (dato >= valorMax + margenRuido || dato <= valorMin - margenRuido) {
                                 //Fuera de la regla
                                 //ACTUALIZAR A VALOR 0
                                 reglaSeCumple = false;
-                            } else if (dato < valorMax - margenRuido && dato > valorMin + margenRuido) {
+                            } else if (dato <= valorMax - margenRuido && dato >= valorMin + margenRuido) {
                                 //En la regla plena
                                 //ACTUALIZAR A VALOR DEL ESTADO
                                 reglaSeCumple = true;
@@ -186,25 +186,25 @@ public class Receptor {
                                 System.out.println("REGLA NO SE CUMPLE");
                                 //Valor de la regla
                                 //ACTUALIZAR A VALOR POR DEFECTO (0)
-                                long fechaHora = new Date().getTime(); //Integer.parseInt(splitChain[4]);
-                                String text = "a" + ";"
-                                        + String.valueOf(id) + ";"
-                                        + String.valueOf(dato) + ";"
-                                        + "0" + ";"
-                                        + String.valueOf(fechaHora);
+//                                long fechaHora = new Date().getTime(); //Integer.parseInt(splitChain[4]);
+//                                String text = "a" + ";"
+//                                        + String.valueOf(id) + ";"
+//                                        + String.valueOf(dato) + ";"
+//                                        + "0" + ";"
+//                                        + String.valueOf(fechaHora);
 
                                 // Hallamos el checksum mediante la función
-                                checksum = 0 + id + (int) dato + 0 + (int) fechaHora;
-                                if (checksum < 0) {
-                                    checksum *= -1;
-                                }
-
-                                text = text + ";" + ip + ";" + puerto + ";" + checksum;
-                                envioActuador(text);
-                                actualizaDatosActuador(id, dato, 0, fecha);
+//                                checksum = 0 + id + (int) dato + 0 + (int) fechaHora;
+//                                if (checksum < 0) {
+//                                    checksum *= -1;
+//                                }
+//
+//                                text = text + ";" + ip + ";" + puerto + ";" + checksum;
+//                                envioActuador(text);
+//                                actualizaDatosActuador(id, dato, 0, fecha);
                             }
                         }
-
+                        System.out.println("Fin de comprobación de reglas.");
                         //FIN DE COMPROBACIÓN DE REGLAS SENSOR-ACTUADOR
                     } else {
                         // SE INFORMA DEL ERROR Y NO SE GUARDA EN BD
