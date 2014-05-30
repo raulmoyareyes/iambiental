@@ -1,4 +1,4 @@
-package es.ujaen.iambiental.modelos;
+package es.ujaen.iambiental.clienteadmin;
 
 import java.io.Serializable;
 import java.util.Date;
@@ -14,14 +14,9 @@ import javax.persistence.TemporalType;
  *
  * @author Raúl Moya Reyes <www.raulmoya.es>
  */
-@Entity
-@Table(name = "historicosensores")
 public class HistoricoSensores implements Serializable {
     
-    @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
     private int id;
-    @Temporal(TemporalType.TIMESTAMP)
     private Date fecha;
     private float dato;
     private int estado;

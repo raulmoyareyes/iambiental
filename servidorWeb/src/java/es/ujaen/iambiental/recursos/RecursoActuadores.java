@@ -129,14 +129,16 @@ public class RecursoActuadores {
     @GET
     @Path("/{idActuador}/historico")
     @Produces("application/json; charset=utf-8")
-    public Response obtenerHistoricoActuador(@PathParam("idActuador") int idActuador, @QueryParam("fechaInicio") Date fechaInicio, @QueryParam("fechaFinal") Date fechaFinal) {
+    public Response obtenerHistoricoActuador(@PathParam("idActuador") int idActuador, @QueryParam("fechaInicio") long fechaInicio, @QueryParam("fechaFinal") long fechaFinal) {
         Actuador actuador = administrador.obtenerActuador(idActuador);
         if (actuador == null) {
             throw new WebApplicationException(
                     Response.status(Response.Status.NOT_FOUND).entity("Actuador no encontrado.").build()
             );
         } else {
-            List<HistoricoActuadores> historico = administrador.obtenerHistoricoActuador(idActuador, fechaInicio, fechaFinal);
+            Date inicio = new Date(fechaInicio);
+            Date fin = new Date(fechaFinal);
+            List<HistoricoActuadores> historico = administrador.obtenerHistoricoActuador(idActuador, inicio, fin);
             if (historico == null) {
                 throw new WebApplicationException(
                         Response.status(Response.Status.NOT_FOUND).entity("Actuador no encontrado.").build()

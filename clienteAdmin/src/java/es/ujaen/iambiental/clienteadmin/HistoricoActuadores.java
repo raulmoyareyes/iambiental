@@ -1,36 +1,24 @@
-package es.ujaen.iambiental.modelos;
+package es.ujaen.iambiental.clienteadmin;
 
 import java.io.Serializable;
 import java.util.Date;
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
-import javax.persistence.Table;
-import javax.persistence.Temporal;
-import javax.persistence.TemporalType;
 
 /**
  *
  * @author Raúl Moya Reyes <www.raulmoya.es>
  */
-@Entity
-@Table(name = "historicosensores")
-public class HistoricoSensores implements Serializable {
+public class HistoricoActuadores implements Serializable {
     
-    @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
     private int id;
-    @Temporal(TemporalType.TIMESTAMP)
     private Date fecha;
     private float dato;
     private int estado;
-    private int sensor_id;
+    private int actuador_id;
 
-    public HistoricoSensores() {
+    public HistoricoActuadores() {
     }
 
-    public HistoricoSensores(Date fecha, float dato, int estado) {
+    public HistoricoActuadores(Date fecha, float dato, int estado) {
         this.fecha = fecha;
         this.dato = dato;
         this.estado = estado;
@@ -65,11 +53,11 @@ public class HistoricoSensores implements Serializable {
     }
 
     public int getSensor() {
-        return sensor_id;
+        return actuador_id;
     }
 
     public void setSensor(int sensor) {
-        this.sensor_id = sensor;
+        this.actuador_id = sensor;
     }
     
 }

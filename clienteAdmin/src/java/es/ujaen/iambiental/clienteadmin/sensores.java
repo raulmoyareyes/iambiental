@@ -7,6 +7,7 @@ import com.sun.jersey.api.client.config.DefaultClientConfig;
 import es.ujaen.iambiental.modelos.Dependencia;
 import es.ujaen.iambiental.modelos.Sensor;
 import java.io.IOException;
+import java.util.Date;
 import java.util.List;
 import javax.servlet.RequestDispatcher;
 import javax.servlet.ServletException;
@@ -137,6 +138,14 @@ public class sensores extends HttpServlet {
                     }
                 }
                 request.setAttribute("sensor", s);
+                // Historico //new Date(114,03,28,12,00), new Date(115,04,30,14,00));
+                ClientResponse responseJSONH = recurso.path("/sensores/"+id+"/historico")
+                        .queryParam("fechaInico", String.valueOf(new Date(114,03,28,12,00).getTime()))
+                        .queryParam("fechaFinal", String.valueOf(new Date(115,04,30,14,00).getTime()))
+                        .accept("application/json")
+                        .get(ClientResponse.class);
+                List<HistoricoSensores> historico = responseJSONH.getEntity(List.class);
+                request.setAttribute("historico", historico);
                 rd = request.getRequestDispatcher("/WEB-INF/sensores/historico.jsp");
                 rd.include(request, response);
                 rd = request.getRequestDispatcher("/WEB-INF/sensores/modalEliminar.jsp");
