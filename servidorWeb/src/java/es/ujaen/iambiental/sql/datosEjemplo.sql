@@ -1,4 +1,5 @@
 
+
 /** DEPENDENCIAS */
 INSERT INTO iambiental.dependencias (descripcion, nombre) 
 	VALUES ('Salón de la planta de arriba', 'Salón');
@@ -7,27 +8,27 @@ INSERT INTO iambiental.dependencias (descripcion, nombre)
 INSERT INTO iambiental.dependencias (descripcion, nombre) 
 	VALUES ('Cocina pequeña', 'Cocina');
 
-/** ACTUADORES */
-INSERT INTO iambiental.actuadores (dato, descripcion, estado, fecha, ip, puerto, dependencia_id, tipo, idfisico) 
-	VALUES (5.0, 'Interruptor de la luz', 0, '2014-04-29 12:20:16.0', '', NULL, 1, 1, 1);
-INSERT INTO iambiental.actuadores (dato, descripcion, estado, fecha, ip, puerto, dependencia_id, tipo, idfisico) 
-	VALUES (22.0, 'Termostato', 1, '2014-04-30 12:12:21.0', NULL, NULL, 1, 0, 1);
-INSERT INTO iambiental.actuadores (dato, descripcion, estado, fecha, ip, puerto, dependencia_id, tipo, idfisico) 
-	VALUES (0.0, 'Interruptor puerta cocina', 1, '2014-04-30 12:15:03.0', NULL, NULL, 1, 1, 1);
-INSERT INTO iambiental.actuadores (dato, descripcion, estado, fecha, ip, puerto, tipo, dependencia_id, idfisico) 
-	VALUES (0.0, 'Interuptor de la luz de la lampara', 0, '2014-05-03 00:23:29.0', NULL, NULL, 1, 2, 1);
-INSERT INTO iambiental.actuadores (dato, descripcion, estado, fecha, ip, puerto, tipo, dependencia_id, idfisico) 
-	VALUES (21.0, 'Termostato dormitorio 1', 0, '2014-05-03 00:26:49.0', NULL, NULL, 0, 2, 1);
 
+/** ACTUADORES */
+INSERT INTO iambiental.actuadores (dato, descripcion, estado, fecha, `idFisico`, ip, puerto, tipo, dependencia_id) 
+	VALUES (5.0, 'Interruptor de la luz del salón', 1, '2014-04-29 12:20:16.0', 10020, '192.168.9.250', '8888', 1, 1);
+INSERT INTO iambiental.actuadores (dato, descripcion, estado, fecha, `idFisico`, ip, puerto, tipo, dependencia_id) 
+	VALUES (22.0, 'Termostato del salón', 1, '2014-04-30 12:12:21.0', 10024, '192.168.9.250', '8888', 0, 1);
+INSERT INTO iambiental.actuadores (dato, descripcion, estado, fecha, `idFisico`, ip, puerto, tipo, dependencia_id) 
+	VALUES (0.0, 'Interruptor puerta cocina', 0, '2014-04-30 12:15:03.0', 10021, '192.168.9.250', '8888', 1, 3);
+INSERT INTO iambiental.actuadores (dato, descripcion, estado, fecha, `idFisico`, ip, puerto, tipo, dependencia_id) 
+	VALUES (0.0, 'Interruptor de la luz de la lampara del dormitorio 1', 0, '2014-05-03 00:23:29.0', 10022, '192.168.9.250', '8888', 1, 2);
+INSERT INTO iambiental.actuadores (dato, descripcion, estado, fecha, `idFisico`, ip, puerto, tipo, dependencia_id) 
+	VALUES (21.0, 'Termostato dormitorio 1', 0, '2014-05-03 00:26:49.0', 10023, '192.168.9.250', '8888', 0, 2);
 
 
 /** SENSORES */
-INSERT INTO iambiental.sensores (dato, descripcion, estado, fecha, ip, puerto, tipo, dependencia_id, idfisico) 
-	VALUES (32.0, 'Sensor de temperatura de habitación', 0, '2014-04-29 12:39:03.0', NULL, NULL, 1, 1, 1);
-INSERT INTO iambiental.sensores (dato, descripcion, estado, fecha, ip, puerto, tipo, dependencia_id, idfisico) 
-	VALUES (28.0, 'Sensor de luz del salón', 1, '2014-04-29 13:14:53.0', NULL, NULL, 0, 1, 1);
-INSERT INTO iambiental.sensores (dato, descripcion, estado, fecha, ip, puerto, tipo, dependencia_id, idfisico) 
-	VALUES (21.0, 'Sensor de temperatura dormitorio 1', 0, '2014-05-03 00:27:58.0', NULL, NULL, 1, 2, 1);
+INSERT INTO iambiental.sensores (dato, descripcion, estado, fecha, `idFisico`, ip, puerto, tipo, dependencia_id) 
+	VALUES (23.0, 'Sensor de temperatura del salón', 0, '2014-04-29 12:39:03.0', 10010, '192.168.9.250', '8888', 1, 1);
+INSERT INTO iambiental.sensores (dato, descripcion, estado, fecha, `idFisico`, ip, puerto, tipo, dependencia_id) 
+	VALUES (28.0, 'Sensor de luz del salón', 1, '2014-04-29 13:14:53.0', 10011, '192.168.9.250', '8888', 0, 1);
+INSERT INTO iambiental.sensores (dato, descripcion, estado, fecha, `idFisico`, ip, puerto, tipo, dependencia_id) 
+	VALUES (21.0, 'Sensor de temperatura dormitorio 1', 0, '2014-05-03 00:27:58.0', 10012, '192.168.9.250', '8888', 1, 2);
 
 
 /** REGLAS SENSOR-ACTUADOR */

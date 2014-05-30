@@ -44,7 +44,7 @@ public class ControladorPrincipal extends HttpServlet {
         DefaultClientConfig defaultClientConfig = new DefaultClientConfig();
         defaultClientConfig.getClasses().add(JacksonJsonProvider.class);
         Client cliente = Client.create(defaultClientConfig);
-        WebResource recurso = cliente.resource("http://192.168.1.15:8084/servidorWeb/recursos");
+        WebResource recurso = cliente.resource("http://localhost:8084/servidorWeb/recursos");
 
         switch (action) {
             case "": {

@@ -1,4 +1,4 @@
-var server = "http://192.168.1.15:8084";
+var server = "http://localhost:8084";
 $(function() {
     /* Spinner */
     $("input[name='spinner']").TouchSpin({min: 0, max: 40, step: 0.5, decimals: 1,
