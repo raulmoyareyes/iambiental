@@ -54,6 +54,7 @@
                 <div class="form-group">
                     <div class="col-sm-offset-2 col-sm-10">
                         <a href="${appUrl}/sensores" rol="button" class="btn btn-default">Volver al listado</a>
+                        <a href="${appUrl}/sensores/historico?id=${sensor.id}" rol="button" class="btn btn-default"><span class="glyphicon glyphicon-stats"></span> Ver histórico</a>
                     </div>
                 </div>
             </form>

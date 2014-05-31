@@ -27,6 +27,9 @@
                         <a href="/clienteAdmin/actuadores/editar?id=${a.id}" class="btn pull-right">
                             <span class="glyphicon glyphicon-edit"></span>
                         </a>
+                        <a href="/clienteAdmin/actuadores/historico?id=${a.id}" class="btn pull-right">
+                            <span class="glyphicon glyphicon-stats"></span>
+                        </a>
                         <a href="/clienteAdmin/actuadores/ver?id=${a.id}" class="btn pull-right">
                             <span class="glyphicon glyphicon-eye-open"></span>
                         </a>

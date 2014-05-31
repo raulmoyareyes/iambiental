@@ -27,6 +27,9 @@
                         <a href="/clienteAdmin/sensores/editar?id=${s.id}" class="btn pull-right">
                             <span class="glyphicon glyphicon-edit"></span>
                         </a>
+                        <a href="/clienteAdmin/sensores/historico?id=${s.id}" class="btn pull-right">
+                            <span class="glyphicon glyphicon-stats"></span>
+                        </a>
                         <a href="/clienteAdmin/sensores/ver?id=${s.id}" class="btn pull-right">
                             <span class="glyphicon glyphicon-eye-open"></span>
                         </a>

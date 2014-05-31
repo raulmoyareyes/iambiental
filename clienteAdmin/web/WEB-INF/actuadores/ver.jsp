@@ -54,6 +54,7 @@
                 <div class="form-group">
                     <div class="col-sm-offset-2 col-sm-10">
                         <a href="${appUrl}/actuadores" rol="button" class="btn btn-default">Volver al listado</a>
+                        <a href="${appUrl}/actuadores/historico?id=${actuador.id}" rol="button" class="btn btn-default"><span class="glyphicon glyphicon-stats"></span> Ver histórico</a>
                     </div>
                 </div>
             </form>

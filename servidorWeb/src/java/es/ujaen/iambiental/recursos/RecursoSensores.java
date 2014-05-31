@@ -7,10 +7,11 @@ import es.ujaen.iambiental.excepciones.SensorErrorDatos;
 import es.ujaen.iambiental.excepciones.SensorErrorEliminar;
 import es.ujaen.iambiental.excepciones.SensorErrorPersistir;
 import es.ujaen.iambiental.excepciones.SensorNoEncontrado;
+import es.ujaen.iambiental.modelos.HistoricoSensores;
 import es.ujaen.iambiental.modelos.Sensor;
 import java.util.ArrayList;
 import java.util.Date;
-import java.util.Map;
+import java.util.List;
 import javax.ws.rs.Consumes;
 import javax.ws.rs.DELETE;
 import javax.ws.rs.GET;
@@ -127,21 +128,24 @@ public class RecursoSensores {
         return Response.status(Status.ACCEPTED).build();
     }
 
-    //Repasar
     @GET
-    @Path("/{idSensor}/{fechaInicio}/{fechaFinal}")
+    @Path("/{idSensor}/historico")
     @Produces("application/json; charset=utf-8")
-    public Response obtenerHistoricoSensor(@PathParam("idSensor") Integer idSensor, @QueryParam("fechaInicio") Date fechaInicio, @QueryParam("fechaFinal") Date fechaFinal) {
+    public Response obtenerHistoricoSensor(@PathParam("idSensor") Integer idSensor, @QueryParam("fechaInicio") long fechaInicio, @QueryParam("fechaFinal") long fechaFinal){
         Sensor sensor = administrador.obtenerSensor(idSensor);
+        
+        
         if (sensor == null) {
             throw new WebApplicationException(
                     Response.status(Status.NOT_FOUND).entity("Sensor no encontrado.").build()
             );
         } else {
-            Map<Date, Double> historico = administrador.obtenerHistoricoSensor(idSensor, fechaInicio, fechaFinal);
+            Date inicio = new Date(fechaInicio);
+            Date fin = new Date(fechaFinal);
+            List<HistoricoSensores> historico = administrador.obtenerHistoricoSensor(idSensor, inicio, fin);
             if (historico == null) {
                 throw new WebApplicationException(
-                        Response.status(Status.NOT_FOUND).entity("Sensor no encontrado.").build()
+                        Response.status(Status.NOT_FOUND).entity("Historico no encontrado.").build()
                 );
             }
             return Response.ok(historico).build();

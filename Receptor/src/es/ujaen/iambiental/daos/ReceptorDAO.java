@@ -29,7 +29,7 @@ public class ReceptorDAO {
         cnx = null;
         try {
             cnx = DriverManager.getConnection("jdbc:mysql://localhost:3306/iAmbiental?"
-                    + "user=root&password=toor");
+                    + "user=root&password=123456");
 
         } catch (SQLException ex) {
             Logger.getLogger(ReceptorDAO.class.getName()).log(Level.SEVERE, ex.getMessage(), ex);
@@ -68,7 +68,7 @@ public class ReceptorDAO {
                     // Atributos de sensor y la fecha
                     stmn.setFloat(1, dato);
                     stmn.setInt(2, estado);
-                    stmn.setDate(3, new java.sql.Date(fecha.getTime()));
+                    stmn.setTimestamp(3, new java.sql.Timestamp(fecha.getTime()));//stmn.setDate(3, new java.sql.Date(fecha.getTime()));
                     stmn.setInt(4, id);
 
                     if (stmn.executeUpdate() > 0) {
@@ -151,7 +151,7 @@ public class ReceptorDAO {
                     // Atributos de actuador y la fecha
                     stmn.setFloat(1, dato);
                     stmn.setInt(2, estado);
-                    stmn.setDate(3, new java.sql.Date(fecha.getTime()));
+                    stmn.setTimestamp(3, new java.sql.Timestamp(fecha.getTime()));
                     stmn.setInt(4, id);
 
                     if (stmn.executeUpdate() > 0) {

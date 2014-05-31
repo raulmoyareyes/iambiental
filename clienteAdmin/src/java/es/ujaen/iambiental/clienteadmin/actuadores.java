@@ -6,7 +6,9 @@ import com.sun.jersey.api.client.WebResource;
 import com.sun.jersey.api.client.config.DefaultClientConfig;
 import es.ujaen.iambiental.modelos.Actuador;
 import es.ujaen.iambiental.modelos.Dependencia;
+import es.ujaen.iambiental.modelos.Sensor;
 import java.io.IOException;
+import java.text.SimpleDateFormat;
 import java.util.List;
 import javax.servlet.RequestDispatcher;
 import javax.servlet.ServletException;
@@ -121,6 +123,49 @@ public class actuadores extends HttpServlet {
                 }
                 request.setAttribute("actuador", a);
                 rd = request.getRequestDispatcher("/WEB-INF/actuadores/ver.jsp");
+                rd.include(request, response);
+                rd = request.getRequestDispatcher("/WEB-INF/actuadores/modalEliminar.jsp");
+                rd.include(request, response);
+                break;
+            case "/historico": //Ver histórico
+                request.setAttribute("actuadores", actuadores);
+                
+                id = Integer.parseInt(request.getParameter("id"));
+                a = null;
+                for (int i = 0; i < actuadores.size() && a == null; i++) {
+                    Actuador aux = mapper.convertValue(actuadores.get(i), Actuador.class);
+                    if (aux.getId() == id) {
+                        a = aux;
+                    }
+                }
+                request.setAttribute("actuador", a);
+                // Historico //new Date(114,03,28,12,00), new Date(115,04,30,14,00));
+
+                SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+
+                String fechaInicio = request.getParameter("fechaInicio");
+                try {
+                    fechaInicio = Long.toString(sdf.parse(fechaInicio).getTime());
+                } catch (Exception ex) {
+                    fechaInicio = "0";
+                }
+                
+                String fechaFinal = request.getParameter("fechaFinal");
+                try {
+                    fechaFinal = Long.toString(sdf.parse(fechaFinal).getTime());
+                } catch (Exception ex) {
+                    fechaFinal = Long.toString(Long.MAX_VALUE);
+                }
+                
+                
+                ClientResponse responseJSONH = recurso.path("/actuadores/" + id + "/historico")
+                        .queryParam("fechaInicio", fechaInicio)
+                        .queryParam("fechaFinal", fechaFinal)
+                        .accept("application/json")
+                        .get(ClientResponse.class);
+                List<HistoricoActuadores> historico = responseJSONH.getEntity(List.class);
+                request.setAttribute("historico", historico);
+                rd = request.getRequestDispatcher("/WEB-INF/actuadores/historico.jsp");
                 rd.include(request, response);
                 rd = request.getRequestDispatcher("/WEB-INF/actuadores/modalEliminar.jsp");
                 rd.include(request, response);
