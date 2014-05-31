@@ -128,7 +128,6 @@ public class RecursoSensores {
         return Response.status(Status.ACCEPTED).build();
     }
 
-    //Repasar
     @GET
     @Path("/{idSensor}/historico")
     @Produces("application/json; charset=utf-8")

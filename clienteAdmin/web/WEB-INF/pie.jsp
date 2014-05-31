@@ -23,15 +23,15 @@
         
         var day_data = [
             <c:forEach var="h" items="${historico}" varStatus="estado">
-                {"period": ${h.fecha}, "dato": ${h.dato}},
+                {"period": ${h.fecha}, "dato": ${h.dato}, "estado": ${h.estado}},
             </c:forEach>
         ];
         Morris.Line({
         element: 'graficoHistorico',
         data: day_data,
         xkey: 'period',
-        ykeys: ['dato'],
-        labels: ['Dato']
+        ykeys: ['dato', 'estado'],
+        labels: ['Dato', 'Estado']
         });
         
         <c:if test="${empty historico}">
@@ -39,11 +39,6 @@
             $("#graficoHistorico").addClass('alert alert-info');
         </c:if>
     </script>
-    
-    
-    
-    
-    
     
     <script type="text/javascript">
         $('.form_datetime').datetimepicker({

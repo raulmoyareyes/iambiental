@@ -124,8 +124,7 @@ public class RecursoActuadores {
         }
         return Response.status(Response.Status.ACCEPTED).build();
     }
-
-    // Repasar
+    
     @GET
     @Path("/{idActuador}/historico")
     @Produces("application/json; charset=utf-8")
