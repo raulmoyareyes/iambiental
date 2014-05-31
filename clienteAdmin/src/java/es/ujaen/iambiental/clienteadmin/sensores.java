@@ -7,8 +7,12 @@ import com.sun.jersey.api.client.config.DefaultClientConfig;
 import es.ujaen.iambiental.modelos.Dependencia;
 import es.ujaen.iambiental.modelos.Sensor;
 import java.io.IOException;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.List;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javax.servlet.RequestDispatcher;
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
@@ -139,9 +143,27 @@ public class sensores extends HttpServlet {
                 }
                 request.setAttribute("sensor", s);
                 // Historico //new Date(114,03,28,12,00), new Date(115,04,30,14,00));
-                ClientResponse responseJSONH = recurso.path("/sensores/"+id+"/historico")
-                        .queryParam("fechaInico", String.valueOf(new Date(114,03,28,12,00).getTime()))
-                        .queryParam("fechaFinal", String.valueOf(new Date(115,04,30,14,00).getTime()))
+
+                SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+
+                String fechaInicio = request.getParameter("fechaInicio");
+                try {
+                    fechaInicio = Long.toString(sdf.parse(fechaInicio).getTime());
+                } catch (Exception ex) {
+                    fechaInicio = "0";
+                }
+                
+                String fechaFinal = request.getParameter("fechaFinal");
+                try {
+                    fechaFinal = Long.toString(sdf.parse(fechaFinal).getTime());
+                } catch (Exception ex) {
+                    fechaFinal = Long.toString(Long.MAX_VALUE);
+                }
+                
+                
+                ClientResponse responseJSONH = recurso.path("/sensores/" + id + "/historico")
+                        .queryParam("fechaInicio", fechaInicio)
+                        .queryParam("fechaFinal", fechaFinal)
                         .accept("application/json")
                         .get(ClientResponse.class);
                 List<HistoricoSensores> historico = responseJSONH.getEntity(List.class);

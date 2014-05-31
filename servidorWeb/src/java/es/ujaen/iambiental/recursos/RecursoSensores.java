@@ -134,6 +134,8 @@ public class RecursoSensores {
     @Produces("application/json; charset=utf-8")
     public Response obtenerHistoricoSensor(@PathParam("idSensor") Integer idSensor, @QueryParam("fechaInicio") long fechaInicio, @QueryParam("fechaFinal") long fechaFinal){
         Sensor sensor = administrador.obtenerSensor(idSensor);
+        
+        
         if (sensor == null) {
             throw new WebApplicationException(
                     Response.status(Status.NOT_FOUND).entity("Sensor no encontrado.").build()

@@ -1,3 +1,4 @@
+<%@taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
         <hr/>
         <footer>
             <p>Proyecto de prácticas de la asignatura <em>Inteligencia Ambiental</em> de <em>4º de Grado en Ingeniería Informática</em> realizado por Gabriel Fernández Moral, Raúl Moya Reyes, Vicente Plaza Franco y Agustín Ruiz Linares</p>
@@ -9,38 +10,57 @@
     <!-- Placed at the end of the document so the pages load faster -->
     <!--<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.0/jquery.min.js"></script>-->
     
-    <script src="http://cdnjs.cloudflare.com/ajax/libs/raphael/2.1.0/raphael-min.js"></script>
+    <script src="${appUrl}/js/raphael-min.js"></script>
     <script src="${appUrl}/js/jquery-1.11.0.min.js"></script>
-    <script src="http://cdn.oesmith.co.uk/morris-0.4.1.min.js"></script>
+    <script src="${appUrl}/js/morris-0.4.1.min.js"></script>
     <script src="${appUrl}/js/bootstrap.min.js"></script>
     <script src="${appUrl}/js/offcanvas.js"></script>
+    <script src="${appUrl}/js/bootstrap-datetimepicker.min.js"></script>
+    <script src="${appUrl}/js/bootstrap-datetimepicker.es.js"></script>
     <script src="${appUrl}/js/script.js"></script>
-    
-    
+                
     <script>
+        
         var day_data = [
-            {"period": "2012-10-01 12:00", "temperatura": 1},
-            {"period": "2012-10-01 12:01", "temperatura": 2},
-            {"period": "2012-10-01 12:02", "temperatura": 3},
-            {"period": "2012-10-01 12:03", "temperatura": 4},
-            {"period": "2012-10-01 12:04", "temperatura": 5},
-            {"period": "2012-10-01 12:05", "temperatura": 6},
-            {"period": "2012-10-01 12:06", "temperatura": 7},
-            {"period": "2012-10-01 12:07", "temperatura": 8},
-            {"period": "2012-10-01 12:08", "temperatura": 9},
-            {"period": "2012-10-01 12:09", "temperatura": 10},
-            {"period": "2012-10-01 12:10", "temperatura": 11
+            <c:forEach var="h" items="${historico}" varStatus="estado">
+                {"period": ${h.fecha}, "dato": ${h.dato}},
+            </c:forEach>
         ];
         Morris.Line({
         element: 'graficoHistorico',
         data: day_data,
         xkey: 'period',
-        ykeys: ['temperatura'],
-        labels: ['Temperatura']
+        ykeys: ['dato'],
+        labels: ['Dato']
         });
-
-        //# sourceURL=jsbin.otaxef.115-5.js
-        //@ sourceURL=jsbin.otaxef.115-5.js
+        
+        <c:if test="${empty historico}">
+            $("#graficoHistorico").text("No hay resultados.");
+            $("#graficoHistorico").addClass('alert alert-info');
+        </c:if>
     </script>
+    
+    
+    
+    
+    
+    
+    <script type="text/javascript">
+        $('.form_datetime').datetimepicker({
+            language:  'es',
+            weekStart: 1,
+            todayBtn:  1,
+                    autoclose: 1,
+                    todayHighlight: 1,
+                    startView: 2,
+                    forceParse: 0,
+            showMeridian: 1
+        });
+    </script>
+    
+    
+    
+    
+    
 </body>
 </html>
