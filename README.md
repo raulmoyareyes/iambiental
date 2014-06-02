@@ -28,3 +28,5 @@ Hay que configurar dos proyectos. En servidorWeb, vamos al directorio WEB-INF y 
 
 Ejecución
 =========
+
+La primera aplicación que debemos ejecutar es servidorWeb. Este genera la base de datos. A continuación ejecutamos el sql con los datos de ejemplo. A continuación, podemos ejecutar el resto de proyectos.
