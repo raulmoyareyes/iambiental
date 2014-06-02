@@ -2,8 +2,8 @@ iAmbiental
 ==========
 
 Casa domótica con inteligencia.
-  - Descarga
-  - Instalación
+  - [Descarga](https://github.com/RaulMoyaReyes/iAmbiental#descarga)
+  - [Instalación](https://github.com/RaulMoyaReyes/iAmbiental#instalacion)
 
 Descarga
 ========
