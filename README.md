@@ -7,8 +7,9 @@ Tabla de contenido
 ==================
 
   - [Descarga](https://github.com/RaulMoyaReyes/iAmbiental#descarga)
-  - [Instalación](https://github.com/RaulMoyaReyes/iAmbiental#instalacion)
-  - [Configuración](https://github.com/RaulMoyaReyes/iAmbiental#configuracion)
+  - [Instalación](https://github.com/RaulMoyaReyes/iAmbiental#instalaci%C3%B3n)
+  - [Configuración](https://github.com/RaulMoyaReyes/iAmbiental#configuraci%C3%B3n)
+  - [Ejecución](https://github.com/RaulMoyaReyes/iAmbiental#ejecuci%C3%B3n)
 
 Descarga
 ========
